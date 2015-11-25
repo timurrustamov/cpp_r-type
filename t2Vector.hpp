@@ -123,6 +123,22 @@ public:
         return (convert.str());
     }
 
+    t2Vector<T> toAbsolute() const
+    {
+        t2Vector<T> vec((this->getX() > 0 ? this->getX() : -this->getX()),
+                        (this->getY() > 0 ? this->getY() : -this->getY()));
+        return (vec);
+    }
+
+    t2Vector<T> normalize() const
+    {
+        float length = sqrtf(static_cast<float>(this->_x) * static_cast<float>(this->_x) +
+                             static_cast<float>(this->_y) * static_cast<float>(this->_y));
+        t2Vector<T> vec(this->_x / length, this->_y / length);
+
+        return (vec);
+    }
+
     template <typename U>
     t2Vector<U> convert() const
     {
@@ -140,7 +156,7 @@ public:
     }
 
     template <typename U>
-	t2Vector &operator-=(const t2Vector &that)
+	t2Vector &operator-=(const t2Vector<U> &that)
     {
         this->_x = this->getX() - static_cast<T>(that.getX());
         this->_y = this->getY() - static_cast<T>(that.getY());
@@ -148,7 +164,7 @@ public:
     }
 
     template <typename U>
-	t2Vector &operator+=(const t2Vector &that)
+	t2Vector &operator+=(const t2Vector<U> &that)
     {
         this->_x = this->getX() + static_cast<T>(that.getX());
         this->_y = this->getY() + static_cast<T>(that.getY());
@@ -158,8 +174,8 @@ public:
     template <typename U>
 	t2Vector &operator*=(U var)
     {
-        U tmpx = static_cast<U>(this->_x) * var;
-        U tmpy = static_cast<U>(this->_y) * var;
+        U tmpx = static_cast<U>(this->getX()) * var;
+        U tmpy = static_cast<U>(this->getY()) * var;
         this->_x = static_cast<T>(tmpx);
         this->_y = static_cast<T>(tmpy);
         return (*this);
@@ -168,15 +184,15 @@ public:
     template <typename U>
 	t2Vector &operator/=(U var)
     {
-        U tmpx = static_cast<U>(this->_x) / var;
-        U tmpy = static_cast<U>(this->_y) / var;
+        U tmpx = static_cast<U>(this->getX()) / var;
+        U tmpy = static_cast<U>(this->getY()) / var;
         this->_x = static_cast<T>(tmpx);
         this->_y = static_cast<T>(tmpy);
         return (*this);
     }
 
     template <typename U>
-	t2Vector operator+(const t2Vector &that) const
+	t2Vector operator+(const t2Vector<U> &that) const
     {
         T x = this->_x + static_cast<T>(that.getX());
         T y = this->_y + static_cast<T>(that.getY());
@@ -186,7 +202,7 @@ public:
     }
 
     template <typename U>
-	t2Vector operator-(const t2Vector &that) const
+	t2Vector operator-(const t2Vector<U> &that) const
     {
         T x = this->_x - static_cast<T>(that.getX());
         T y = this->_y - static_cast<T>(that.getY());
@@ -198,8 +214,8 @@ public:
     template <typename U>
 	t2Vector operator*(U var) const
     {
-        U tmpx = static_cast<U>(this->x) * var;
-        U tmpy = static_cast<U>(this->y) * var;
+        U tmpx = static_cast<U>(this->getX()) * var;
+        U tmpy = static_cast<U>(this->getY()) * var;
 
         t2Vector<T> v(static_cast<T>(tmpx), static_cast<T>(tmpy));
         return (v);
@@ -208,8 +224,8 @@ public:
     template <typename U>
 	t2Vector operator/(U var) const
     {
-        U tmpx = static_cast<U>(this->x) / var;
-        U tmpy = static_cast<U>(this->y) / var;
+        U tmpx = static_cast<U>(this->getX()) / var;
+        U tmpy = static_cast<U>(this->getY()) / var;
 
         t2Vector<T> v(static_cast<T>(tmpx), static_cast<T>(tmpy));
         return (v);
@@ -229,34 +245,34 @@ public:
     }
 
     template <typename U>
-	bool operator!=(const t2Vector &that) const
+	bool operator!=(const t2Vector<U> &that) const
     {
-        return (!(*this) == that);
+        return (!(*this == that));
     }
 
     template <typename U>
-    bool operator<(const t2Vector &that) const
+    bool operator<(const t2Vector<U> &that) const
     {
         return (this->getX() < static_cast<T>(that.getX()) &&
                 this->getY() < static_cast<T>(that.getY()));
     }
 
     template <typename U>
-    bool operator>(const t2Vector &that) const
+    bool operator>(const t2Vector<U> &that) const
     {
         return (this->getX() > static_cast<T>(that.getX()) &&
                 this->getY() > static_cast<T>(that.getY()));
     }
 
     template <typename U>
-    bool operator<=(const t2Vector &that) const
+    bool operator<=(const t2Vector<U> &that) const
     {
         return (this->getX() <= static_cast<T>(that.getX()) &&
                 this->getY() <= static_cast<T>(that.getY()));
     }
 
     template <typename U>
-    bool operator>=(const t2Vector &that) const
+    bool operator>=(const t2Vector<U> &that) const
     {
         return (this->getX() >= static_cast<T>(that.getX()) &&
                 this->getY() >= static_cast<T>(that.getY()));
@@ -270,7 +286,7 @@ private:
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const t2Vector<T>& that)
 {
-    os << that.toString;
+    os << that.toString();
     return (os);
 }
 
