@@ -123,6 +123,12 @@ public:
         return (convert.str());
     }
 
+    float length() const
+    {
+        return (sqrtf(static_cast<float>(this->_x) * static_cast<float>(this->_x) +
+                                    static_cast<float>(this->_y) * static_cast<float>(this->_y)));
+    };
+
     t2Vector<T> toAbsolute() const
     {
         t2Vector<T> vec((this->getX() > 0 ? this->getX() : -this->getX()),
@@ -132,8 +138,7 @@ public:
 
     t2Vector<T> normalize() const
     {
-        float length = sqrtf(static_cast<float>(this->_x) * static_cast<float>(this->_x) +
-                             static_cast<float>(this->_y) * static_cast<float>(this->_y));
+        float length = this->length();
         t2Vector<T> vec(this->_x / length, this->_y / length);
 
         return (vec);

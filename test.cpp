@@ -16,8 +16,8 @@ int main()
     bool keydown = false;
     bool r = false;
 
-    Geometry geo(t2Vector<float>(0, 0), t2Vector<int>(1, 1), t2Vector<float>(100, 70), 2, 5);
-    Geometry rocket(geo.getPosition(), t2Vector<int>(1, 1), t2Vector<float>(1000, 30), 10, 5);
+    Geometry geo(t2Vector<float>(0, 0), t2Vector<int>(1, 1), 100, 2, 5);
+    Geometry rocket(geo.getPosition(), t2Vector<int>(1, 1), 1000, 10, 5);
 
     sf::RectangleShape rock(sf::Vector2f(5, 5));
 
@@ -55,7 +55,7 @@ int main()
         {
             rocket.setPosition(geo.getPosition());
             r = true;
-            rocket.addImpulse(t2Vector<float>(5, 0));
+            rocket.setVelocity(t2Vector<float>(0, 0)).applyImpulse(t2Vector<float>(100, 0));
         }
         if (!keydown)
             geo.removeImpulse();

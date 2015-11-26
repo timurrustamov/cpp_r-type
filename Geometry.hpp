@@ -11,8 +11,7 @@ class Geometry {
 
 public:
 
-    Geometry(t2Vector<float> position, t2Vector<int> size,
-             t2Vector<float> terminalVelocity = t2Vector<float>(20, 20), float accelerationTime = 0, float decelerationTime = 0);
+    Geometry(t2Vector<float> position, t2Vector<int> size, float terminalVelocity = 20, float accelerationTime = 0, float decelerationTime = 0);
 
     Geometry &tick(float delta_time);
 
@@ -26,9 +25,18 @@ public:
     }
 
     template <typename T>
-    Geometry &addImpulse(t2Vector<T> impulse)
+    Geometry &applyImpulse(t2Vector<T> impulse)
     {
+        this->_applyed = true;
+        this->_currentAccelerationTime = 0;
         this->_acceleration = impulse;
+        return (*this);
+    }
+
+    template <typename T>
+    Geometry addImpulse(t2Vector<T> impulse)
+    {
+        this->_acceleration += impulse;
         return (*this);
     }
 
@@ -36,6 +44,7 @@ public:
     {
         this->_currentAccelerationTime = 0;
         this->_acceleration.assign(0, 0);
+        this->_applyed = false;
         return (*this);
     }
 
@@ -50,6 +59,13 @@ public:
 
     const t2Vector<float> getVelocity() const;
 
+    template <typename T>
+    Geometry &setVelocity(t2Vector<T> velocity)
+    {
+        this->_velocity = velocity;
+        return (*this);
+    }
+
     const t2Vector<float> getAcceleration() const;
 
     float getClockWiseAngle() const;
@@ -61,11 +77,12 @@ private:
     t2Vector<float> _position;
     t2Vector<float> _velocity;
     t2Vector<float> _acceleration;
+    bool _applyed;
+
     float _accelerationTime;
     float _currentAccelerationTime;
     float _inertiaRatio;
-    //const
-    t2Vector<float> _terminalVelocity;
+    float _terminalVelocity;
 };
 
 

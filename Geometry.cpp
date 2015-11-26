@@ -5,16 +5,17 @@
 #include "Geometry.hpp"
 
 Geometry::Geometry(t2Vector<float> position, t2Vector<int> size,
-                   t2Vector<float> terminalVelocity, float accelerationTime, float inertiaRatio)
+                   float terminalVelocity, float accelerationTime, float inertiaRatio)
 {
     this->_position = position;
     this->_size = size;
 
-    this->_terminalVelocity = terminalVelocity.toAbsolute();
+    this->_terminalVelocity = terminalVelocity;
 
     this->_accelerationTime = (accelerationTime <= 0 ? 0.00001 : accelerationTime);
     this->_inertiaRatio = inertiaRatio <= 0 ? 0.00001 : inertiaRatio;
 
+    this->_applyed = false;
     this->_currentAccelerationTime = 0;
     this->_velocity.setX(0).setY(0);
     this->_acceleration.setX(0).setY(0);
@@ -39,15 +40,14 @@ Geometry::tick(float delta_time)
         this->_velocity -= (this->_velocity * this->_inertiaRatio * delta_time);
     }
 
-    t2Vector<float> absoluteVelocity = this->_velocity.toAbsolute();
-    if (absoluteVelocity.getX() > this->_terminalVelocity.getX())
-        this->_velocity.x() /= absoluteVelocity.getX() / this->_terminalVelocity.getX();
-    if (absoluteVelocity.getY() > this->_terminalVelocity.getY())
-        this->_velocity.y() /= absoluteVelocity.getY() / this->_terminalVelocity.getY();
+    if (this->_velocity.length() > this->_terminalVelocity)
+        this->_velocity *= this->_terminalVelocity / this->_velocity.length();
 
     //std::cout << "current velocity " << this->_velocity << std::endl;
 
     this->_position += this->_velocity * delta_time;
+    if (!_applyed) //not a continuous movement
+        this->_acceleration.assign(0, 0);
 
     return (*this);
 }
