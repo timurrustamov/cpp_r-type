@@ -1,0 +1,12 @@
+﻿Build started 01/12/2015 23:41:10.
+     1>Project "C:\Users\fabY\Documents\GitHubVisualStudio\cpp_r-type\R-Type\R-Type.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\fabY\Documents\GitHubVisualStudio\cpp_r-type\x64\Debug\R-Type.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Windows\SFML-2.3.2\lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib "sfml-graphics.lib" "sfml-window.lib" "sfml-system.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\fabY\Documents\GitHubVisualStudio\cpp_r-type\x64\Debug\R-Type.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\fabY\Documents\GitHubVisualStudio\cpp_r-type\x64\Debug\R-Type.lib" /MACHINE:X64 x64\Debug\Geometry.obj
+         x64\Debug\QuadTree.obj
+         x64\Debug\test.obj
+     1>sfml-graphics.lib(sfml-graphics-2.dll) : fatal error LNK1112: module machine type 'X86' conflicts with target machine type 'x64'
+     1>Done Building Project "C:\Users\fabY\Documents\GitHubVisualStudio\cpp_r-type\R-Type\R-Type.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.14
