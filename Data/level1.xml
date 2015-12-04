@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level>
+  <title>Level 0</title>
+  <BGT>background_0.png</BGT>
+  <BGM>sfox2-opening.mp3</BGM>
+  <parameters>
+    <scrollSpeed>1</scrollSpeed>
+    <size>2880</size>
+    <gravity>
+      <x>0</x>
+      <y>0</y>
+    </gravity>
+  </parameters>
+</level>

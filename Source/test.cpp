@@ -1,10 +1,14 @@
 #include <iostream>
-#include "t2Vector.hpp"
-#include "Geometry.hpp"
+#include "GameEngine/t2Vector.hpp"
+#include "GameEngine/Geometry.hpp"
+#include "GameEngine/Level.h"
 #include <SFML/Graphics.hpp>
 
 int main()
 {
+	Level cool("../Data/level1.xml");
+
+	std::cout << cool << std::endl;
     sf::RenderWindow window(sf::VideoMode(400, 400), "SFML works!");
     sf::CircleShape shape(10.f);
     shape.setFillColor(sf::Color::Green);
@@ -28,8 +32,6 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-
-        std::cout << geo.getClockWiseAngle() << std::endl;
 
         if (geo.getPosition().getY() >= 400 || geo.getPosition().getY() <= 0)
                 geo.setVelocity(t2Vector<float>(geo.getVelocity().getX(), -geo.getVelocity().getY()));
