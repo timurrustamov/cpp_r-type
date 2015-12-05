@@ -6,6 +6,7 @@
 # include							<SFML/Graphics/Texture.hpp>
 # include							<SFML/Audio/Music.hpp>
 # include							"t2Vector.hpp"
+# include							"../System/RTypeException.h"
 
 # define ASSET_FOLDER				"../Assets/"
 # define BGM_LOCATION				"Sounds/BGM/"
