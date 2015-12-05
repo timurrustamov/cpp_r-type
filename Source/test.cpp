@@ -9,7 +9,7 @@ int main()
 	Level cool("../Data/level1.xml");
 
 	std::cout << cool << std::endl;
-    sf::RenderWindow window(sf::VideoMode(1138, 640), "R-Type");
+	sf::RenderWindow window(sf::VideoMode(1138, 640), "R-Type", sf::Style::Close);
 	sf::View view(window.getDefaultView());
 	window.setView(view = sf::View(sf::FloatRect(0.f, 0.f, 1138.f, 640.f)));
     sf::CircleShape shape(10.f);
@@ -33,8 +33,6 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
-			if (event.type == sf::Event::Resized)
-				window.setView(view = sf::View(sf::FloatRect(0.f, 0.f, 1138.f, 640.f)));
         }
 
         if (geo.getPosition().getY() >= 400 || geo.getPosition().getY() <= 0)

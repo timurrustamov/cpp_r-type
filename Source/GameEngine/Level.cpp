@@ -2,7 +2,7 @@
 #include							<boost/property_tree/xml_parser.hpp>
 #include							"Level.h"
 
-Level::Level(std::string const &filepath)
+Level::Level(std::string const &filepath) : loaded(false)
 {
 	boost::property_tree::ptree		ptree;
 
@@ -16,7 +16,7 @@ Level::Level(std::string const &filepath)
 		this->bgtPath = ptree.get<std::string>("level.BGT");
 
 		this->scrollSpeed = ptree.get("level.parameters.scrollSpeed", 1);
-		this->size = ptree.get<unsigned int>("level.parameters.size");
+		this->size = ptree.get("level.parameters.size", 0);
 		this->gravity.assign(ptree.get("level.parameters.gravity.x", 0), ptree.get("level.parameters.gravity.y", 0));
 	}
 	catch (const std::exception &err)
@@ -36,7 +36,9 @@ void								Level::load()
 		throw RTypeException("Background music or background texture missing, cannot load level");
 	if (!this->bgm.openFromFile(ASSET_FOLDER BGM_LOCATION + this->bgmPath) || !this->bgt.loadFromFile(ASSET_FOLDER BGT_LOCATION + this->bgtPath))
 		throw RTypeException("Wrong background music path or background texture path, cannot load level");
+	this->size = (this->size) ? this->size : this->bgt.getSize().x;
 	this->bgs.setTexture(this->bgt);
+	this->loaded = true;
 }
 
 std::string const					&Level::getTitle() const
@@ -66,6 +68,11 @@ int									Level::getScrollSpeed() const
 unsigned int						Level::getSize() const
 {
 	return (this->size);
+}
+
+bool								Level::isLoaded() const
+{
+	return (this->loaded);
 }
 
 std::ostream						&operator<<(std::ostream& os, const Level& that)

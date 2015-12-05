@@ -25,6 +25,7 @@ class								Level
 	int								scrollSpeed;
 	unsigned int					size;
 	t2Vector<int>					gravity;
+	bool							loaded;
 	
 public:
 	Level(std::string const &);
@@ -37,6 +38,7 @@ public:
 	t2Vector<int>					Level::getGravity() const;
 	int								getScrollSpeed() const;
 	unsigned int					getSize() const;
+	bool							isLoaded() const;
 };
 
 std::ostream						&operator<<(std::ostream &, const Level &);
