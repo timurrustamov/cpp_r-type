@@ -1,22 +1,26 @@
-﻿Build started 01/12/2015 23:49:24.
-     1>Project "C:\Users\fabY\Documents\GitHubVisualStudio\cpp_r-type\R-Type\R-Type.vcxproj" on node 2 (Rebuild target(s)).
+﻿Build started 08/12/2015 18:39:51.
+     1>Project "C:\Users\fabY\Documents\GitHubVisualStudio\cpp_r-type\R-Type\R-Type.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"C:\Windows\SFML-2.3.2\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Geometry.cpp ..\QuadTree.cpp ..\test.cpp
-         test.cpp
-     1>c:\users\faby\documents\githubvisualstudio\cpp_r-type\test.cpp(18): warning C4305: 'argument': truncation from 'double' to 'float'
-         QuadTree.cpp
-         Geometry.cpp
-     1>c:\users\faby\documents\githubvisualstudio\cpp_r-type\geometry.cpp(15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-     1>c:\users\faby\documents\githubvisualstudio\cpp_r-type\geometry.cpp(16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-     1>c:\users\faby\documents\githubvisualstudio\cpp_r-type\geometry.cpp(88): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-         Generating Code...
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"C:\Windows\SFML-2.3.2\include" /I"C:\Program Files\boost\boost_1_59_0" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Source\GameEngine\GameData.cpp ..\Source\GameEngine\OnLevel.cpp ..\Source\main.cpp ..\Source\System\window.cpp
+         window.cpp
+     1>c:\users\faby\documents\githubvisualstudio\cpp_r-type\source\system\window.cpp(12): warning C4244: 'argument' : conversion de 'unsigned int' en 'float', perte possible de données
+     1>c:\users\faby\documents\githubvisualstudio\cpp_r-type\source\system\window.cpp(24): warning C4244: 'argument' : conversion de 'unsigned int' en 'float', perte possible de données
+         main.cpp
+         OnLevel.cpp
+         GameData.cpp
+         Génération de code en cours...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\fabY\Documents\GitHubVisualStudio\cpp_r-type\Debug\R-Type.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Windows\SFML-2.3.2\lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib "sfml-graphics.lib" "sfml-window.lib" "sfml-system.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\fabY\Documents\GitHubVisualStudio\cpp_r-type\Debug\R-Type.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\fabY\Documents\GitHubVisualStudio\cpp_r-type\Debug\R-Type.lib" /MACHINE:X86 Debug\Geometry.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\fabY\Documents\GitHubVisualStudio\cpp_r-type\Debug\R-Type.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Windows\SFML-2.3.2\lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib "sfml-graphics.lib" "sfml-window.lib" "sfml-system.lib" "sfml-audio.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\fabY\Documents\GitHubVisualStudio\cpp_r-type\Debug\R-Type.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\fabY\Documents\GitHubVisualStudio\cpp_r-type\Debug\R-Type.lib" /MACHINE:X86 Debug\GameData.obj
+         Debug\OnLevel.obj
+         Debug\Geometry.obj
+         Debug\Level.obj
          Debug\QuadTree.obj
-         Debug\test.obj
+         Debug\main.obj
+         Debug\RTypeException.obj
+         Debug\window.obj
          R-Type.vcxproj -> C:\Users\fabY\Documents\GitHubVisualStudio\cpp_r-type\Debug\R-Type.exe
-     1>Done Building Project "C:\Users\fabY\Documents\GitHubVisualStudio\cpp_r-type\R-Type\R-Type.vcxproj" (Rebuild target(s)).
+     1>Done Building Project "C:\Users\fabY\Documents\GitHubVisualStudio\cpp_r-type\R-Type\R-Type.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.75
+Time Elapsed 00:00:03.12

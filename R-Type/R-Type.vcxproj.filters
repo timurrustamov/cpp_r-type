@@ -13,27 +13,80 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\GameEngine">
+      <UniqueIdentifier>{b4cb83a1-961c-454d-8c14-daef1527fd56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\System">
+      <UniqueIdentifier>{44f7b313-7156-4d91-813a-d9563f910efb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\GameEngine">
+      <UniqueIdentifier>{cec808a1-79fa-486b-a005-4f6ed986a31d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\System">
+      <UniqueIdentifier>{608fade3-f02e-4feb-b25d-3d479831b651}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Geometry.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClCompile Include="..\Source\GameEngine\Level.cpp">
+      <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\QuadTree.cpp">
+      <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Geometry.cpp">
+      <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\System\window.cpp">
+      <Filter>Fichiers sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\System\RTypeException.cpp">
+      <Filter>Fichiers sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\main.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\test.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\OnLevel.cpp">
+      <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\GameData.cpp">
+      <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Source\GameEngine\QuadTree.hpp">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
     </ClInclude>
-    <ClInclude Include="..\QuadTree.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="..\Source\GameEngine\t2Vector.hpp">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
     </ClInclude>
-    <ClInclude Include="..\t2Vector.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="..\Source\GameEngine\Geometry.hpp">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Level.h">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\System\window.h">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\System\RTypeException.h">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\IGameplay.h">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\OnLevel.h">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\GameData.h">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Geometry.cpp">
+    <None Include="..\.gitignore">
       <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\QuadTree.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\test.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
+    </None>
   </ItemGroup>
 </Project>

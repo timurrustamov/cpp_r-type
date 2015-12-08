@@ -29,20 +29,21 @@ bool				Window::isOpen() const
 	return (this->window.isOpen());
 }
 
-void				Window::attachGameplay(Gameplay *gameplay)
+void				Window::attachGameplay(IGameplay *gameplay)
 {
 	this->gameplay = gameplay;
 }
 
 void				Window::callGameplay()
 {
+	GameData		*gameData = GameData::getInstance();
 	sf::Event		event;
 
 	while (this->isOpen() && this->window.pollEvent(event))
 	{
-		if (event.type == sf::Event::Closed || this->gameplay->mustCloseGame())
+		if (event.type == sf::Event::Closed || gameData->getMustQuit())
 			this->window.close();
-		if (this->gameplay->mustSwitchFullscreen())
+		if (gameData->getFullscreen() != this->fullscreen)
 			this->switchFullscreen();
 		if (event.type == sf::Event::KeyPressed)
 		{

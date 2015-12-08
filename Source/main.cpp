@@ -1,13 +1,13 @@
 #include					<iostream>
 #include					"System/window.h"
-#include					"GameEngine/Gameplay.h"
+#include					"GameEngine/OnLevel.h"
 
 int							main()
 {
 	Window					window("R-Type");
-	Gameplay				gameplay;
+	OnLevel					gameplay;
 
-	window.attachGameplay(&gameplay);
+	window.attachGameplay(dynamic_cast<IGameplay *>(&gameplay));
 	try
 	{
 		window.launchWindow();

@@ -4,11 +4,11 @@
 # include					<string>
 # include					<SFML/Graphics.hpp>
 # include					"RTypeException.h"
-# include					"../GameEngine/Gameplay.h"
+# include					"../GameEngine/IGameplay.h"
 
 class						Window
 {
-	Gameplay				*gameplay;
+	IGameplay				*gameplay;
 	sf::RenderWindow		window;
 	sf::View				view;
 
@@ -25,7 +25,7 @@ public:
 	void					switchFullscreen();
 	bool					isOpen() const;
 
-	void					attachGameplay(Gameplay *);
+	void					attachGameplay(IGameplay *);
 	void					callGameplay();
 };
 
