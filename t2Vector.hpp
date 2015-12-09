@@ -283,6 +283,20 @@ public:
                 this->getY() >= static_cast<T>(that.getY()));
     }
 
+    template <typename U>
+    T dot(const t2Vector<U> &that) const
+    {
+        return (this->_x * static_cast<T>(that.getX()) + this->_y * static_cast<T>(that.getY()));
+    }
+
+    template <typename U>
+    float getAngleTo(const t2Vector<U> &that) const
+    {
+        float dot = that.getX() * this->getX() + that.getY() * this->getY();
+        float det = that.getX() * this->getY() - that.getX() * this->getX();
+        return (std::atan2(dot, det) * 180 / M_PI);
+    }
+
 private:
     T _x;
     T _y;

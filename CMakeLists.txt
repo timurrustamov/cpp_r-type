@@ -3,8 +3,8 @@ project(cpp_r_type)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES
-        i2Vector.cpp
-        i2Vector.hpp f2Vector.cpp f2Vector.hpp BaseVector.hpp t2Vector.cpp t2Vector.hpp QuadTree.cpp QuadTree.hpp Geometry.cpp Geometry.hpp)
+find_package(SFML 2 REQUIRED system window graphics network audio)
+set(SOURCE_FILES test.cpp t2Vector.hpp QuadTree.cpp QuadTree.hpp Geometry.cpp Geometry.hpp Rectangle.cpp Rectangle.hpp World.cpp World.hpp)
 
-add_executable(cpp_r_type ${SOURCE_FILES})
+add_executable(cpp_r-type ${SOURCE_FILES})
+target_link_libraries(cpp_r-type ${SFML_LIBRARIES})
