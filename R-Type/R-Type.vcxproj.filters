@@ -54,6 +54,12 @@
     <ClCompile Include="..\Source\GameEngine\GameData.cpp">
       <Filter>Fichiers sources\GameEngine</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Object.cpp">
+      <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\ResourcesBank.cpp">
+      <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\GameEngine\QuadTree.hpp">
@@ -81,6 +87,12 @@
       <Filter>Fichiers d%27en-tête\GameEngine</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\GameEngine\GameData.h">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Object.h">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\ResourcesBank.h">
       <Filter>Fichiers d%27en-tête\GameEngine</Filter>
     </ClInclude>
   </ItemGroup>
