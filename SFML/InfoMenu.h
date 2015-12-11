@@ -7,6 +7,10 @@
 
 #include <string>
 #include <SFML/Graphics.hpp>
+#include "Gameplay.h"
+#include "MainMenu.h"
+
+class MainMenu;
 
 class InfoMenu
 {
@@ -16,25 +20,30 @@ public:
 
     void init();
     void showUserForm();
-    void showIpForm();
+    void showIpForm(char);
 
-    void setIP(const std::string &);
-    void setUsername(const std::string &);
-    void renderFrame();
+    void addLetters(sf::Event*);
+    void addNumbers(sf::Event*);
 
-    int  getNext();
+    int cutIP();
+
+    void  getNext();
 
     std::string getIP() const;
     std::string getUsername() const;
     std::string getPort() const;
 
 private:
-    std::string         username;
-    std::string         ip;
-    std::string         port;
-    sf::RenderWindow    *window;
-    sf::Texture         *fileImg;
-    sf::Sprite          *background;
+    bool                        isDone;
+    std::string                 username;
+    std::string                 ip;
+    std::string                 port;
+    std::vector<sf::Texture*>   fileImg;
+    std::vector<sf::Sprite*>    sprites;
+    std::vector<sf::Text*>      texts;
+    sf::RenderWindow            *window;
+    sf::Font                    *font;
+    MainMenu                    *next;
 };
 
 
