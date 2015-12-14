@@ -8,8 +8,10 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "MainMenu.h"
+#include "WaitingRoom.h"
 
 class MainMenu;
+class WaitingRoom;
 
 class CreateRoomMenu
 {
@@ -18,12 +20,21 @@ public:
     ~CreateRoomMenu();
 
     void RenderFrame();
-    int getKeys();
+    int getKeys(sf::Event *);
 
     static CreateRoomMenu *getInstance(sf::RenderWindow*);
 
 private:
     sf::RenderWindow    *window;
+    float               transp;
+    sf::Texture         *texture;
+    sf::Sprite          *sprite;
+    sf::Text            *text;
+    sf::Sprite          *fondu;
+    sf::Clock           *clock;
+    sf::Font            *font;
+    std::string         input;
+    WaitingRoom         *waitingRoom;
 };
 
 
