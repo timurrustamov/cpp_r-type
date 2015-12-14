@@ -9,8 +9,8 @@
 
 class													ResourcesBank
 {
-	std::map<const std::string &, sf::Texture *>		textureBank;
-	std::map<const std::string &, sf::SoundBuffer>		soundBufferBank;
+	std::map<std::string, sf::Texture *>				textureBank;
+	std::map<std::string, sf::SoundBuffer>				soundBufferBank;
 
 	ResourcesBank();
 	~ResourcesBank();
