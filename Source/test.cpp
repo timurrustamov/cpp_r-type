@@ -1,86 +1,73 @@
-#include <iostream>
 #include "GameEngine/t2Vector.hpp"
 #include "GameEngine/Geometry.hpp"
-#include "GameEngine/Level.h"
+#include "GameEngine/World.hpp"
 #include <SFML/Graphics.hpp>
+#include <curses.h>
 
 int main()
 {
-	Level cool("../Data/level1.xml");
+    sf::RenderWindow window(sf::VideoMode(400, 400), "SFML works!");
 
-	std::cout << cool << std::endl;
-	sf::RenderWindow window(sf::VideoMode(1138, 640), "R-Type", sf::Style::Close);
-	sf::View view(window.getDefaultView());
-	window.setView(view = sf::View(sf::FloatRect(0.f, 0.f, 1138.f, 640.f)));
-    sf::CircleShape shape(10.f);
-    shape.setFillColor(sf::Color::Green);
-
-    float sec = 0;
     sf::Clock deltaClock;
     sf::Time dt;
-    bool keydown = false;
-    bool r = false;
+    bool keydown;
 
-    Geometry geo(t2Vector<float>(0, 0), t2Vector<int>(1, 1), 100, 5, 0.1);
-    Geometry rocket(geo.getPosition(), t2Vector<int>(1, 1), 1000, 10, 5);
+    World w(t2Vector<int>(400, 400), true, true);
 
-    sf::RectangleShape rock(sf::Vector2f(5, 5));
+    Geometry *geo = w.bindPlayerObject(Rectangle<float>(20, 100, 20, 200), 300, 0.1, 5);
+    Geometry *geo2 = w.bindPlayerObject(Rectangle<float>(20, 100, 350, 200), 300, 0.1, 5);
+
+    Geometry *rocket = w.newGeometry(Rectangle<float>(10, 10, 250, 250), 400, 0.1, 0.5);
+
+    sf::RectangleShape shape(sf::Vector2f(20, 100));
+    sf::RectangleShape shape2(sf::Vector2f(20, 100));
+    sf::RectangleShape rock(sf::Vector2f(10, 10));
+    shape.setFillColor(sf::Color::Green);
+    shape2.setFillColor(sf::Color::Green);
+
+    sf::Event event;
+
+    while (window.pollEvent(event))
+    {
+        if (event.type == sf::Event::Closed)
+            window.close();
+    }
 
     while (window.isOpen())
     {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            window.close();
 
-        if (geo.getPosition().getY() >= 400 || geo.getPosition().getY() <= 0)
-                geo.setVelocity(t2Vector<float>(geo.getVelocity().getX(), -geo.getVelocity().getY()));
-        if (geo.getPosition().getX() >= 400 || geo.getPosition().getX() <= 0)
-                geo.setVelocity(t2Vector<float>(-geo.getVelocity().getX(), geo.getVelocity().getY()));
+        //std::cout << geo->getClockWiseAngle() << std::endl;
 
-        keydown = false;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-        {
-            geo.addImpulse(t2Vector<float>(-200, 0));
-            keydown = true;
-        }
+            geo->addImpulse(t2Vector<float>(-10, 0));
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-        {
-            geo.addImpulse(t2Vector<float>(200, 0));
-            keydown = true;
-        }
+            geo->addImpulse(t2Vector<float>(10, 0));
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-        {
-            geo.addImpulse(t2Vector<float>(0, -200));
-            keydown = true;
-        }
+            geo->addImpulse(t2Vector<float>(0, -10));
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-        {
-            geo.addImpulse(t2Vector<float>(0, 200));
-            keydown = true;
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-        {
-            rocket.setPosition(geo.getPosition());
-            r = true;
-            rocket.setVelocity(t2Vector<float>(0, 0)).applyImpulse(t2Vector<float>(100, 0));
-        }
-        if (!keydown)
-            geo.removeImpulse();
+            geo->addImpulse(t2Vector<float>(0, 10));
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+            geo2->addImpulse(t2Vector<float>(-10, 0));
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+            geo2->addImpulse(t2Vector<float>(10, 0));
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+            geo2->addImpulse(t2Vector<float>(0, -10));
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            geo2->addImpulse(t2Vector<float>(0, 10));
 
-        //std::cout << dt.asSeconds() << std::endl;
-        if (r)
-        {
-            rocket.tick(dt.asSeconds());
-            rock.setPosition(sf::Vector2f(rocket.getPosition().getX(), rocket.getPosition().getY()));
-        }
-        //std::cout << geo.getPosition() << std::endl;
-        geo.tick(dt.asSeconds());
-        shape.setPosition(sf::Vector2f(geo.getPosition().getX(), geo.getPosition().getY()));
+        w.tick(dt.asSeconds());
+
+        shape.setPosition(sf::Vector2f(geo->getPosition().getX() - geo->getSize().getX() / 2,
+                                       geo->getPosition().getY() - geo->getSize().getY() / 2));
+        shape2.setPosition(sf::Vector2f(geo2->getPosition().getX() - geo2->getSize().getX() / 2,
+                                       geo2->getPosition().getY() - geo2->getSize().getY() / 2));
+        rock.setPosition(sf::Vector2f(rocket->getPosition().getX() - rocket->getSize().getX() / 2,
+                                      rocket->getPosition().getY() - rocket->getSize().getY() / 2));
         window.clear();
         window.draw(shape);
+        window.draw(shape2);
         window.draw(rock);
         window.display();
         dt = deltaClock.restart();
