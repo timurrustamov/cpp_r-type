@@ -20,13 +20,15 @@ InfoMenu::InfoMenu()
 InfoMenu::~InfoMenu()
 {
     for (std::vector<sf::Texture*>::iterator it = this->fileImg.begin(); it != this->fileImg.end(); it++)
-        delete *it;
+        if (*it != NULL)
+            delete *it;
     for (std::vector<sf::Sprite*>::iterator it = this->sprites.begin(); it != this->sprites.end(); it++)
-        delete *it;
+        if (*it != NULL)
+            delete *it;
     for (std::vector<sf::Text*>::iterator it = this->texts.begin(); it != this->texts.end(); it++)
-        delete *it;
+        if (*it != NULL)
+            delete *it;
     delete this->font;
-    delete this->next;
     delete this->window;
 }
 
@@ -47,6 +49,7 @@ void InfoMenu::init()
 void InfoMenu::showUserForm()
 {
     sf::Color   color(0, 0, 0);
+
     this->texts[0] = new sf::Text("Enter your username:", *this->font, 20);
     this->texts[1] = new sf::Text("(max 8 characters)", *this->font, 10);
     this->texts[2] = new sf::Text(this->username, *this->font, 30);
@@ -58,8 +61,6 @@ void InfoMenu::showUserForm()
     this->texts[2]->setColor(color);
     while (this->window->isOpen())
     {
-        if (this->isDone)
-            return;
         sf::Event  event;
         while (this->window->pollEvent(event))
         {
@@ -67,6 +68,8 @@ void InfoMenu::showUserForm()
             if (event.type == sf::Event::Closed)
                 this->window->close();
         }
+        if (this->isDone)
+            return;
         this->texts[2]->setString(this->username);
         this->window->clear();
         this->window->draw(*this->sprites[0]);
@@ -100,7 +103,10 @@ void InfoMenu::showIpForm(char status)
     while (this->window->isOpen())
     {
         if (this->isDone)
+        {
+            this->window->clear();
             return;
+        }
         sf::Event  event;
         while (this->window->pollEvent(event))
         {
@@ -109,7 +115,6 @@ void InfoMenu::showIpForm(char status)
                 this->window->close();
         }
         this->texts[2]->setString(this->ip);
-        this->window->clear();
         this->window->draw(*this->sprites[0]);
         this->window->draw(*this->sprites[1]);
         this->window->draw(*this->texts[0]);
