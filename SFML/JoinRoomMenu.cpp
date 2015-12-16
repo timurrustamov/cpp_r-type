@@ -92,7 +92,7 @@ JoinRoomMenu *JoinRoomMenu::getInstance(sf::RenderWindow *window)
 
 int JoinRoomMenu::getKeys()
 {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
         return -1;
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && this->currentRoom + 1 < 4)
     {
@@ -110,7 +110,13 @@ int JoinRoomMenu::getKeys()
         usleep(120000);
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
-        this->removeRoom(this->currentRoom);
+    {
+        if (this->texts[this->currentRoom]->getString() != "<Room not available>")
+        {
+            this->waitingRoom = WaitingRoom::getInstance(this->window, false);
+            this->waitingRoom->RenderFrame();
+        }
+    }
     return 0;
 }
 
@@ -122,7 +128,8 @@ bool JoinRoomMenu::addRoom()
     std::stringstream   ss;
     ss << ++this->nbRooms;
     name += ss.str();
-    this->texts[this->nbRooms - 1]->setString(name);
+    if (this->nbRooms - 1 >= 0)
+        this->texts[this->nbRooms - 1]->setString(name);
     return true;
 }
 

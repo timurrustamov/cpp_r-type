@@ -7,6 +7,9 @@
 
 #include <sstream>
 #include "MainMenu.h"
+#include "WaitingRoom.h"
+
+class WaitingRoom;
 
 class JoinRoomMenu
 {
@@ -35,6 +38,7 @@ private:
     std::vector<sf::Text *> texts;
     sf::Color               *green;
     sf::Color               *yellow;
+    WaitingRoom             *waitingRoom;
 };
 
 
