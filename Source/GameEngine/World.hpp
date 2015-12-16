@@ -5,10 +5,14 @@
 #ifndef CPP_R_TYPE_WORLD_HPP
 #define CPP_R_TYPE_WORLD_HPP
 
-#include "Geometry.hpp"
+#include "Object.h"
 #include "QuadTree.hpp"
+#include "Player.hpp"
+#include "WallOfPain.hpp"
+#include <typeinfo>
 
 #define MAX_PLAYERS 4
+#define BAD_ID 0xB16B00B5
 
 class World {
 
@@ -16,17 +20,66 @@ public:
     World(t2Vector<int> size, bool verticalWalls = true, bool horizontalWalls = false);
     ~World();
 
-    World &newGeometry(Geometry *geo);
-    Geometry *newGeometry(const Rectangle<float> &obj, float terminalVelocity, float accelerationTime, float inertiaRatio);
-    World &bindPlayerObject(Geometry *geo);
-    Geometry *bindPlayerObject(const Rectangle<float> &obj, float terminalVelocity, float accelerationTime, float inertiaRatio);
-    World & removePlayerObject(Geometry *geo);
+    template <typename T>
+    unsigned int createNewObject(const t2Vector<int> &position)
+    {
+        Object *newobj;
+
+        if (typeid(T) == typeid(Player))
+            return (BAD_ID);
+        newobj = new T(position);
+        this->_objects[newobj->getId()] = newobj;
+        this->_qt.insert(newobj->geometry);
+
+        std::cout << newobj->getId() << std::endl;
+        return (newobj->getId());
+    };
+
+    template <typename T>
+    unsigned int createNewObject(int x, int y)
+    {
+        return (this->createNewObject<T>(t2Vector<int>(x, y)));
+    };
+
+    unsigned int createNewPlayer(const t2Vector<int> &position, unsigned int playerNo)
+    {
+        Object *newobj;
+        unsigned int id;
+
+        if (playerNo > MAX_PLAYERS)
+            return (BAD_ID);
+        if (this->_playersId[playerNo] != BAD_ID)
+            return (this->_playersId[playerNo]);
+        newobj = new Player(position);
+        id = newobj->getId();
+        this->_objects[id] = newobj;
+        this->_playersId[playerNo] = id;
+        return (id);
+    }
+
+    unsigned int createNewPlayer(int x, int y, unsigned int playerNo)
+    {
+        return (this->createNewPlayer(t2Vector<int>(x, y), playerNo));
+    }
+
     World & tick(float seconds);
 
-    std::vector<Geometry *> _objects;
-    std::vector<Geometry *> _players;
+    Object *getPlayerObject(unsigned int playerNo)
+    {
+        if (playerNo > MAX_PLAYERS || this->_playersId[playerNo] == BAD_ID)
+            return (NULL);
+        return (this->_objects[this->_playersId[playerNo]]);
+    }
+
+    Object *getObject(unsigned int objectId)
+    {
+        return (this->_objects[objectId]);
+    }
+
 private:
 
+    std::map<unsigned int, Object *> _objects;
+    std::vector<unsigned int> _playersId;
     QuadTree _qt;
 };
 

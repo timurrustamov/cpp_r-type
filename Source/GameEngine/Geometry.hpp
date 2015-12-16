@@ -8,6 +8,9 @@
 #include "t2Vector.hpp"
 #include "Rectangle.hpp"
 #include "QuadTree.hpp"
+#include "Object.h"
+
+class Object;
 
 class QuadTree;
 
@@ -15,7 +18,7 @@ class Geometry {
 
 public:
 
-    Geometry(const Rectangle<float> &obj, float terminalVelocity = 20, float accelerationTime = 0, float decelerationTime = 0);
+    Geometry(const Rectangle<float> &obj, float terminalVelocity = 20, float decelerationTime = 0);
 
     Geometry &operator=(const Geometry &geo);
 
@@ -31,6 +34,10 @@ public:
 
     Geometry &attach(QuadTree *quadTree, bool forced = false);
 
+    Geometry &attachToObject(Object &obj);
+
+    Object *getObject();
+
     Geometry &detach();
 
     Geometry & hardDetach();
@@ -45,10 +52,9 @@ public:
     }
 
     template <typename T>
-    Geometry &applyImpulse(t2Vector<T> impulse)
+    Geometry &applyImpulse(t2Vector<T> impulse, float accelerationTime)
     {
-        this->_applyed = true;
-        this->_currentAccelerationTime = 0;
+        this->_object->timer.addNewEvent("acceleration", accelerationTime);
         this->_acceleration = impulse;
         return (*this);
     }
@@ -56,15 +62,15 @@ public:
     template <typename T>
     Geometry addImpulse(t2Vector<T> impulse)
     {
-        this->_acceleration += impulse;
+        this->_acceleration.x() += impulse.getX();
+        this->_acceleration.y() += impulse.getY();
+        this->_object->timer.addNewEvent("acceleration", 0.05);
         return (*this);
     }
 
     Geometry &removeImpulse()
     {
-        this->_currentAccelerationTime = 0;
-        this->_acceleration.assign(0, 0);
-        this->_applyed = false;
+        this->_object->timer.removeEvent("acceleration");
         return (*this);
     }
 
@@ -102,10 +108,9 @@ public:
 
     QuadTree * getNode() const;
 
-
 private:
 
-    unsigned int _objectId;
+    Object *        _object;
     QuadTree *      _node;
 
     Rectangle<float> _innerObj;
@@ -113,10 +118,7 @@ private:
     t2Vector<float> _acceleration;
     t2Vector<float> _previousPosition[10];
     unsigned int _currentFrame;
-    bool _applyed;
 
-    float _accelerationTime;
-    float _currentAccelerationTime;
     float _inertiaRatio;
     float _terminalVelocity;
 };
