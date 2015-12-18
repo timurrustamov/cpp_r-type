@@ -2,7 +2,9 @@
 # define OBJECT_H_
 
 # include				<string>
-# include				"Geometry.hpp"
+# include 				"Timer.hpp"
+
+class 					Geometry;
 
 class					Object
 {
@@ -17,18 +19,32 @@ public:
 		Other
 	};
 
-private:
 	Geometry			*geometry;
+	virtual ~Object();
+
+	virtual void interact(Object *) = 0;
+	Type  getType() const;
+	unsigned int 		getId() const;
+	bool mustBeDeleted() const;
+	bool setToDelete();
+	Timer 				timer;
+
+private:
+
+	unsigned int		static getNewId();
+
+protected:
 	std::string			name;
 	Type				type;
 	unsigned int		id;
+	bool 				to_delete;
 
+	Object();
 	Object(Geometry &, std::string const &, Type);
 	Object(Geometry *, std::string const &, Type);
-	~Object();
 
-private:
-	unsigned int		static getId();
 };
+
+# include				"Geometry.hpp"
 
 #endif /* !OBJECT_H_ */

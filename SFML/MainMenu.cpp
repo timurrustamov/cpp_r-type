@@ -8,12 +8,6 @@ MainMenu::MainMenu(sf::RenderWindow *win)
 {
     this->transp = 255;
     this->window = win;
-    sf::VideoMode mode = sf::VideoMode::getDesktopMode();
-    sf::Vector2i pos((mode.width / 2) - 640, (mode.height / 2) - 360);
-    sf::Vector2u size(1280, 720);
-    this->currentImg = 0;
-    this->window->setSize(size);
-    this->window->setPosition(pos);
     this->texture.push_back(new sf::Texture());
     this->texture.push_back(new sf::Texture());
     this->texture.push_back(new sf::Texture());
@@ -30,20 +24,29 @@ MainMenu::MainMenu(sf::RenderWindow *win)
     this->sprite[2]->setScale(0.39, 0.42);
     this->fondu = new sf::Sprite(*this->texture[0]);
     this->fondu->setColor(sf::Color(0, 0, 0, static_cast<sf::Uint8>(this->transp)));
+    this->window->draw(*this->fondu);
     this->song = new sf::Music();
     this->song->openFromFile("musics/tron.ogg");
     this->song->setLoop(true);
     this->song->setVolume(150);
     this->clock = new sf::Clock();
     this->fondu->setPosition(0, 0);
+    sf::VideoMode mode = sf::VideoMode::getDesktopMode();
+    sf::Vector2i pos((mode.width / 2) - 640, (mode.height / 2) - 360);
+    sf::Vector2u size(1280, 720);
+    this->currentImg = 0;
+    this->window->setSize(size);
+    this->window->setPosition(pos);
 }
 
 MainMenu::~MainMenu()
 {
     for (std::vector<sf::Texture*>::iterator it = this->texture.begin(); it != this->texture.end(); it++)
-        delete *it;
+        if (*it != NULL)
+            delete *it;
     for (std::vector<sf::Sprite*>::iterator it = this->sprite.begin(); it != this->sprite.end(); it++)
-        delete *it;
+        if (*it != NULL)
+            delete *it;
 }
 
 void MainMenu::RenderFrame()
@@ -54,9 +57,9 @@ void MainMenu::RenderFrame()
     while (this->window->isOpen())
     {
         time = this->clock->getElapsedTime().asMilliseconds();
-        if (time >= 1 && this->transp > 0)
+        if (time >= 0.5 && this->transp > 0)
         {
-            this->transp -= 2;
+            this->transp -= 4;
             this->fondu->setColor(sf::Color(0, 0, 0, static_cast<sf::Uint8>(this->transp)));
             this->clock->restart();
         }

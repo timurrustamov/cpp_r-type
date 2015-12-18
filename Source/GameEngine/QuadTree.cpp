@@ -175,11 +175,11 @@ QuadTree::retrieveObjects(std::list<Geometry *> &objects, bool searchSon)
     return (objects.size());
 }
 
-void
+Geometry *
 QuadTree::testCollision(Geometry *geo, std::map<Geometry *, std::vector<Geometry *> > interactionmap)
 {
     if (geo->getNode() == NULL)
-        return;
+        return geo;
     std::list<Geometry*> objects;
     geo->getNode()->retrieveObjects(objects);
 
@@ -191,25 +191,12 @@ QuadTree::testCollision(Geometry *geo, std::map<Geometry *, std::vector<Geometry
             geo->getNode()->collision(geo, *it);
             interactionmap[*it].push_back(geo);
         }
+    return (geo);
 }
-
 
 //geo1 is always the one initializing collision
 void
 QuadTree::collision(Geometry *geo1, Geometry *geo2)
 {
-    Geometry *tmp[2];
-
-    geo1->removeImpulse();
-    geo2->applyImpulse(geo2->getPosition() - geo1->getPosition());
-    //geo2->setPosition(geo2->getPreviousPosition(9));
-
-    if (geo1->getRect().touchUpper(geo2->getRect()) || geo1->getRect().touchLower(geo2->getRect()))
-        geo1->velocity().y() *= -1;
-    if (geo1->getRect().touchLeft(geo2->getRect()) || geo1->getRect().touchRight(geo2->getRect()))
-        geo1->velocity().x() *= -1;
-    geo1->setPosition(geo1->getPreviousPosition(1));
-//    if (geo1->getRect().fitsIn(geo2->getRect()))
-//        geo1->setPosition(t2Vector<float>(std::rand() % 400, std::rand() % 400));
-    //geo1->attach(this);
+    geo1->getObject()->interact(geo2->getObject());
 }

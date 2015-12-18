@@ -1,32 +1,37 @@
 //
-// Created by Zaboon on 12/12/2015.
+// Created by rustam_t on 12/15/15.
 //
 
-#ifndef CPP_R_TYPE2_TIMER_HPP
-#define CPP_R_TYPE2_TIMER_HPP
+#ifndef CPP_R_TYPECPY2_TIMER_HPP
+#define CPP_R_TYPECPY2_TIMER_HPP
 
-#include                                                  <iostream>
-#include                                                  <string>
-#include                                                  <chrono>
+#include <string>
+#include <utility>
+#include <map>
+#include <algorithm>
+#include <SFML/System/Time.hpp>
+#include <SFML/System/Clock.hpp>
 
+class Timer {
 
-class                                                           Timer {
 public:
+
     Timer();
-    ~Timer();
-    void                                                        start();
-    void                                                        stop();
-    void                                                        pause();
-    void                                                        reset();
-    void                                                        refresh();
-    void                                                        addTime(int time);
-    void                                                        setTimer(int min, int sec, int mil);
-private:
-    int                                                         _min;
-    int                                                         _sec;
-    int                                                         _mil;
-    bool                                                        _isOn;
-    std::chrono::time_point<std::chrono::system_clock>          _time;
+    ~Timer() {};
+    Timer &addNewEvent(const std::string &name, float seconds);
+    Timer &removeEvent(const std::string &name);
+    Timer &reset(const std::string &name);
+
+    bool eventExists(const std::string &name);
+    float elapsedTime(const std::string &name);
+    float advancement(const std::string &name);
+    bool eventDone(const std::string &name);
+    bool operator[](const std::string &name);
+
+protected:
+
+    std::map<std::string, std::pair<float, sf::Clock> > _events;
 };
 
-#endif //CPP_R_TYPE2_TIMER_HPP
+
+#endif //CPP_R_TYPECPY2_TIMER_HPP

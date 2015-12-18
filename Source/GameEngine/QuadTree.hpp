@@ -33,7 +33,7 @@ public:
    // QuadTree &  realign(Geometry *geo1, Geometry *geo2);
 
     unsigned long int       retrieveObjects(std::list<Geometry*> &, bool searchSon = true);
-    static void             testCollision(Geometry *geo, std::map<Geometry *, std::vector<Geometry *> > interactionmap);
+    Geometry                *testCollision(Geometry *geo, std::map<Geometry *, std::vector<Geometry *> > interactionmap);
 private:
 
     QuadTree(int pLevel, QuadTree *parent, const Rectangle<int> &rec);

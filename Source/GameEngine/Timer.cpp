@@ -1,48 +1,75 @@
 //
-// Created by Zaboon on 12/12/2015.
+// Created by rustam_t on 12/15/15.
 //
 
-#include                                                  "Timer.hpp"
+#include "Timer.hpp"
 
 Timer::Timer() {
-    this->_time = std::chrono::system_clock::now();
-    this->_isOn = false;
-    this->setTimer(0, 0, 0);
-}
-
-Timer::~Timer() {
 
 }
 
-void                                                            Timer::start() {
-    this->_isOn = true;
+Timer &
+Timer::addNewEvent(const std::string &name, float seconds) {
+
+    if (this->eventExists(name))
+        this->_events[name].first = seconds;
+    else
+        this->_events[name] = std::make_pair(seconds, sf::Clock());
+    return (*this);
 }
 
-void                                                            Timer::stop() {
-    this->pause();
-    this->reset();
+Timer &
+Timer::removeEvent(const std::string &name)
+{
+    std::map<std::string, std::pair<float, sf::Clock> >::iterator it;
+
+    if ((it = this->_events.find(name)) != this->_events.end())
+        this->_events.erase(it);
+    return (*this);
 }
 
-void                                                            Timer::pause() {
-    this->_isOn = false;
+bool
+Timer::eventExists(const std::string &name)
+{
+    return (this->_events.find(name) != this->_events.end());
 }
 
-void                                                            Timer::refresh() {
-    int                                                         timeLeft = this->_isOn ?
-                                                                         std::chrono::duration_cast<std::chrono::milliseconds>(this->_isOn - this->_time).count()
-                                                                                     : 0;
-    std::chrono::time_point<std::chrono::system_clock>           _now = std::chrono::system_clock::now();
+bool
+Timer::eventDone(const std::string &name) {
 
-    this->_time = _now;
-    this->addTime(timeLeft);
+    if (this->_events.find(name) != this->_events.end())
+    {
+        if (this->_events[name].first <= this->_events[name].second.getElapsedTime().asSeconds())
+            return (true);
+    }
+    return (false);
 }
 
-void                                                            Timer::addTime(int time) {
-    //TODO Add time to the timer.
+bool
+Timer::operator[](const std::string &name) {
+
+    return (this->eventDone(name));
 }
 
-void                                                            Timer::setTimer(int min, int sec, int mil) {
-    this->_min = min;
-    this->_sec = sec;
-    this->mil = mil;
+Timer &Timer::reset(const std::string &name) {
+
+    if (this->eventExists(name))
+        this->_events[name].second.restart();
+    return (*this);
+}
+
+float Timer::elapsedTime(const std::string &name) {
+
+    if (this->eventExists(name))
+        return (this->_events[name].second.getElapsedTime().asSeconds());
+    return (0.0);
+}
+
+float Timer::advancement(const std::string &name) {
+
+    if (this->eventExists(name) && this->_events[name].first > 0.0000001) {
+        return (this->_events[name].second.getElapsedTime().asSeconds() >= this->_events[name].first ?
+                (1) : this->_events[name].second.getElapsedTime().asSeconds() / this->_events[name].first);
+    }
+    return (0);
 }

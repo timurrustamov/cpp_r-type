@@ -4,18 +4,15 @@
 
 #include "Geometry.hpp"
 
-Geometry::Geometry(const Rectangle<float> &obj, float terminalVelocity, float accelerationTime, float inertiaRatio)
+Geometry::Geometry(const Rectangle<float> &obj, float terminalVelocity, float inertiaRatio)
 {
     this->_innerObj = obj;
     this->_node = NULL;
 
     this->_terminalVelocity = terminalVelocity;
 
-    this->_accelerationTime = (accelerationTime <= 0 ? 0.001 : accelerationTime);
     this->_inertiaRatio = inertiaRatio <= 0 ? 0.001 : inertiaRatio;
 
-    this->_applyed = false;
-    this->_currentAccelerationTime = 0;
     this->_velocity.setX(0).setY(0);
     this->_acceleration.setX(0).setY(0);
     int i = -1;
@@ -29,9 +26,7 @@ Geometry &Geometry::operator=(const Geometry &geo) {
     this->_innerObj = geo._innerObj;
     this->_node = geo._node;
     this->_terminalVelocity = geo._terminalVelocity;
-    this->_accelerationTime = geo._accelerationTime;
     this->_inertiaRatio = geo._inertiaRatio;
-    this->_applyed = geo._applyed;
     this->_velocity = geo._velocity;
     this->_acceleration = geo._acceleration;
     int i = -1;
@@ -45,9 +40,7 @@ Geometry::Geometry(const Geometry &geo)
     this->_innerObj = geo._innerObj;
     this->_node = geo._node;
     this->_terminalVelocity = geo._terminalVelocity;
-    this->_accelerationTime = geo._accelerationTime;
     this->_inertiaRatio = geo._inertiaRatio;
-    this->_applyed = geo._applyed;
     this->_velocity = geo._velocity;
     this->_acceleration = geo._acceleration;
     int i = -1;
@@ -66,28 +59,26 @@ Geometry::tick(float delta_time)
     t2Vector<float> acceleration;
     float step;
 
-    this->_previousPosition[this->_currentFrame++ % 10] = this->_innerObj.getPosition();
-    if (this->_acceleration != t2Vector<float>(0, 0)) {
+    this->_previousPosition[this->_currentFrame = (this->_currentFrame++ % 10)] = this->_innerObj.getPosition();
 
-        step = (this->_currentAccelerationTime += delta_time) / this->_accelerationTime;
-        step = (step > 1) ? 1 : (step);
-
+    if (this->_object->timer.eventExists("acceleration"))
+    {
+        step = this->_object->timer.advancement("acceleration");
         acceleration = this->_acceleration * (step * step * (3 - 2 * step));
         this->_velocity += acceleration;
-    }
-    if (this->_velocity != t2Vector<float>(0, 0)) {
 
+        if (this->_object->timer.eventDone("acceleration")) {
+            this->_object->timer.removeEvent("acceleration");
+            this->_acceleration.setX(0).setY(0);
+        }
+    }
+
+    if (this->_velocity != t2Vector<float>(0, 0))
         this->_velocity -= (this->_velocity * this->_inertiaRatio * delta_time);
-    }
-
     if (this->_velocity.length() > this->_terminalVelocity)
         this->_velocity *= this->_terminalVelocity / this->_velocity.length();
 
-    //std::cout << "current velocity " << this->_velocity << std::endl;
-
     this->_innerObj.position() += this->_velocity * delta_time;
-    if (!_applyed) //not a continuous movement
-        this->_acceleration.assign(0, 0);
 
     return (*this);
 }
@@ -149,7 +140,8 @@ Geometry::setRelativeAngle(float angle)
     return (*this);
 }
 
-Geometry &Geometry::setClockWiseAngle(float angle) {
+Geometry &
+Geometry::setClockWiseAngle(float angle) {
 
     this->setRelativeAngle(-this->getClockWiseAngle()).setRelativeAngle(angle);
     return (*this);
@@ -176,6 +168,20 @@ Geometry::attach(QuadTree *quadTree, bool forced)
         this->_node->remove(this);
     this->_node = quadTree->insert(this);
     return (*this);
+}
+
+Geometry &
+Geometry::attachToObject(Object &obj)
+{
+    if (this->_object != NULL)
+        this->_object = &obj;
+    return (*this);
+}
+
+Object *
+Geometry::getObject()
+{
+    return (this->_object);
 }
 
 Geometry &
