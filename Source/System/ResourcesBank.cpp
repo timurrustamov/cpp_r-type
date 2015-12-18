@@ -44,7 +44,10 @@ void								ResourcesBank::setTexture(const std::string &name, const std::string
 		sf::Texture					*texture = new sf::Texture();
 
 		if (texture->loadFromFile(pathfile))
+		{
 			this->textureBank[name] = texture;
+			std::cout << name << std::endl;
+		}
 		else
 			throw RTypeException("Adding texture: " + name + " (location: " + pathfile + ")" + " failed (loading)");
 	}

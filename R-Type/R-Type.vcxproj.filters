@@ -57,8 +57,14 @@
     <ClCompile Include="..\Source\GameEngine\Object.cpp">
       <Filter>Fichiers sources\GameEngine</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\GameEngine\ResourcesBank.cpp">
+    <ClCompile Include="..\Source\GameEngine\World.cpp">
       <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\System\ResourcesBank.cpp">
+      <Filter>Fichiers sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\System\Animation.cpp">
+      <Filter>Fichiers sources\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,8 +98,20 @@
     <ClInclude Include="..\Source\GameEngine\Object.h">
       <Filter>Fichiers d%27en-tête\GameEngine</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\GameEngine\ResourcesBank.h">
+    <ClInclude Include="..\Source\GameEngine\Rectangle.hpp">
       <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\World.hpp">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\System\Animation.h">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\System\ResourcesBank.h">
+      <Filter>Fichiers d%27en-tête\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

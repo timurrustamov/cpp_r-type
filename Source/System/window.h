@@ -3,13 +3,14 @@
 
 # include					<string>
 # include					<SFML/Graphics.hpp>
+# include					<SFML/Graphics/Drawable.hpp>
 # include					"RTypeException.h"
 # include					"../GameEngine/IGameplay.h"
 
 class						Window
 {
 	IGameplay				*gameplay;
-	sf::RenderWindow		window;
+	
 	sf::View				view;
 
 	const					char *title;
@@ -18,7 +19,9 @@ class						Window
 	unsigned int			height;
 
 public:
-	Window(const char *, unsigned int width = 1138, unsigned int height = 640, bool fullscreen = false);
+	sf::RenderWindow		window;
+
+	Window(const char *, unsigned int width = 0, unsigned int height = 0, bool fullscreen = false);
 	~Window();
 
 	void					launchWindow();
@@ -27,6 +30,11 @@ public:
 
 	void					attachGameplay(IGameplay *);
 	void					callGameplay();
+
+	unsigned int			getWidth() const;
+	unsigned int			getHeight() const;
+
+	void					draw(const sf::Drawable &drawable, const sf::RenderStates &states = sf::RenderStates::Default);
 };
 
 #endif /* !WINDOW_H_ */

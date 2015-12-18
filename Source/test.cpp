@@ -2,7 +2,6 @@
 #include "GameEngine/Geometry.hpp"
 #include "GameEngine/World.hpp"
 #include <SFML/Graphics.hpp>
-#include <curses.h>
 
 int main()
 {

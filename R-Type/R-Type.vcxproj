@@ -25,8 +25,15 @@
     <ClCompile Include="..\Source\GameEngine\Geometry.cpp" />
     <ClCompile Include="..\Source\GameEngine\Level.cpp" />
     <ClCompile Include="..\Source\GameEngine\QuadTree.cpp" />
-    <ClCompile Include="..\Source\GameEngine\ResourcesBank.cpp" />
-    <ClCompile Include="..\Source\main.cpp" />
+    <ClCompile Include="..\Source\GameEngine\World.cpp" />
+    <ClCompile Include="..\Source\main.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\System\Animation.cpp" />
+    <ClCompile Include="..\Source\System\ResourcesBank.cpp" />
     <ClCompile Include="..\Source\System\RTypeException.cpp" />
     <ClCompile Include="..\Source\System\window.cpp" />
     <ClCompile Include="..\Source\test.cpp">
@@ -44,10 +51,14 @@
     <ClInclude Include="..\Source\GameEngine\Object.h" />
     <ClInclude Include="..\Source\GameEngine\OnLevel.h" />
     <ClInclude Include="..\Source\GameEngine\QuadTree.hpp" />
-    <ClInclude Include="..\Source\GameEngine\ResourcesBank.h" />
+    <ClInclude Include="..\Source\GameEngine\Rectangle.hpp" />
     <ClInclude Include="..\Source\GameEngine\t2Vector.hpp" />
+    <ClInclude Include="..\Source\GameEngine\World.hpp" />
+    <ClInclude Include="..\Source\System\Animation.h" />
+    <ClInclude Include="..\Source\System\ResourcesBank.h" />
     <ClInclude Include="..\Source\System\RTypeException.h" />
     <ClInclude Include="..\Source\System\window.h" />
+    <ClInclude Include="Animation.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
