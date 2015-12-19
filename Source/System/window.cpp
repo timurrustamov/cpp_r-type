@@ -56,8 +56,8 @@ void				Window::callGameplay()
 		if (event.type == sf::Event::KeyPressed)
 		{
 			this->gameplay->keyPressed(event.key.code);
-			this->gameplay->updateGraphics();
 		}
+		this->gameplay->updateGraphics();
 	}
 }
 

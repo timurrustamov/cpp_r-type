@@ -66,6 +66,18 @@
     <ClCompile Include="..\Source\System\Animation.cpp">
       <Filter>Fichiers sources\System</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\WallOfPain.cpp">
+      <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Timer.cpp">
+      <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Rocket.cpp">
+      <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Player.cpp">
+      <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\GameEngine\QuadTree.hpp">
@@ -111,6 +123,21 @@
       <Filter>Fichiers d%27en-tête\System</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\System\ResourcesBank.h">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Player.hpp">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Rocket.hpp">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Timer.hpp">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\WallOfPain.hpp">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\AnimationEntity.hpp">
       <Filter>Fichiers d%27en-tête\System</Filter>
     </ClInclude>
   </ItemGroup>

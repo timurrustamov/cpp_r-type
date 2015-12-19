@@ -2,6 +2,7 @@
 # define GAMEDATA_H_
 
 # include				"../System/ResourcesBank.h"
+# include				"t2Vector.hpp"
 # include				"World.hpp"
 
 class					GameData
