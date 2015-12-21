@@ -4,11 +4,12 @@
 
 #include "Geometry.hpp"
 
-Geometry::Geometry(const Rectangle<float> &obj, float terminalVelocity, float inertiaRatio) : _currentFrame(0)
+Geometry::Geometry(const Rectangle<float> &obj, float terminalVelocity, float inertiaRatio) : _object(NULL)
 {
     this->_innerObj = obj;
     this->_node = NULL;
     this->_terminalVelocity = terminalVelocity;
+    this->_currentFrame = 0;
     this->_inertiaRatio = inertiaRatio <= 0 ? 0.001 : inertiaRatio;
     this->_velocity.setX(0).setY(0);
     this->_acceleration.setX(0).setY(0);
@@ -18,8 +19,7 @@ Geometry::Geometry(const Rectangle<float> &obj, float terminalVelocity, float in
 }
 
 
-Geometry &Geometry::operator=(const Geometry &geo)
-{
+Geometry &Geometry::operator=(const Geometry &geo){
 
     this->_innerObj = geo._innerObj;
     this->_node = geo._node;
@@ -28,13 +28,14 @@ Geometry &Geometry::operator=(const Geometry &geo)
     this->_currentFrame = 0;
     this->_velocity = geo._velocity;
     this->_acceleration = geo._acceleration;
+	this->_object = geo._object;
     int i = -1;
     while (++i < 10)
         this->_previousPosition[i] = geo._previousPosition[i];
     return (*this);
 }
 
-Geometry::Geometry(const Geometry &geo) : _currentFrame(0)
+Geometry::Geometry(const Geometry &geo) : _object(NULL)
 {
     this->_innerObj = geo._innerObj;
     this->_node = geo._node;
@@ -59,10 +60,9 @@ Geometry::tick(float delta_time)
     t2Vector<float> acceleration;
     float step;
 
-    this->_previousPosition[this->_currentFrame] = this->_innerObj.getPosition();
-    this->_currentFrame = this->_currentFrame++ % 10;
+    this->_previousPosition[this->_currentFrame++ % 10] = this->_innerObj.getPosition();
 
-    if (this->_object->timer.eventExists("acceleration"))
+    if (this->_object && this->_object->timer.eventExists("acceleration"))
     {
         step = this->_object->timer.advancement("acceleration");
         acceleration = this->_acceleration * (step * step * (3 - 2 * step));
@@ -171,11 +171,12 @@ Geometry::attach(QuadTree *quadTree, bool forced)
     return (*this);
 }
 
+#include <stdio.h>
+
 Geometry &
-Geometry::attachToObject(Object &obj)
+Geometry::attachToObject(Object *obj)
 {
-    if (this->_object != NULL)
-        this->_object = &obj;
+	this->_object = obj;
     return (*this);
 }
 
@@ -210,7 +211,9 @@ Geometry::getNode() const
 const t2Vector<float> &
 Geometry::getPreviousPosition(unsigned int pos) const
 {
-    return (this->_previousPosition[(this->_currentFrame + pos) % 10]);
+    if (pos > 10)
+        pos = 10;
+    return (this->_previousPosition[(this->_currentFrame - 1 + pos) % 10]);
 }
 
 t2Vector<float> &
