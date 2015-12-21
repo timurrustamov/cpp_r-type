@@ -2,10 +2,10 @@
 <level>
   <title>Level 0</title>
   <BGT>background_0.png</BGT>
-  <BGM>sfox2-opening.mp3</BGM>
+  <BGM>sfox2-opening.ogg</BGM>
   <parameters>
-    <scrollSpeed>1</scrollSpeed>
-    <size>2880</size>
+    <scrollspeed>10</scrollspeed>
+    <size>10000</size>
     <gravity>
       <x>0</x>
       <y>0</y>

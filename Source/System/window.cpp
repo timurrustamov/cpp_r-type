@@ -8,6 +8,8 @@ Window::Window(const char *_title, unsigned int _width, unsigned int _height, bo
 		this->width = gameData->getWidth();
 	if (this->height == 0)
 		this->height = gameData->getHeight();
+
+	this->window.setKeyRepeatEnabled(false);
 }
 
 Window::~Window() {}
@@ -47,18 +49,18 @@ void				Window::callGameplay()
 	GameData		*gameData = GameData::getInstance();
 	sf::Event		event;
 
-	while (this->isOpen() && this->window.pollEvent(event))
+	while (this->window.pollEvent(event))
 	{
 		if (event.type == sf::Event::Closed || gameData->getMustQuit())
 			this->window.close();
 		if (gameData->getFullscreen() != this->fullscreen)
 			this->switchFullscreen();
 		if (event.type == sf::Event::KeyPressed)
-		{
 			this->gameplay->keyPressed(event.key.code);
-		}
-		this->gameplay->updateGraphics();
 	}
+	this->gameplay->updateLogic(&this->time);
+	this->gameplay->updateGraphics();
+	this->time = deltaClock.restart();
 }
 
 void				Window::draw(const sf::Drawable &drawable, const sf::RenderStates &states)

@@ -12,6 +12,7 @@ public:
 
 	void			virtual keyPressed(sf::Keyboard::Key) = 0;
 	void			virtual updateGraphics() = 0;
+	void			virtual updateLogic(sf::Time *) = 0;
 };
 
 #endif /* !IGAMEPLAY_H_ */

@@ -25,6 +25,9 @@
     <Filter Include="Fichiers sources\System">
       <UniqueIdentifier>{608fade3-f02e-4feb-b25d-3d479831b651}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers de ressources\Data">
+      <UniqueIdentifier>{f03e110d-ff5a-49c0-9af8-87b8a8ebca83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\GameEngine\Level.cpp">
@@ -76,6 +79,12 @@
       <Filter>Fichiers sources\GameEngine</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\GameEngine\Player.cpp">
+      <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\SerializedObject.cpp">
+      <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Snapshot.cpp">
       <Filter>Fichiers sources\GameEngine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -140,10 +149,21 @@
     <ClInclude Include="..\Source\GameEngine\AnimationEntity.hpp">
       <Filter>Fichiers d%27en-tête\System</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\SerializedObject.hpp">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Snapshot.hpp">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore">
       <Filter>Fichiers sources</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Data\level1.xml">
+      <Filter>Fichiers de ressources\Data</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

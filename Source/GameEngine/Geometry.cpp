@@ -4,7 +4,7 @@
 
 #include "Geometry.hpp"
 
-Geometry::Geometry(const Rectangle<float> &obj, float terminalVelocity, float inertiaRatio)
+Geometry::Geometry(const Rectangle<float> &obj, float terminalVelocity, float inertiaRatio) : _object(NULL)
 {
     this->_innerObj = obj;
     this->_node = NULL;
@@ -19,7 +19,7 @@ Geometry::Geometry(const Rectangle<float> &obj, float terminalVelocity, float in
 }
 
 
-Geometry &Geometry::operator=(const Geometry &geo) {
+Geometry &Geometry::operator=(const Geometry &geo){
 
     this->_innerObj = geo._innerObj;
     this->_node = geo._node;
@@ -28,13 +28,14 @@ Geometry &Geometry::operator=(const Geometry &geo) {
     this->_currentFrame = 0;
     this->_velocity = geo._velocity;
     this->_acceleration = geo._acceleration;
+	this->_object = geo._object;
     int i = -1;
     while (++i < 10)
         this->_previousPosition[i] = geo._previousPosition[i];
     return (*this);
 }
 
-Geometry::Geometry(const Geometry &geo)
+Geometry::Geometry(const Geometry &geo) : _object(NULL)
 {
     this->_innerObj = geo._innerObj;
     this->_node = geo._node;
@@ -61,7 +62,7 @@ Geometry::tick(float delta_time)
 
     this->_previousPosition[this->_currentFrame++ % 10] = this->_innerObj.getPosition();
 
-    if (this->_object->timer.eventExists("acceleration"))
+    if (this->_object && this->_object->timer.eventExists("acceleration"))
     {
         step = this->_object->timer.advancement("acceleration");
         acceleration = this->_acceleration * (step * step * (3 - 2 * step));
@@ -170,11 +171,12 @@ Geometry::attach(QuadTree *quadTree, bool forced)
     return (*this);
 }
 
+#include <stdio.h>
+
 Geometry &
-Geometry::attachToObject(Object &obj)
+Geometry::attachToObject(Object *obj)
 {
-    if (this->_object != NULL)
-        this->_object = &obj;
+	this->_object = obj;
     return (*this);
 }
 

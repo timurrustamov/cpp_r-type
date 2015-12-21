@@ -183,14 +183,14 @@ QuadTree::testCollision(Geometry *geo, std::map<Geometry *, std::vector<Geometry
     std::list<Geometry*> objects;
     geo->getNode()->retrieveObjects(objects);
 
-    for (std::list<Geometry *>::iterator it = objects.begin(); it != objects.end(); it++)
-        if (geo != *it &&
-            std::find(interactionmap[geo].begin(), interactionmap[geo].end(), *it) == interactionmap[geo].end() &&
-            geo->getRect().touches((*it)->getRect()))
-        {
-            geo->getNode()->collision(geo, *it);
-            interactionmap[*it].push_back(geo);
-        }
+	for (std::list<Geometry *>::iterator it = objects.begin(); it != objects.end(); it++)
+		if (geo != NULL && geo->getObject() != NULL && geo->getNode() != NULL && geo != *it &&
+			std::find(interactionmap[geo].begin(), interactionmap[geo].end(), *it) == interactionmap[geo].end() &&
+			geo->getRect().touches((*it)->getRect()))
+		{
+			geo->getNode()->collision(geo, *it);
+			interactionmap[*it].push_back(geo);
+		}
     return (geo);
 }
 

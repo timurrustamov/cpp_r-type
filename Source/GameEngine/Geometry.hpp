@@ -34,7 +34,7 @@ public:
 
     Geometry &attach(QuadTree *quadTree, bool forced = false);
 
-    Geometry &attachToObject(Object &obj);
+    Geometry &attachToObject(Object *obj);
 
     Object *getObject();
 

@@ -3,33 +3,31 @@
 #include				"../System/Animation.h"
 #include				"OnLevel.h"
 
-OnLevel::OnLevel()
+OnLevel::OnLevel() : level(static_cast<Level *>(0)), backgroundEntity(0, 0, t2Vector<int>(0, 0))
 {
 	this->gameData = GameData::getInstance();
-
-	try
-	{
-		this->gameData->resourceBank->setTexture("Ship", "../Assets/Graphics/Sprites/r-typesheet32.png");
-		this->gameData->resourceBank->setTexture("Background", "../Assets/Graphics/Backgrounds/background_1.png");
-		this->test = new Animation("Ship", t2Vector<unsigned int>(260, 143), t2Vector<unsigned int>(0, 0), t2Vector<unsigned int>(2, 4));
-		this->background = new Animation("Background", t2Vector<unsigned int>(this->gameData->getWidth(), this->gameData->getHeight()), t2Vector<unsigned int>(0, 0), t2Vector<unsigned int>(1, 1));
-
-		this->test->changeEntity(0, 0, t2Vector<int>(40, 40));
-		this->test->changeEntity(1, 0, t2Vector<int>(250, 40));
-		this->test->changeEntity(2, 0, t2Vector<int>(500, 40));
-		this->test->changeEntity(3, 0, t2Vector<int>(200, 300));
-		this->test->changeEntity(4, 0, t2Vector<int>(450, 300));
-		this->background->changeEntity(0, 0, t2Vector<int>(0, 0));
-	}
-	catch (const RTypeException &exception)
-	{
-		std::cerr << exception.what() << std::endl;
-		system("pause");
-	}
+	this->gameData->resourceBank->setAnimations(&this->animations);
 }
 
 OnLevel::~OnLevel()
 {}
+
+void					OnLevel::loadLevel(Level *newLevel)
+{
+	this->level = newLevel;
+	this->level->load();
+	if (!this->level->isLoaded())
+		throw RTypeException("Could not load level" + this->level->getTitle());
+
+	this->level->playMusic();
+	this->gameData->resourceBank->setTexture("Player", "../Assets/Graphics/Sprites/r-typesheet1.png");
+	this->animations["Background"] = new Animation("Background", this->level->getTexture(), t2Vector<unsigned int>(this->level->getSize(), this->gameData->getHeight()));
+	this->animations["Background"]->changeEntity(&this->backgroundEntity);
+	this->timer.addNewEvent("scrolling", static_cast<float>(this->level->getScrollSpeed()) / 100);
+	this->world = new World(t2Vector<int>(this->gameData->getWidth(), this->gameData->getHeight()), true, true);
+	this->world->createNewPlayer(t2Vector<unsigned int>(this->gameData->getWidth() / 10, this->gameData->getHeight() / 2), 0);
+	this->player = dynamic_cast<Player *>(this->world->getPlayerObject(0));
+}
 
 void					OnLevel::keyPressed(sf::Keyboard::Key key)
 {
@@ -38,11 +36,7 @@ void					OnLevel::keyPressed(sf::Keyboard::Key key)
 	case sf::Keyboard::Escape:
 		this->gameData->setMustQuit(true);
 		break;
-	case sf::Keyboard::Space:
-		this->test->changeEntity(1, 4, t2Vector<int>(250, 40));
-		break;
 	case sf::Keyboard::F:
-		std::cout << "F has been pressed" << std::endl;
 		this->gameData->setFullscreen(!this->gameData->getFullscreen());
 		break;
 	default:
@@ -52,12 +46,33 @@ void					OnLevel::keyPressed(sf::Keyboard::Key key)
 
 void					OnLevel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	this->background->draw(target, states);
-	this->test->draw(target, states);
+	for (std::map<std::string, Animation *>::const_iterator animation = this->animations.begin(); animation != this->animations.end(); ++animation)
+		animation->second->draw(target, states);
+}
+
+void					OnLevel::updateLogic(sf::Time *time)
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		this->player->geometry->addImpulse(t2Vector<float>(-10, 0));
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		this->player->geometry->addImpulse(t2Vector<float>(10, 0));
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		this->player->geometry->addImpulse(t2Vector<float>(0, -10));
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		this->player->geometry->addImpulse(t2Vector<float>(0, 10));
+	this->world->tick(time->asSeconds());
 }
 
 void					OnLevel::updateGraphics()
 {
-	this->test->prepareVertices();
-	this->background->prepareVertices();
+	if (this->timer.eventDone("scrolling"))
+	{
+		this->backgroundEntity.setPosition(this->backgroundEntity.getPosition() + t2Vector<int>(-1, 0));
+		this->animations["Background"]->changeEntity(&this->backgroundEntity);
+		this->timer.addNewEvent("scolling", static_cast<float>(this->level->getScrollSpeed()) / 100);
+		this->timer.reset("scrolling");
+	}
+
+	for (std::map<std::string, Animation *>::const_iterator animation = this->animations.begin(); animation != this->animations.end(); ++animation)
+		animation->second->prepareVertices();
 }

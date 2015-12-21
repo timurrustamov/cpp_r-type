@@ -12,6 +12,8 @@ class						Window
 	IGameplay				*gameplay;
 	
 	sf::View				view;
+	sf::Clock				deltaClock;
+	sf::Time				time;
 
 	const					char *title;
 	bool					fullscreen;

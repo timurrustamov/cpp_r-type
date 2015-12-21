@@ -42,8 +42,11 @@ World::tick(float seconds)
     std::map<Geometry *, std::vector<Geometry *> > interactionmap;
 
     for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++) {
-        if (it->second != NULL)
-            this->_qt.testCollision(it->second->geometry, interactionmap)->attach(&(this->_qt)).tick(seconds);
+		if (it->second != NULL)
+		{
+			this->_qt.testCollision(it->second->geometry, interactionmap)->attach(&(this->_qt)).tick(seconds);
+			it->second->lateUpdate();
+		}
     }
 
     //check players first

@@ -16,6 +16,7 @@ public:
     virtual ~Rocket() {};
 
     virtual void interact(Object *);
+	virtual void lateUpdate();
 
 protected:
 

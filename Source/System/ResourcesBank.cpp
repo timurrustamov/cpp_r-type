@@ -32,6 +32,24 @@ sf::SoundBuffer						*ResourcesBank::getSoundBuffer(const std::string &name)
 	return (&this->soundBufferBank.at(name));
 }
 
+std::map<std::string, Animation *>	*ResourcesBank::getAnimations() const
+{
+	return (this->animationBank);
+}
+
+Animation							*ResourcesBank::getAnimation(const std::string &name)
+{
+	try
+	{
+		if (this->animationBank)
+			return (this->animationBank->at(name));
+	}
+	catch (const std::out_of_range &)
+	{
+		return (static_cast<Animation *>(0));
+	}
+}
+
 void								ResourcesBank::setTexture(const std::string &name, const std::string &pathfile)
 {
 	try
@@ -64,5 +82,23 @@ void								ResourcesBank::setSoundBuffer(const std::string &name, const std::st
 	{
 		if (!this->soundBufferBank[name].loadFromFile(pathfile))
 			throw RTypeException("Adding sound: " + name + " (location: " + pathfile + ")" + " failed (loading)");
+	}
+}
+
+void								ResourcesBank::setAnimations(std::map<std::string, Animation *> *animations)
+{
+	this->animationBank = animations;
+}
+
+void								ResourcesBank::setAnimation(std::string const &name, Animation *newAnimation)
+{
+	try
+	{
+		if (this->animationBank->at(name))
+			throw RTypeException("Trying to add texture: " + name + " but it already exists");
+	}
+	catch (const std::out_of_range &)
+	{
+		this->animationBank->operator[](name) = newAnimation;
 	}
 }

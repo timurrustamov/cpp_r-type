@@ -26,6 +26,7 @@ class													Animation : public sf::Drawable, public sf::Transformable
 	
 public:
 	Animation(std::string const &_name, t2Vector<unsigned int> dimensions, t2Vector<int> position, t2Vector<unsigned int> grid);
+	Animation(std::string const &_name, sf::Texture *, t2Vector<unsigned int> dimensions);
 	~Animation();
 
 	void												changeEntity(unsigned int id, unsigned int state, t2Vector<int> position);

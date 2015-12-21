@@ -16,6 +16,7 @@ public:
     virtual ~Wall() {};
 
     virtual void interact(Object *);
+	virtual void lateUpdate();
 };
 
 #endif //CPP_R_TYPECPY2_WALLOFPAIN_HPP
