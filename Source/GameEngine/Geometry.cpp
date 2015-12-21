@@ -4,12 +4,11 @@
 
 #include "Geometry.hpp"
 
-Geometry::Geometry(const Rectangle<float> &obj, float terminalVelocity, float inertiaRatio)
+Geometry::Geometry(const Rectangle<float> &obj, float terminalVelocity, float inertiaRatio) : _currentFrame(0)
 {
     this->_innerObj = obj;
     this->_node = NULL;
     this->_terminalVelocity = terminalVelocity;
-    this->_currentFrame = 0;
     this->_inertiaRatio = inertiaRatio <= 0 ? 0.001 : inertiaRatio;
     this->_velocity.setX(0).setY(0);
     this->_acceleration.setX(0).setY(0);
@@ -19,7 +18,8 @@ Geometry::Geometry(const Rectangle<float> &obj, float terminalVelocity, float in
 }
 
 
-Geometry &Geometry::operator=(const Geometry &geo) {
+Geometry &Geometry::operator=(const Geometry &geo)
+{
 
     this->_innerObj = geo._innerObj;
     this->_node = geo._node;
@@ -34,7 +34,7 @@ Geometry &Geometry::operator=(const Geometry &geo) {
     return (*this);
 }
 
-Geometry::Geometry(const Geometry &geo)
+Geometry::Geometry(const Geometry &geo) : _currentFrame(0)
 {
     this->_innerObj = geo._innerObj;
     this->_node = geo._node;
@@ -59,7 +59,8 @@ Geometry::tick(float delta_time)
     t2Vector<float> acceleration;
     float step;
 
-    this->_previousPosition[this->_currentFrame++ % 10] = this->_innerObj.getPosition();
+    this->_previousPosition[this->_currentFrame] = this->_innerObj.getPosition();
+    this->_currentFrame = this->_currentFrame++ % 10;
 
     if (this->_object->timer.eventExists("acceleration"))
     {
@@ -209,9 +210,7 @@ Geometry::getNode() const
 const t2Vector<float> &
 Geometry::getPreviousPosition(unsigned int pos) const
 {
-    if (pos > 10)
-        pos = 10;
-    return (this->_previousPosition[(this->_currentFrame - 1 + pos) % 10]);
+    return (this->_previousPosition[(this->_currentFrame + pos) % 10]);
 }
 
 t2Vector<float> &

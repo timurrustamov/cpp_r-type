@@ -46,7 +46,7 @@ Player::interact(Object *object)
                 geo1->velocity().y() *= -1;
             if (geo1->getRect().touchLeft(geo2->getRect()) || geo1->getRect().touchRight(geo2->getRect()))
                 geo1->velocity().x() *= -1;
-            geo1->setPosition(geo1->getPreviousPosition(1));
+            geo1->setPosition(geo1->getPreviousPosition(0));
             break;
     }
 }

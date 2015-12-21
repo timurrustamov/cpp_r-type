@@ -8,19 +8,19 @@ World::World(t2Vector<int> size, bool verticalWalls, bool horizontalWalls) : _qt
 {
     if (verticalWalls)
     {
-        Object *verticallWall = new Wall(size.getX() - 2, 1, size.getX() / 2, 1);
+        Object *verticallWall = new Wall(size.getX() - 2, 300, size.getX() / 2, -150);
         verticallWall->geometry->attach(&this->_qt);
         this->_objects[verticallWall->getId()] = verticallWall;
-        verticallWall = new Wall(size.getX() - 2, 1, size.getX() / 2, size.getY() - 1);
+        verticallWall = new Wall(size.getX() - 2, 300, size.getX() / 2, size.getY() + 150);
         verticallWall->geometry->attach(&this->_qt);
         this->_objects[verticallWall->getId()] = verticallWall;
     }
     if (horizontalWalls)
     {
-        Object *horizontalWall = new Wall(1, size.getY() - 2, 1, size.getY() / 2);
+        Object *horizontalWall = new Wall(300, size.getY() - 2, -150, size.getY() / 2);
         horizontalWall->geometry->attach(&this->_qt);
         this->_objects[horizontalWall->getId()] = horizontalWall;
-        horizontalWall = new Wall(1, size.getY() - 2, size.getX() - 1, size.getY() / 2);
+        horizontalWall = new Wall(300, size.getY() - 2, size.getX() + 150, size.getY() / 2);
         horizontalWall->geometry->attach(&this->_qt);
         this->_objects[horizontalWall->getId()] = horizontalWall;
     }
