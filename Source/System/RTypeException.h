@@ -1,5 +1,5 @@
 #ifndef RTYPEEXCEPTION_H_
-# define RTYPEEXCEPTION_H
+# define RTYPEEXCEPTION_H_
 
 # include													<iostream>
 # include													<sstream>
@@ -10,7 +10,7 @@ class RTypeException :										public std::exception
 public:
 	RTypeException(const std::string &message)				throw();
 	RTypeException(const std::string &message, int line)	throw();
-	virtual ~RTypeException()								throw ();
+	virtual ~RTypeException()								throw();
 	const char												*what() const throw();
 
 protected:

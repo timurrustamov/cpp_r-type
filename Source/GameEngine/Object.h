@@ -3,6 +3,7 @@
 
 # include				<string>
 # include 				"Timer.hpp"
+# include				"AnimationEntity.hpp"
 
 #define BAD_ID 0xB16B00B5
 
@@ -25,12 +26,13 @@ public:
 	Geometry			*geometry;
 	virtual ~Object();
 
-	virtual void interact(Object *) = 0;
-	Type  getType() const;
+	virtual void		lateUpdate() = 0;
+	virtual void		interact(Object *) = 0;
+	Type				getType() const;
 	unsigned int 		getId() const;
 	const std::string 	&getName() const;
-	bool mustBeDeleted() const;
-	bool setToDelete();
+	bool				mustBeDeleted() const;
+	bool				setToDelete();
 	Timer 				timer;
 
 private:
@@ -38,6 +40,7 @@ private:
 	unsigned int		static getNewId();
 
 protected:
+	AnimationEntity		entity;
 	std::string			name;
 	Type				type;
 	unsigned int		id;
@@ -46,7 +49,6 @@ protected:
 	Object();
 	Object(Geometry &, std::string const &, Type);
 	Object(Geometry *, std::string const &, Type);
-
 };
 
 # include				"Geometry.hpp"

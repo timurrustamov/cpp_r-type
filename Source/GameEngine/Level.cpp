@@ -15,7 +15,7 @@ Level::Level(std::string const &filepath) : loaded(false)
 		this->bgmPath = ptree.get<std::string>("level.BGM");
 		this->bgtPath = ptree.get<std::string>("level.BGT");
 
-		this->scrollSpeed = ptree.get("level.parameters.scrollSpeed", 1);
+		this->scrollSpeed = ptree.get("level.parameters.scrollspeed", 100);
 		this->size = ptree.get("level.parameters.size", 0);
 		this->gravity.assign(ptree.get("level.parameters.gravity.x", 0), ptree.get("level.parameters.gravity.y", 0));
 	}
@@ -37,8 +37,22 @@ void								Level::load()
 	if (!this->bgm.openFromFile(ASSET_FOLDER BGM_LOCATION + this->bgmPath) || !this->bgt.loadFromFile(ASSET_FOLDER BGT_LOCATION + this->bgtPath))
 		throw RTypeException("Wrong background music path or background texture path, cannot load level");
 	this->size = (this->size) ? this->size : this->bgt.getSize().x;
-	this->bgs.setTexture(this->bgt);
 	this->loaded = true;
+}
+
+void								Level::playMusic()
+{
+	this->bgm.play();
+}
+
+void								Level::unPlayMusic()
+{
+	this->bgm.stop();
+}
+
+sf::Texture							*Level::getTexture()
+{
+	return (&this->bgt);
 }
 
 std::string const					&Level::getTitle() const

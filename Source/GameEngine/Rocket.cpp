@@ -7,7 +7,7 @@
 Rocket::Rocket(t2Vector<int> position) : Object()
 {
     this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(10, 10), position), 1000, 0.1);
-    this->geometry->attachToObject(*this);
+    this->geometry->attachToObject(this);
     this->name = "rocket";
     this->type = Object::Projectile;
     this->id = Object::getId();
@@ -16,7 +16,7 @@ Rocket::Rocket(t2Vector<int> position) : Object()
 Rocket::Rocket(int x, int y)
 {
     this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(10, 10), t2Vector<int>(x, y)), 1000, 0.1);
-    this->geometry->attachToObject(*this);
+    this->geometry->attachToObject(this);
     this->name = "rocket";
     this->type = Object::Projectile;
     this->id = Object::getId();
@@ -41,4 +41,9 @@ Rocket::interact(Object *object)
             geo1->setPosition(geo1->getPreviousPosition(0));
             break;
     }
+}
+
+void		Rocket::lateUpdate()
+{
+	this->entity.setPosition(this->geometry->getPosition());
 }

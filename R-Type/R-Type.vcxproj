@@ -27,6 +27,8 @@
     <ClCompile Include="..\Source\GameEngine\Player.cpp" />
     <ClCompile Include="..\Source\GameEngine\QuadTree.cpp" />
     <ClCompile Include="..\Source\GameEngine\Rocket.cpp" />
+    <ClCompile Include="..\Source\GameEngine\SerializedObject.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Snapshot.cpp" />
     <ClCompile Include="..\Source\GameEngine\Timer.cpp" />
     <ClCompile Include="..\Source\GameEngine\WallOfPain.cpp" />
     <ClCompile Include="..\Source\GameEngine\World.cpp">
@@ -64,6 +66,8 @@
     <ClInclude Include="..\Source\GameEngine\QuadTree.hpp" />
     <ClInclude Include="..\Source\GameEngine\Rectangle.hpp" />
     <ClInclude Include="..\Source\GameEngine\Rocket.hpp" />
+    <ClInclude Include="..\Source\GameEngine\SerializedObject.hpp" />
+    <ClInclude Include="..\Source\GameEngine\Snapshot.hpp" />
     <ClInclude Include="..\Source\GameEngine\t2Vector.hpp" />
     <ClInclude Include="..\Source\GameEngine\Timer.hpp" />
     <ClInclude Include="..\Source\GameEngine\WallOfPain.hpp" />
@@ -81,6 +85,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Data\level1.xml" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E446E61D-BCE5-4A3A-9455-86852693D9E2}</ProjectGuid>

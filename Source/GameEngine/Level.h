@@ -2,7 +2,6 @@
 # define LEVEL_H_
 
 # include							<string>
-# include							<SFML/Graphics/Sprite.hpp>
 # include							<SFML/Graphics/Texture.hpp>
 # include							<SFML/Audio/Music.hpp>
 # include							"t2Vector.hpp"
@@ -18,7 +17,6 @@ class								Level
 	std::string						bgtPath;
 	std::string						bgmPath;
 
-	sf::Sprite						bgs;
 	sf::Texture						bgt;
 	sf::Music						bgm;
 
@@ -35,10 +33,15 @@ public:
 	std::string const				&getTitle() const;
 	std::string const				&getBgmPath() const;
 	std::string const				&getBgtPath() const;
-	t2Vector<int>					Level::getGravity() const;
+
+	sf::Texture						*getTexture();
+	t2Vector<int>					getGravity() const;
 	int								getScrollSpeed() const;
 	unsigned int					getSize() const;
 	bool							isLoaded() const;
+
+	void							playMusic();
+	void							unPlayMusic();
 };
 
 std::ostream						&operator<<(std::ostream &, const Level &);

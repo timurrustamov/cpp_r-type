@@ -31,6 +31,30 @@ Animation::Animation(std::string const &_name, t2Vector<unsigned int> dimensions
 	this->quadCount = this->animationGrid.getVertexCount() / 4;
 }
 
+Animation::Animation(std::string const &_name, sf::Texture *_texture, t2Vector<unsigned int> dimensions)
+	: texture(_texture), name(_name), refresh(false)
+{
+	this->animationGrid.setPrimitiveType(sf::Quads);
+	this->vertices.setPrimitiveType(sf::Quads);
+
+	this->vertices.resize(0);
+	this->animationGrid.resize(4);
+
+	sf::Vertex	*quad = &this->animationGrid[0];
+
+	quad[0].position = sf::Vector2f(0, 0);
+	quad[1].position = sf::Vector2f(dimensions.getX(), 0);
+	quad[2].position = sf::Vector2f(dimensions.getX(), dimensions.getY());
+	quad[3].position = sf::Vector2f(0, dimensions.getY());
+
+	quad[0].texCoords = sf::Vector2f(0, 0);
+	quad[1].texCoords = sf::Vector2f(dimensions.getX(), 0);
+	quad[2].texCoords = sf::Vector2f(dimensions.getX(), dimensions.getY());
+	quad[3].texCoords = sf::Vector2f(0, dimensions.getY());
+
+	this->quadCount = 1;
+}
+
 Animation::~Animation()
 {}
 
@@ -76,8 +100,7 @@ void					Animation::removeEntity(unsigned int id)
 
 void					Animation::prepareVertices()
 {
-	if (!this->refresh)
-		return ;
+	if (!this->refresh) return ;
 
 	sf::Vector2f		entityPosition;
 	sf::Vertex			*tileQuad;
@@ -85,13 +108,13 @@ void					Animation::prepareVertices()
 	unsigned int		i = 0;
 
 	this->vertices.resize(this->entities.size() * 4);
-	for (auto const &entity : this->entities)
+	for (std::map<unsigned int, AnimationEntity *>::const_iterator entity = this->entities.begin(); entity != this->entities.end(); ++entity)
 	{
-		tileQuad = &this->animationGrid[entity.second->getState() * 4];
+		tileQuad = &this->animationGrid[entity->second->getState() * 4];
 		quad = &this->vertices[4 * i++];
 
-		entityPosition.x = entity.second->getPosition().getX();
-		entityPosition.y = entity.second->getPosition().getY();
+		entityPosition.x = entity->second->getPosition().getX();
+		entityPosition.y = entity->second->getPosition().getY();
 
 		quad[0].position = tileQuad[0].position + entityPosition;
 		quad[1].position = tileQuad[1].position + entityPosition;

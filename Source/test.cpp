@@ -29,7 +29,7 @@ int main() {
     shape.setFillColor(sf::Color::Green);
     shape2.setFillColor(sf::Color::Green);
 
-    Snapshot *s = w.getSnapshot();
+   // Snapshot *s = w.getSnapshot();
     sf::Event event;
 
     while (window.isOpen())
@@ -76,20 +76,20 @@ int main() {
             shape2.setPosition(sf::Vector2f(geo2->geometry->getPosition().getX() - geo2->geometry->getSize().getX() / 2,
                                             geo2->geometry->getPosition().getY() - geo2->geometry->getSize().getY() / 2));
             window.draw(shape2);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
                 geo2->geometry->addImpulse(t2Vector<float>(-10, 0));
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
                 geo2->geometry->addImpulse(t2Vector<float>(10, 0));
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
                 geo2->geometry->addImpulse(t2Vector<float>(0, -10));
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
                 geo2->geometry->addImpulse(t2Vector<float>(0, 10));
         }
         w.tick(dt.asSeconds());
-        if (t.eventDone("reload")) {
+        /*if (t.eventDone("reload")) {
             w.loadSnapshot(s);
             t.reset("reload");
-        }
+        }*/
         window.display();
         dt = deltaClock.restart();
 
