@@ -52,3 +52,9 @@ bool Object::setToDelete()
 	this->to_delete = true;
 	return (true);
 }
+
+const std::string &
+Object::getName() const {
+
+	return (this->name);
+}

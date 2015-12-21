@@ -63,3 +63,37 @@ World::tick(float seconds)
         }
     return (*this);
 }
+
+Snapshot *
+World::getSnapshot() {
+
+    std::vector<SerializedObject *> objects;
+
+    for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++)
+        if (it->second != NULL && !it->second->mustBeDeleted())
+            objects.push_back(new SerializedObject(*it->second));
+
+    return (new Snapshot(this->_qt.getSize(), objects));
+}
+
+World &
+World::loadSnapshot(Snapshot *snap)
+{
+    if (snap->isInited())
+    {
+        //look for integrity of objects
+        for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++)
+            if (it->second != NULL && !it->second->mustBeDeleted() && snap->objects.find(it->second->getId()) == snap->objects.end())
+                it->second->setToDelete();
+
+        //replace and load new objects
+        for (std::map<unsigned int, SerializedObject *>::iterator it = snap->objects.begin(); it != snap->objects.end(); it++) {
+            if (this->_objects.find(it->second->attr.id) != this->_objects.end()) {
+                this->_objects[it->second->attr.id]->geometry->setVelocity(t2Vector<float>(it->second->attr.velocityx, it->second->attr.velocityy));
+                this->_objects[it->second->attr.id]->geometry->setPosition(t2Vector<float>(it->second->attr.positionx, it->second->attr.positiony));
+            }
+            //else load new objects
+        }
+    }
+    return (*this);
+}

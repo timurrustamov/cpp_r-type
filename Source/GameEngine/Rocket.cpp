@@ -6,7 +6,7 @@
 
 Rocket::Rocket(t2Vector<int> position) : Object()
 {
-    this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(10, 10), position), 350, 0.1);
+    this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(10, 10), position), 1000, 0.1);
     this->geometry->attachToObject(*this);
     this->name = "rocket";
     this->type = Object::Projectile;
@@ -15,7 +15,7 @@ Rocket::Rocket(t2Vector<int> position) : Object()
 
 Rocket::Rocket(int x, int y)
 {
-    this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(10, 10), t2Vector<int>(x, y)), 350, 0.1);
+    this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(10, 10), t2Vector<int>(x, y)), 1000, 0.1);
     this->geometry->attachToObject(*this);
     this->name = "rocket";
     this->type = Object::Projectile;

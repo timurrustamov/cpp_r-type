@@ -8,11 +8,9 @@ Geometry::Geometry(const Rectangle<float> &obj, float terminalVelocity, float in
 {
     this->_innerObj = obj;
     this->_node = NULL;
-
     this->_terminalVelocity = terminalVelocity;
-
+    this->_currentFrame = 0;
     this->_inertiaRatio = inertiaRatio <= 0 ? 0.001 : inertiaRatio;
-
     this->_velocity.setX(0).setY(0);
     this->_acceleration.setX(0).setY(0);
     int i = -1;
@@ -27,6 +25,7 @@ Geometry &Geometry::operator=(const Geometry &geo) {
     this->_node = geo._node;
     this->_terminalVelocity = geo._terminalVelocity;
     this->_inertiaRatio = geo._inertiaRatio;
+    this->_currentFrame = 0;
     this->_velocity = geo._velocity;
     this->_acceleration = geo._acceleration;
     int i = -1;
@@ -40,6 +39,7 @@ Geometry::Geometry(const Geometry &geo)
     this->_innerObj = geo._innerObj;
     this->_node = geo._node;
     this->_terminalVelocity = geo._terminalVelocity;
+    this->_currentFrame = 0;
     this->_inertiaRatio = geo._inertiaRatio;
     this->_velocity = geo._velocity;
     this->_acceleration = geo._acceleration;
@@ -59,7 +59,7 @@ Geometry::tick(float delta_time)
     t2Vector<float> acceleration;
     float step;
 
-    this->_previousPosition[this->_currentFrame = (this->_currentFrame++ % 10)] = this->_innerObj.getPosition();
+    this->_previousPosition[this->_currentFrame++ % 10] = this->_innerObj.getPosition();
 
     if (this->_object->timer.eventExists("acceleration"))
     {
@@ -218,4 +218,14 @@ t2Vector<float> &
 Geometry::position()
 {
     return (this->_innerObj.position());
+}
+
+float Geometry::getInertia() const {
+
+    return (this->_inertiaRatio);
+}
+
+float Geometry::getMaxVelocity() const {
+
+    return (this->_terminalVelocity);
 }

@@ -4,32 +4,30 @@
 
 #include "Player.hpp"
 
-Player::Player(t2Vector<int> position) : Object()
+Player::Player(t2Vector<int> position, unsigned int playerNo) : Object()
 {
     this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(32, 16), position), 150, 5);
     this->geometry->attachToObject(*this);
     this->name = "player";
     this->type = Object::Character;
     this->id = Object::getId();
-    this->playerNo = getPlayerNo();
+    this->playerNo = playerNo;
 }
 
-Player::Player(int x, int y)
+Player::Player(int x, int y, unsigned int playerNo)
 {
     this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(32, 16), t2Vector<int>(x, y)), 150, 5);
     this->geometry->attachToObject(*this);
     this->name = "player";
     this->type = Object::Character;
     this->id = Object::getId();
-    this->playerNo = getPlayerNo();
+    this->playerNo = playerNo;
 }
 
 unsigned int
-Player::getPlayerNo()
+Player::getPlayerNo() const
 {
-    static unsigned int playerId;
-
-    return (playerId++);
+    return (this->playerNo);
 }
 
 void
@@ -43,7 +41,6 @@ Player::interact(Object *object)
         default :
             geo1->removeImpulse();
             geo2->applyImpulse((geo2->getPosition() - geo1->getPosition()) * 500, 0.1);
-            //geo2->setPosition(geo2->getPreviousPosition(9));
 
             if (geo1->getRect().touchUpper(geo2->getRect()) || geo1->getRect().touchLower(geo2->getRect()))
                 geo1->velocity().y() *= -1;

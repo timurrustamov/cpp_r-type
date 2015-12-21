@@ -4,11 +4,14 @@
 # include				<string>
 # include 				"Timer.hpp"
 
+#define BAD_ID 0xB16B00B5
+
 class 					Geometry;
 
 class					Object
 {
 public:
+
 	enum				Type
 	{
 		WallOfPain,
@@ -25,6 +28,7 @@ public:
 	virtual void interact(Object *) = 0;
 	Type  getType() const;
 	unsigned int 		getId() const;
+	const std::string 	&getName() const;
 	bool mustBeDeleted() const;
 	bool setToDelete();
 	Timer 				timer;

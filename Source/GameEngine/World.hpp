@@ -9,10 +9,12 @@
 #include "QuadTree.hpp"
 #include "Player.hpp"
 #include "WallOfPain.hpp"
+#include "Snapshot.hpp"
 #include <typeinfo>
 
 #define MAX_PLAYERS 4
-#define BAD_ID 0xB16B00B5
+
+class Snapshot;
 
 class World {
 
@@ -50,7 +52,7 @@ public:
             return (BAD_ID);
         if (this->_playersId[playerNo] != BAD_ID)
             return (this->_playersId[playerNo]);
-        newobj = new Player(position);
+        newobj = new Player(position, playerNo);
         id = newobj->getId();
         this->_objects[id] = newobj;
         this->_playersId[playerNo] = id;
@@ -61,6 +63,10 @@ public:
     {
         return (this->createNewPlayer(t2Vector<int>(x, y), playerNo));
     }
+
+    Snapshot *getSnapshot();
+
+    World &loadSnapshot(Snapshot *);
 
     World & tick(float seconds);
 

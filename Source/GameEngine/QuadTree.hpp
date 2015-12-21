@@ -25,6 +25,7 @@ public:
     bool        has(Geometry *geo) const;
     bool        objectExists(Geometry *geo) const;
     unsigned int countSubTotal() const;
+    const t2Vector<int> &getSize() const;
     QuadTree &  split();
     QuadTree &  collapse();
     QuadTree *  insert(Geometry *geo, bool parentTest = true);

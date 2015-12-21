@@ -2,24 +2,24 @@
 #include "GameEngine/Geometry.hpp"
 #include "GameEngine/World.hpp"
 #include "GameEngine/Rocket.hpp"
-#include "GameEngine/Timer.hpp"
 #include <SFML/Graphics.hpp>
 
-int main()
-{
-    sf::RenderWindow window(sf::VideoMode(400, 400), "SFML works!");
+int main() {
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML works!");
 
     sf::Clock deltaClock;
     sf::Time dt;
 
-    World w(t2Vector<int>(400, 400), true, true);
+    Timer t;
+    t.addNewEvent("reload", 10);
+    World w(t2Vector<int>(1280, 720), true, true);
 
     Object *geo;
     Object *rocket;
     w.createNewPlayer(40, 40, 0);
     Object *geo2;
     w.createNewPlayer(80, 40, 1);
-    unsigned int rocketId =  w.createNewObject<Rocket>(100, 100);
+    unsigned int rocketId = w.createNewObject<Rocket>(100, 100);
 
     //Object *rocket = w.newGeometry(Rectangle<float>(10, 10, 250, 250), 400, 0.1, 0.5);
 
@@ -29,6 +29,7 @@ int main()
     shape.setFillColor(sf::Color::Green);
     shape2.setFillColor(sf::Color::Green);
 
+    Snapshot *s = w.getSnapshot();
     sf::Event event;
 
     while (window.isOpen())
@@ -85,6 +86,10 @@ int main()
                 geo2->geometry->addImpulse(t2Vector<float>(0, 10));
         }
         w.tick(dt.asSeconds());
+        if (t.eventDone("reload")) {
+            w.loadSnapshot(s);
+            t.reset("reload");
+        }
         window.display();
         dt = deltaClock.restart();
 

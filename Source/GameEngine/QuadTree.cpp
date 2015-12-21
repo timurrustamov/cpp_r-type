@@ -200,3 +200,9 @@ QuadTree::collision(Geometry *geo1, Geometry *geo2)
 {
     geo1->getObject()->interact(geo2->getObject());
 }
+
+const t2Vector<int> &
+QuadTree::getSize() const {
+
+    return (this->obj.getSize());
+}

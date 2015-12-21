@@ -11,15 +11,15 @@ class Player : public Object {
 
 public:
 
-    Player(t2Vector<int> position);
-    Player(int x, int y);
+    Player(t2Vector<int> position, unsigned int);
+    Player(int x, int y, unsigned int);
     virtual ~Player() {};
 
+    unsigned int getPlayerNo() const;
     virtual void interact(Object *);
 
 protected:
 
-    unsigned int getPlayerNo();
     unsigned int playerNo;
 };
 

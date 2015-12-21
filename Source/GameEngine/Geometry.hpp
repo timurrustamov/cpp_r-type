@@ -83,6 +83,10 @@ public:
         return (*this);
     }
 
+    float getInertia() const;
+
+    float getMaxVelocity() const;
+
     t2Vector<float> &position();
 
     const t2Vector<float> getVelocity() const;
