@@ -31,8 +31,8 @@ int             main(int ac, char **av)
     while (s != "quit") {
 
         std::getline(std::cin, s);
-        //servTcp->writePacket(Packet::pack<std::string>(s));
-        servUdp->writePacket(Packet::pack<std::string>(s));
+        servTcp->writePacket(Packet::pack<std::string>(s));
+        //servUdp->writePacket(Packet::pack<std::string>(s));
     }
     servTcp->cancel();
     sleep(1);

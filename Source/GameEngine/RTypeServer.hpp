@@ -26,6 +26,8 @@ public:
     bool userNameExists(const std::string &username);
     bool startGame(User *user);
 
+    static void tcpGuestWelcomeRoom(ISocket *client);
+    static void tcpGuestGoodbyeRoom(ISocket *client);
     static void tcpGuestRoom(ISocket *client);
     static void tcpMemberRoom(ISocket *client);
     static void tcpWaitingRoom(ISocket *client);

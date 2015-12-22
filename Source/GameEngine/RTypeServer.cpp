@@ -9,7 +9,9 @@ RTypeServer::RTypeServer(int tcpPort, int udpPort)
     this->tcpServer = ISocket::getServer(tcpPort, "TCP");
     this->udpServer = ISocket::getServer(udpPort, "UDP");
 
+    this->tcpServer->attachOnConnect(RTypeServer::tcpGuestWelcomeRoom);
     this->tcpServer->attachOnReceive(RTypeServer::tcpGuestRoom);
+    this->tcpServer->attachOnDisconnect(RTypeServer::tcpGuestGoodbyeRoom);
     if (this->tcpServer->start() == -1 || this->udpServer->start() == -1)
         throw BBException("Failed to create server");
 }
@@ -138,6 +140,7 @@ RTypeServer::tcpGuestRoom(ISocket *client) {
     Packet *packet;
     std::string *str;
 
+    std::cout << "Received from " << client->getIp() << " : " << std::endl;
     //get packet
     while ((packet = client->readPacket()) != NULL) {
 
@@ -173,4 +176,14 @@ RTypeServer *RTypeServer::getInstance(int tcpPort, int udpPort) {
         }
     }
     return (instance);
+}
+
+void RTypeServer::tcpGuestWelcomeRoom(ISocket *client) {
+
+    std::cout << "Client connected " << client->getIp() << std::endl;
+}
+
+void RTypeServer::tcpGuestGoodbyeRoom(ISocket *client) {
+
+    std::cout << "Client disconnected " << client->getIp() << std::endl;
 }
