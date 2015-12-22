@@ -5,6 +5,7 @@
 #ifndef CPP_R_TYPECPY2_SERIALIZEDOBJECT_HPP
 #define CPP_R_TYPECPY2_SERIALIZEDOBJECT_HPP
 
+#include <cstddef>
 #include <cstring>
 #include "Object.h"
 #include "Player.hpp"

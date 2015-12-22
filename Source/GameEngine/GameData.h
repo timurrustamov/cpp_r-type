@@ -1,6 +1,7 @@
 #ifndef GAMEDATA_H_
 # define GAMEDATA_H_
 
+# include				<cstddef>
 # include				"../System/ResourcesBank.h"
 # include				"t2Vector.hpp"
 # include				"World.hpp"

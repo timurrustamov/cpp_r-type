@@ -5,6 +5,7 @@
 #ifndef CPP_R_TYPECPY2_SNAPSHOT_HPP
 #define CPP_R_TYPECPY2_SNAPSHOT_HPP
 
+#include <cstddef>
 #include "World.hpp"
 #include "SerializedObject.hpp"
 

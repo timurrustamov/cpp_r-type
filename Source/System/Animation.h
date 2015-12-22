@@ -1,13 +1,14 @@
 #ifndef ANIMATION_H_
 # define ANIMATION_H_
 
+# include												<cstddef>
+# include												<string>
+# include												<map>
 # include												<SFML/Graphics/Drawable.hpp>
 # include												<SFML/Graphics/Transformable.hpp>
 # include												<SFML/Graphics/Texture.hpp>
 # include												<SFML/Graphics/VertexArray.hpp>
 # include												<SFML/Graphics/RenderTarget.hpp>
-# include												<string>
-# include												<map>
 
 # include												"../GameEngine/AnimationEntity.hpp"
 # include												"../GameEngine/t2Vector.hpp"

@@ -5,6 +5,7 @@
 #ifndef CPP_R_TYPE_RECTANGLE_HPP
 #define CPP_R_TYPE_RECTANGLE_HPP
 
+#include <cstddef>
 #include "t2Vector.hpp"
 
 template <typename T>

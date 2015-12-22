@@ -5,6 +5,7 @@
 #ifndef CPP_R_TYPECPY2_ROCKET_HPP
 #define CPP_R_TYPECPY2_ROCKET_HPP
 
+#include <cstddef>
 #include "Object.h"
 #include "../System/Animation.h"
 #include "../System/ResourcesBank.h"

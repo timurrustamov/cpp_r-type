@@ -5,6 +5,7 @@
 #ifndef CPP_R_TYPE_T2VECTOR_HPP
 #define CPP_R_TYPE_T2VECTOR_HPP
 
+#include <cstddef>
 #include <iostream>
 #include <vector>
 #include <string>

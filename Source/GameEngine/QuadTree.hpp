@@ -5,6 +5,7 @@
 #ifndef CPP_R_TYPE_QUADTREE_HPP
 #define CPP_R_TYPE_QUADTREE_HPP
 
+#include <cstddef>
 #include <list>
 #include <map>
 #include "Geometry.hpp"

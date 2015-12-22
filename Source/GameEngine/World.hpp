@@ -5,6 +5,7 @@
 #ifndef CPP_R_TYPE_WORLD_HPP
 #define CPP_R_TYPE_WORLD_HPP
 
+#include <cstddef>
 #include "Object.h"
 #include "QuadTree.hpp"
 #include "Player.hpp"

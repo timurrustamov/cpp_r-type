@@ -5,6 +5,7 @@
 #ifndef CPP_R_TYPECPY2_TIMER_HPP
 #define CPP_R_TYPECPY2_TIMER_HPP
 
+#include <cstddef>
 #include <string>
 #include <utility>
 #include <map>

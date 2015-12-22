@@ -1,6 +1,7 @@
 #ifndef ANIMATIONENTITY_HPP_
 # define ANIMATIONENTITY_HPP_
 
+# include				<cstddef>
 # include				"t2Vector.hpp"
 
 class					AnimationEntity

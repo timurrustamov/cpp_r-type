@@ -1,6 +1,7 @@
 #ifndef IGAMEPLAY_H_
 # define IGAMEPLAY_H_
 
+# include			<cstddef>
 # include			<SFML/Window/Event.hpp>
 # include			<SFML/Graphics/Drawable.hpp>
 # include			"GameData.h"

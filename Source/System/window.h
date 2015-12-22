@@ -1,6 +1,7 @@
 #ifndef WINDOW_H_
 # define WINDOW_H_
 
+# include					<cstddef>
 # include					<string>
 # include					<SFML/Graphics.hpp>
 # include					<SFML/Graphics/Drawable.hpp>

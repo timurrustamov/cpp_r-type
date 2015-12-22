@@ -1,6 +1,7 @@
 #ifndef LEVEL_H_
 # define LEVEL_H_
 
+# include							<cstddef>
 # include							<string>
 # include							<SFML/Graphics/Texture.hpp>
 # include							<SFML/Audio/Music.hpp>

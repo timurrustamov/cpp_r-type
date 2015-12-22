@@ -1,6 +1,7 @@
 #ifndef RTYPEEXCEPTION_H_
 # define RTYPEEXCEPTION_H_
 
+# include													<cstddef>
 # include													<iostream>
 # include													<sstream>
 # include													<vector>

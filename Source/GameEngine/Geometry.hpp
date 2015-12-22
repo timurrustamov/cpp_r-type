@@ -5,6 +5,7 @@
 #ifndef CPP_R_TYPE_GEOMETRY_HPP
 # define CPP_R_TYPE_GEOMETRY_HPP
 
+#include <cstddef>
 #include "t2Vector.hpp"
 #include "Rectangle.hpp"
 #include "QuadTree.hpp"

@@ -1,6 +1,7 @@
 #ifndef RESOURCESBANK_H_
 # define RESOURCESBANK_H_
 
+# include												<cstddef>
 # include												<string>
 # include												<map>
 # include												<SFML/Graphics/Texture.hpp>

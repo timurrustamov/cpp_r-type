@@ -1,6 +1,7 @@
 #ifndef ONLEVEL_H_
 # define ONLEVEL_H_
 
+# include									<cstddef>
 # include									<map>
 # include									"IGameplay.h"
 # include									"GameData.h"

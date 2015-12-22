@@ -5,6 +5,7 @@
 #ifndef CPP_R_TYPECPY2_WALLOFPAIN_HPP
 #define CPP_R_TYPECPY2_WALLOFPAIN_HPP
 
+#include <cstddef>
 #include "Object.h"
 
 class Wall : public Object {

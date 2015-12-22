@@ -1,6 +1,7 @@
 #ifndef OBJECT_H_
 # define OBJECT_H_
 
+# include				<cstddef>
 # include				<string>
 # include 				"Timer.hpp"
 # include				"AnimationEntity.hpp"
