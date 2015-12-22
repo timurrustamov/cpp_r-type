@@ -26,7 +26,7 @@ public:
 	bool				getFullscreen() const;
 	bool				getMustQuit() const;
 
-	void				GameData::setWorld(t2Vector<int> size, bool verticalWalls = true, bool horizontalWalls = false);
+	void				setWorld(t2Vector<int> size, bool verticalWalls = true, bool horizontalWalls = false);
 	unsigned int		getWidth() const;
 	unsigned int		getHeight() const;
 };

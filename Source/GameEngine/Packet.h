@@ -8,9 +8,12 @@
 #include <string>
 #include <vector>
 #include <typeinfo>
+#include "Instruction.h"
 #include "Rsa.h"
 
 #define _MAGIC_ 0x0101010
+
+class Instruction;
 
 class Packet
 {
@@ -25,13 +28,15 @@ public:
         Id = 0x12345678,
         Inst = 0x51515151,
         SSLPublicKey = 0x4ab2321a,
-        Sound = 0x98765432
+        Sound = 0x98765432,
+        Instruct = 0x69696969
     };
 
     //object specific constructors
     Packet(std::string &str);
     Packet(std::vector<int> &vec);
     Packet(Rsa &);
+    Packet(Instruction &);
 
     static std::vector<unsigned char>& stringToStream(char *buf, int const size)
     {

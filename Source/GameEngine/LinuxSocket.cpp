@@ -164,16 +164,13 @@ LinuxSocket::launchClient(unsigned int __attribute__((__unused__)) thread_id, Li
 LinuxSocket *
 LinuxSocket::getThisClient(struct sockaddr_in &clientinfo)
 {
-    ISocket *tcpClient;
     ISocket *udpClient;
     LinuxSocket *newclient;
 
     std::string ip = inet_ntoa(clientinfo.sin_addr);
     int port = static_cast<int>(ntohs(clientinfo.sin_port));
-    if ((tcpClient = ISocket::getServer(this->_port, "TCP")->hasThisIp(ip)) == NULL)
-        std::cout << "NOT FOUND " << ip << port << std::endl;
 
-    if (this->_proto == "UDP" && (tcpClient = ISocket::getServer(this->_port, "TCP")->hasThisIp(ip)))
+    if (this->_proto == "UDP" && ISocket::getServer(this->_port, "TCP")->hasThisIp(ip))
     {
         if ((udpClient = this->hasThisIp(ip)) == NULL)
         {

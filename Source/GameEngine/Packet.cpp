@@ -34,6 +34,24 @@ Packet::Packet(Rsa &rsa) : _type(Packet::SSLPublicKey)
     this->_encrypted = false;
 }
 
+Packet::Packet(Instruction &instr) : _type(Packet::Instruct)
+{
+    std::string str;
+    unsigned int elemNo = instr.getNb();
+    char *ptr = reinterpret_cast<char *>(&elemNo);
+
+    for (unsigned int i = 0; i < sizeof(unsigned int); i++)
+        this->_data.push_back(ptr[i]);
+    for (std::vector<std::string>::iterator it = instr.getListNames().begin(); it != instr.getListNames().end(); it++)
+    {
+        Packet *p = new Packet();
+        std::vector<unsigned char> *build = p->build();
+        this->_data.insert(this->_data.end(), build->begin(), build->end());
+        delete p;
+    }
+    this->_encrypted = false;
+}
+
 //static
 unsigned int
 Packet::getHeaderSize()

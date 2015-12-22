@@ -14,12 +14,13 @@ class WaitingRoom;
 class JoinRoomMenu
 {
 public:
-    JoinRoomMenu(sf::RenderWindow*);
+    JoinRoomMenu(sf::RenderWindow *);
     ~JoinRoomMenu();
 
-    static JoinRoomMenu *getInstance(sf::RenderWindow*);
+    static JoinRoomMenu *getInstance(sf::RenderWindow *);
 
     void RenderFrame();
+
     bool addRoom();
     bool removeRoom(int);
 
@@ -40,6 +41,5 @@ private:
     sf::Color               *yellow;
     WaitingRoom             *waitingRoom;
 };
-
 
 #endif //SFML_JOINROOMMENU_H

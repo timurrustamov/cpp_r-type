@@ -29,7 +29,8 @@ JoinRoomMenu::JoinRoomMenu(sf::RenderWindow *win)
     this->texts.resize(4);
     for (std::vector<sf::Text *>::iterator it = this->texts.begin(); it != this->texts.end(); it++)
     {
-        *it = new sf::Text("<Room not available>", *this->font, 15);
+        *it = new sf::Text("<Room not available>", *this->font, 35);
+        (*it)->setScale(0.39, 0.42);
         if (it == this->texts.begin())
             (*it)->setColor(*this->green);
         else
@@ -48,6 +49,7 @@ void JoinRoomMenu::RenderFrame()
 {
     float   time = 0;
 
+    usleep(100000);
     while (this->window->isOpen())
     {
         time = this->clock->getElapsedTime().asMilliseconds();
@@ -106,6 +108,7 @@ int JoinRoomMenu::getKeys()
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
     {
+        std::cout << "LOLILOL" << std::endl;
         this->addRoom();
         usleep(120000);
     }
@@ -113,6 +116,7 @@ int JoinRoomMenu::getKeys()
     {
         if (this->texts[this->currentRoom]->getString() != "<Room not available>")
         {
+            std::cout << "WAITING ROOM" << std::endl;
             this->waitingRoom = WaitingRoom::getInstance(this->window, false);
             this->waitingRoom->RenderFrame();
         }
@@ -126,7 +130,7 @@ bool JoinRoomMenu::addRoom()
         return false;
     std::string name = "         Room ";
     std::stringstream   ss;
-    ss << ++this->nbRooms;
+    //ss << ++this->nbRooms;
     name += ss.str();
     if (this->nbRooms - 1 >= 0)
         this->texts[this->nbRooms - 1]->setString(name);
