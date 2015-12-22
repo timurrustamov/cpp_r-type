@@ -1,17 +1,26 @@
-//
-// Created by rustam_t on 12/15/15.
-//
+#include			"Explosion.h"
 
-#include "GameData.h"
-#include "Rocket.hpp"
-
-Rocket::Rocket(t2Vector<int> position) : Object()
+Explosion::Explosion(Explosion::Type type, bool hurting, t2Vector<int> position) : Object()
 {
-    this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(10, 10), position), 1000, 2);
-    this->geometry->attachToObject(this);
-    this->name = "rocket";
-    this->type = Object::Projectile;
-    this->id = Object::getId();
+	t2Vector<int>	size;
+
+	size = (type == Explosion::Type::SmallEnergy || Explosion::Type::SmallPhysic) ? t2Vector<int>(24, 23) : t2Vector<int>(47, 46);
+	this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(10, 10), position), 1000, 2);
+	this->geometry->attachToObject(this);
+	this->name = "explosion";
+	this->type = Object::Projectile;
+	this->explosionType = type;
+	this->id = Object::getId();
+	this->start();
+}
+
+Rocket::Rocket(int x, int y)
+{
+	this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(10, 10), t2Vector<int>(x, y)), 1000, 2);
+	this->geometry->attachToObject(this);
+	this->name = "rocket";
+	this->type = Object::Projectile;
+	this->id = Object::getId();
 	this->start();
 }
 
@@ -38,32 +47,36 @@ Rocket::start()
 void
 Rocket::interact(Object *object)
 {
-    Geometry *geo1 = this->geometry;
-    Geometry *geo2 = object->geometry;
+	Geometry *geo1 = this->geometry;
+	Geometry *geo2 = object->geometry;
 
-    switch (object->getType())
-    {
+	switch (object->getType())
+	{
 	case (Object::Character) :
 		return;
-	default :
+	default:
 		geo1->removeImpulse();
-        geo2->applyImpulse((geo2->getPosition() - geo1->getPosition()) * 100, 0.3);
+		geo2->applyImpulse((geo2->getPosition() - geo1->getPosition()) * 100, 0.3);
 		if (geo1->getRect().touchUpper(geo2->getRect()) || geo1->getRect().touchLower(geo2->getRect()))
 			geo1->velocity().y() *= -1;
 		if (geo1->getRect().touchLeft(geo2->getRect()) || geo1->getRect().touchRight(geo2->getRect()))
 			geo1->velocity().x() *= -1;
-        geo1->setPosition(geo1->getPreviousPosition(0));
+		geo1->setPosition(geo1->getPreviousPosition(0));
 		break;
-    }
+	}
 }
 
 void		Rocket::lateUpdate()
 {
+	GameData *gameData;
+
 	this->entity->setPosition(this->geometry->getPosition() - this->geometry->getSize() / 2);
 	if (this->timer.eventDone("autoDestruction"))
 		this->geometry->removeImpulse();
 	if (this->timer.eventDone("Destruction"))
 	{
+		gameData = GameData::getInstance();
+		gameData->world->createNewObject<Rocket>(this->geometry->getPosition() + t2Vector<unsigned int>(25, 0));
 		this->setToDelete();
 		this->animation->removeEntity(this->entity->getId());
 	}

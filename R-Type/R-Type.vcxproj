@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Source\GameEngine\Explosion.cpp" />
     <ClCompile Include="..\Source\GameEngine\GameData.cpp" />
     <ClCompile Include="..\Source\GameEngine\Object.cpp" />
     <ClCompile Include="..\Source\GameEngine\OnLevel.cpp" />
@@ -56,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\GameEngine\AnimationEntity.hpp" />
+    <ClInclude Include="..\Source\GameEngine\Explosion.h" />
     <ClInclude Include="..\Source\GameEngine\GameData.h" />
     <ClInclude Include="..\Source\GameEngine\IGameplay.h" />
     <ClInclude Include="..\Source\GameEngine\Geometry.hpp" />

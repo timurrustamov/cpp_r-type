@@ -3,30 +3,34 @@
 //
 
 #ifndef CPP_R_TYPE_WORLD_HPP
-#define CPP_R_TYPE_WORLD_HPP
+# define CPP_R_TYPE_WORLD_HPP
 
-#include <cstddef>
-#include "Object.h"
-#include "QuadTree.hpp"
-#include "Player.hpp"
-#include "WallOfPain.hpp"
-#include "Snapshot.hpp"
-#include <typeinfo>
+# include								<cstddef>
+# include								"Object.h"
+# include								"QuadTree.hpp"
+# include								"Player.hpp"
+# include								"WallOfPain.hpp"
+# include								"Snapshot.hpp"
+# include								<typeinfo>
 
-#define MAX_PLAYERS 4
+# define MAX_PLAYERS					4
 
-class Snapshot;
+class									Snapshot;
 
-class World {
+class									World
+{
+	std::map<unsigned int, Object *>	_objects;
+	std::vector<unsigned int>			_playersId;
+	QuadTree _qt;
 
 public:
-    World(t2Vector<int> size, bool verticalWalls = true, bool horizontalWalls = false);
+	World(t2Vector<int> size, bool verticalWalls = true, bool horizontalWalls = false);
     ~World();
 
     template <typename T>
-    unsigned int createNewObject(const t2Vector<int> &position)
+    unsigned int						createNewObject(const t2Vector<int> &position)
     {
-        Object *newobj;
+        Object							*newobj;
 
         if (typeid(T) == typeid(Player))
             return (BAD_ID);
@@ -38,13 +42,15 @@ public:
         return (newobj->getId());
     };
 
-    template <typename T>
-    unsigned int createNewObject(int x, int y)
+    template							<typename T>
+    unsigned int						createNewObject(int x, int y)
     {
         return (this->createNewObject<T>(t2Vector<int>(x, y)));
     };
 
-    unsigned int createNewPlayer(const t2Vector<int> &position, unsigned int playerNo)
+	unsigned int						createNewObject(Object *object);
+
+    unsigned int						createNewPlayer(const t2Vector<int> &position, unsigned int playerNo)
     {
         Object *newobj;
         unsigned int id;
@@ -60,35 +66,26 @@ public:
         return (id);
     }
 
-    unsigned int createNewPlayer(int x, int y, unsigned int playerNo)
+    unsigned int						createNewPlayer(int x, int y, unsigned int playerNo)
     {
         return (this->createNewPlayer(t2Vector<int>(x, y), playerNo));
     }
 
-    Snapshot *getSnapshot();
+    Snapshot							*getSnapshot();
+    World								&loadSnapshot(Snapshot *);
+    World								&tick(float seconds);
 
-    World &loadSnapshot(Snapshot *);
-
-    World & tick(float seconds);
-
-    Object *getPlayerObject(unsigned int playerNo)
+    Object								*getPlayerObject(unsigned int playerNo)
     {
         if (playerNo > MAX_PLAYERS || this->_playersId[playerNo] == BAD_ID)
             return (NULL);
         return (this->_objects[this->_playersId[playerNo]]);
     }
 
-    Object *getObject(unsigned int objectId)
+    Object								*getObject(unsigned int objectId)
     {
         return (this->_objects[objectId]);
     }
-
-private:
-
-    std::map<unsigned int, Object *> _objects;
-    std::vector<unsigned int> _playersId;
-    QuadTree _qt;
 };
 
-
-#endif //CPP_R_TYPE_WORLD_HPP
+#endif /* !CPP_R_TYPE_WORLD_HPP */

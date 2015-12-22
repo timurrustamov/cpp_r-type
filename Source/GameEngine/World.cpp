@@ -36,6 +36,36 @@ World::~World()
         delete (it->second);
 }
 
+template <typename T>
+unsigned int						createNewObject(const t2Vector<int> &position)
+{
+	Object							*newobj;
+
+	if (typeid(T) == typeid(Player))
+		return (BAD_ID);
+	newobj = new T(position);
+	this->_objects[newobj->getId()] = newobj;
+	this->_qt.insert(newobj->geometry);
+	return (newobj->getId());
+};
+
+template							<typename T>
+unsigned int						createNewObject(int x, int y)
+{
+	return (this->createNewObject<T>(t2Vector<int>(x, y)));
+};
+
+unsigned int						World::createNewObject(Object *newobj)
+{
+	Player							*playerptr = dynamic_cast<Player *>(newobj);
+
+	if (playerptr != NULL)
+		return (BAD_ID);
+	this->_objects[newobj->getId()] = newobj;
+	this->_qt.insert(newobj->geometry);
+	return (newobj->getId());
+}
+
 World &
 World::tick(float seconds)
 {

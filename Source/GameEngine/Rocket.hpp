@@ -15,7 +15,6 @@ class Rocket : public Object
 public:
 
     Rocket(t2Vector<int> position);
-    Rocket(int x, int y);
     virtual ~Rocket() {};
 
     virtual void interact(Object *);

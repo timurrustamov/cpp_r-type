@@ -6,7 +6,7 @@
 # include 				"Timer.hpp"
 # include				"AnimationEntity.hpp"
 
-#define BAD_ID 0xB16B00B5
+#define BAD_ID			0xB16B00B5
 
 class 					Geometry;
 

@@ -87,6 +87,9 @@
     <ClCompile Include="..\Source\GameEngine\Snapshot.cpp">
       <Filter>Fichiers sources\GameEngine</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Explosion.cpp">
+      <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\GameEngine\QuadTree.hpp">
@@ -150,6 +153,9 @@
       <Filter>Fichiers d%27en-tête\GameEngine</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\GameEngine\Snapshot.hpp">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Explosion.h">
       <Filter>Fichiers d%27en-tête\GameEngine</Filter>
     </ClInclude>
   </ItemGroup>
