@@ -125,9 +125,6 @@
     <ClInclude Include="..\Source\GameEngine\World.hpp">
       <Filter>Fichiers d%27en-tête\GameEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\System\Animation.h">
       <Filter>Fichiers d%27en-tête\System</Filter>
     </ClInclude>

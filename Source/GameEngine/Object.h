@@ -20,6 +20,7 @@ public:
 		Ennemy,
 		Character,
 		Projectile,
+		Explosion,
 		Other
 	};
 
@@ -28,6 +29,7 @@ public:
 
 	virtual void		lateUpdate() = 0;
 	virtual void		interact(Object *) = 0;
+	virtual void		start() = 0;
 	Type				getType() const;
 	unsigned int 		getId() const;
 	const std::string 	&getName() const;

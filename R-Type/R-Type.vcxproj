@@ -81,7 +81,6 @@
     <ClInclude Include="..\Source\System\ResourcesBank.h" />
     <ClInclude Include="..\Source\System\RTypeException.h" />
     <ClInclude Include="..\Source\System\window.h" />
-    <ClInclude Include="Animation.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />

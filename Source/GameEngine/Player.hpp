@@ -7,6 +7,7 @@
 
 #include "Object.h"
 #include "../System/Animation.h"
+#include "../System/ResourcesBank.h"
 
 class Player : public Object {
 
@@ -19,6 +20,7 @@ public:
     unsigned int getPlayerNo() const;
     virtual void interact(Object *);
 	virtual void lateUpdate();
+	virtual void start();
 
 
 protected:

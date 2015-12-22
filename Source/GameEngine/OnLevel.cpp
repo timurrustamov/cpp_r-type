@@ -12,6 +12,8 @@ OnLevel::OnLevel() : level(static_cast<Level *>(0)), backgroundEntity(0, 0, t2Ve
 OnLevel::~OnLevel()
 {}
 
+#include "Rocket.hpp"
+
 void					OnLevel::loadLevel(Level *newLevel)
 {
 	this->level = newLevel;
@@ -21,16 +23,21 @@ void					OnLevel::loadLevel(Level *newLevel)
 
 	this->level->playMusic();
 	this->gameData->resourceBank->setTexture("Player", "../Assets/Graphics/Sprites/r-typesheet1.png");
+	this->gameData->resourceBank->setTexture("Bullets", "../Assets/Graphics/Sprites/Bullets.png");
 	this->animations["Background"] = new Animation("Background", this->level->getTexture(), t2Vector<unsigned int>(this->level->getSize(), this->gameData->getHeight()));
 	this->animations["Background"]->changeEntity(&this->backgroundEntity);
 	this->timer.addNewEvent("scrolling", static_cast<float>(this->level->getScrollSpeed()) / 100);
+	this->timer.addNewEvent("shoot", 0.2f);
 	this->world = new World(t2Vector<int>(this->gameData->getWidth(), this->gameData->getHeight()), true, true);
+	this->gameData->world = this->world;
 	this->world->createNewPlayer(t2Vector<unsigned int>(this->gameData->getWidth() / 10, this->gameData->getHeight() / 2), 0);
 	this->player = dynamic_cast<Player *>(this->world->getPlayerObject(0));
 }
 
 void					OnLevel::keyPressed(sf::Keyboard::Key key)
 {
+	unsigned int		id;
+
 	switch (key)
 	{
 	case sf::Keyboard::Escape:
@@ -38,6 +45,12 @@ void					OnLevel::keyPressed(sf::Keyboard::Key key)
 		break;
 	case sf::Keyboard::F:
 		this->gameData->setFullscreen(!this->gameData->getFullscreen());
+		break;
+	case sf::Keyboard::Space:
+		if (!this->timer.eventDone("shoot")) break;
+		id = this->world->createNewObject<Rocket>(this->player->geometry->getPosition() + t2Vector<unsigned int>(25, 0));
+		this->world->getObject(id)->geometry->applyImpulse(t2Vector<float>(30, 0), 0.1f);
+		this->timer.reset("shoot");
 		break;
 	default:
 		break;
@@ -53,13 +66,13 @@ void					OnLevel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 void					OnLevel::updateLogic(sf::Time *time)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		this->player->geometry->addImpulse(t2Vector<float>(-10, 0));
+		this->player->geometry->addImpulse(t2Vector<float>(-1, 0));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		this->player->geometry->addImpulse(t2Vector<float>(10, 0));
+		this->player->geometry->addImpulse(t2Vector<float>(1, 0));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		this->player->geometry->addImpulse(t2Vector<float>(0, -10));
+		this->player->geometry->addImpulse(t2Vector<float>(0, -1));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		this->player->geometry->addImpulse(t2Vector<float>(0, 10));
+		this->player->geometry->addImpulse(t2Vector<float>(0, 1));
 	this->world->tick(time->asSeconds());
 }
 

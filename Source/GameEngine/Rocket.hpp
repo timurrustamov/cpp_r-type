@@ -6,6 +6,8 @@
 #define CPP_R_TYPECPY2_ROCKET_HPP
 
 #include "Object.h"
+#include "../System/Animation.h"
+#include "../System/ResourcesBank.h"
 
 class Rocket : public Object
 {
@@ -17,9 +19,11 @@ public:
 
     virtual void interact(Object *);
 	virtual void lateUpdate();
+	virtual void start();
 
 protected:
-
+	Animation *animation;
+	AnimationEntity *entity;
     unsigned int collisionNo;
 };
 

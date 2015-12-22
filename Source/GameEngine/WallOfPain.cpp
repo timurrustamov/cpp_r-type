@@ -34,4 +34,5 @@ Wall::interact(Object *object)
     }
 }
 
-void Wall::lateUpdate() { return ; };
+void Wall::lateUpdate() { return; };
+void Wall::start() { return; };

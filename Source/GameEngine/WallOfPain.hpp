@@ -17,6 +17,7 @@ public:
 
     virtual void interact(Object *);
 	virtual void lateUpdate();
+	virtual void start();
 };
 
 #endif //CPP_R_TYPECPY2_WALLOFPAIN_HPP
