@@ -53,7 +53,7 @@ void MainMenu::RenderFrame()
 {
     float   time = 0;
 
-    this->song->play();
+//    this->song->play();
     while (this->window->isOpen())
     {
         time = this->clock->getElapsedTime().asMilliseconds();

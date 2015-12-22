@@ -19,7 +19,7 @@ public:
     ~InfoMenu();
 
     void init();
-    void showUserForm();
+    void showUserForm(char);
     void showIpForm(char);
 
     void addLetters(sf::Event*);
