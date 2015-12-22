@@ -9,6 +9,7 @@ RTypeServer::RTypeServer(int tcpPort, int udpPort)
     this->tcpServer = ISocket::getServer(tcpPort, "TCP");
     this->udpServer = ISocket::getServer(udpPort, "UDP");
 
+    this->tcpServer->attachOnReceive(RTypeServer::tcpGuestRoom);
     if (this->tcpServer->start() == -1 || this->udpServer->start() == -1)
         throw BBException("Failed to create server");
 }
@@ -125,14 +126,28 @@ RTypeServer::startGame(User *user) {
     bool res = false;
 
     mutex->lock(true);
-    if (user->getRoom() != NULL) {
-        
-    }
+    if (user->getRoom() != NULL)
+        res = user->getRoom()->setState(GameRoom::Running, user);
+    mutex->unlock();
+    return (res);
 }
 
 void
 RTypeServer::tcpGuestRoom(ISocket *client) {
 
+    Packet *packet;
+    std::string *str;
+
+    //get packet
+    while ((packet = client->readPacket()) != NULL) {
+
+        if (packet->getType() == Packet::String &&
+            (str = packet->unpack<std::string>()) != NULL) {
+
+            std::cout << *str << std::endl;
+            delete str;
+        }
+    }
 }
 
 void
@@ -145,3 +160,17 @@ RTypeServer::tcpWaitingRoom(ISocket *client) {
 
 }
 
+RTypeServer *RTypeServer::getInstance(int tcpPort, int udpPort) {
+
+    static RTypeServer *instance = NULL;
+
+    if (instance == NULL) {
+        try {
+            instance = new RTypeServer(tcpPort, udpPort);
+        }
+        catch (std::exception &e) {
+            std::cerr << e.what() << std::endl;
+        }
+    }
+    return (instance);
+}

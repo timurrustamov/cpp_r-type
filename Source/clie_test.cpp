@@ -16,8 +16,8 @@ void            recvHandler(ISocket *client)
 
 int             main(int ac, char **av)
 {
-    ISocket *servTcp = ISocket::getClient("127.0.0.1", 4343, "TCP");
-    ISocket *servUdp = ISocket::getClient("127.0.0.1", 4242, "UDP");
+    ISocket *servTcp = ISocket::getClient("127.0.0.1", 4242, "TCP");
+    ISocket *servUdp = ISocket::getClient("127.0.0.1", 4343, "UDP");
 
     servTcp->attachOnReceive(recvHandler);
     servUdp->attachOnReceive(recvHandler2);

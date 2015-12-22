@@ -14,7 +14,7 @@
 class RTypeServer {
 
 public:
-    RTypeServer(int tcpPort, int udpPort);
+    static RTypeServer *getInstance(int tcpPort = 4242, int udpPort = 4243);
     ~RTypeServer();
 
     bool createRoom(User *user, const std::string &roomName);
@@ -31,6 +31,8 @@ public:
     static void tcpWaitingRoom(ISocket *client);
 
 protected:
+
+    RTypeServer(int tcpPort, int udpPort);
 
     ISocket *tcpServer;
     ISocket *udpServer;
