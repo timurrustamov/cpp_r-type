@@ -22,7 +22,8 @@ WaitingRoom::WaitingRoom(sf::RenderWindow *win, bool b)
     this->players.resize(4);
     for (std::vector<sf::Text *>::iterator it = this->players.begin(); it != this->players.end(); it++)
     {
-        *it = new sf::Text("", *this->font, 15);
+        *it = new sf::Text("", *this->font, 35);
+        (*it)->setScale(0.39, 0.42);
         (*it)->setPosition(150, 100 + i);
         (*it)->setColor(sf::Color(0, 254, 0));
         i += 40;
@@ -31,7 +32,8 @@ WaitingRoom::WaitingRoom(sf::RenderWindow *win, bool b)
     this->fondu = new sf::Sprite(*this->text);
     this->fondu->setColor(sf::Color(0, 0, 0, static_cast<sf::Uint8>(this->transp)));
     this->fondu->setPosition(0, 0);
-    this->forHost = new sf::Text("I'm the host", *this->font, 20);
+    this->forHost = new sf::Text("I'm the host", *this->font, 40);
+    this->forHost->setScale(0.39, 0.42);
     this->forHost->setPosition(150, 140);
 }
 

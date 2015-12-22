@@ -17,9 +17,10 @@ CreateRoomMenu::CreateRoomMenu(sf::RenderWindow *win)
     this->sprite->setScale(0.39, 0.42);
     this->font = new sf::Font();
     this->font->loadFromFile("fonts/batmfa__.ttf");
-    this->text = new sf::Text(this->input, *this->font, 10);
+    this->text = new sf::Text(this->input, *this->font, 30);
+    this->text->setScale(0.39, 0.42);
     this->text->setColor(sf::Color(0, 0, 0));
-    this->text->setPosition(230, 151);
+    this->text->setPosition(230, 149);
     this->clock = new sf::Clock();
     this->fondu = new sf::Sprite(*this->texture);
     this->fondu->setColor(sf::Color(0, 0, 0, static_cast<sf::Uint8>(this->transp)));

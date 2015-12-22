@@ -46,11 +46,16 @@ void InfoMenu::init()
     this->font->loadFromFile("fonts/batmfa__.ttf");
 }
 
-void InfoMenu::showUserForm()
+void InfoMenu::showUserForm(char c)
 {
     sf::Color   color(0, 0, 0);
 
-    this->texts[0] = new sf::Text("Enter your username:", *this->font, 20);
+    this->isDone = false;
+    this->username = "";
+    if (c == 0)
+        this->texts[0] = new sf::Text("Enter your username:", *this->font, 20);
+    else
+        this->texts[0] = new sf::Text("Username is already used:", *this->font, 20);
     this->texts[1] = new sf::Text("(max 8 characters)", *this->font, 10);
     this->texts[2] = new sf::Text(this->username, *this->font, 30);
     this->texts[0]->setPosition(10, 90);
@@ -69,7 +74,10 @@ void InfoMenu::showUserForm()
                 this->window->close();
         }
         if (this->isDone)
+        {
+            std::cout << "GO" << std::endl;
             return;
+        }
         this->texts[2]->setString(this->username);
         this->window->clear();
         this->window->draw(*this->sprites[0]);
@@ -156,7 +164,7 @@ void InfoMenu::addLetters(sf::Event *event)
             if (this->username.length() != 0)
                 this->username.erase(this->username.begin() + this->username.length() - 1);
         if (event->text.unicode == 13)
-            this->showIpForm(0);
+            this->isDone = true;
     }
 }
 
@@ -187,7 +195,11 @@ int InfoMenu::cutIP()
         this->ip = this->ip.substr(0, found - 1);
     }
     if (found == std::string::npos)
+    {
+        this->ip = "";
+        this->port = "";
         return -1;
+    }
     else
         return 0;
 }
