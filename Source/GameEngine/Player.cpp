@@ -8,7 +8,6 @@ Player::Player(t2Vector<int> position, unsigned int playerNo) : Object()
 {
     this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(33, 18), position), 320, 5);
     this->geometry->attachToObject(this);
-    this->name = "player";
     this->type = Object::Character;
     this->id = Object::getId();
     this->playerNo = playerNo;
@@ -19,7 +18,6 @@ Player::Player(int x, int y, unsigned int playerNo)
 {
     this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(33, 18), t2Vector<int>(x, y)), 320, 5);
     this->geometry->attachToObject(this);
-    this->name = "player";
     this->type = Object::Character;
     this->id = Object::getId();
     this->playerNo = playerNo;
@@ -40,6 +38,14 @@ Player::start()
 		resourceBank->setAnimation("Player", this->animation);
 	}
 	this->animation->changeEntity(this->entity);
+}
+
+Object					*Player::clone(SerializedObject *serializedObject)
+{
+	Player				*newObject = new Player(this->geometry->getPosition(), serializedObject->attr.playerId);
+
+	newObject->setValues(serializedObject);
+	return (newObject);
 }
 
 unsigned int

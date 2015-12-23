@@ -3,12 +3,14 @@
 
 # include								<cstddef>
 # include								<string>
+# include								"SerializedObject.hpp"
 # include 								"Timer.hpp"
 # include								"AnimationEntity.hpp"
 
 # define BAD_ID							0xB16B00B5
 
 class 									Geometry;
+class									SerializedObject;
 
 class									Object
 {
@@ -25,9 +27,11 @@ public:
 	};
 
 	Geometry							*geometry;
+	Timer 								timer;
+
 	virtual ~Object();
 
-	virtual Object						*clone() = 0;
+	virtual Object						*clone(SerializedObject *serializedObject) = 0;
 	virtual void						lateUpdate() = 0;
 	virtual void						interact(Object *) = 0;
 	virtual void						start() = 0;
@@ -35,25 +39,25 @@ public:
 	Type								getType() const;
 	unsigned int 						getId() const;
 	unsigned int						getIdentifier() const;
-	const std::string 					&getName() const;
+
 	bool								mustBeDeleted() const;
 	bool								setToDelete();
-	Timer 								timer;
+	void								setValues(SerializedObject *serializedObject);
 
 private:
 	unsigned int						static getNewId();
 
 protected:
 	AnimationEntity						entity;
-	std::string							name;
 	Type								type;
+
 	unsigned int						identifier;
 	unsigned int						id;
 	bool 								to_delete;
 
 	Object();
-	Object(Geometry &, std::string const &, Type);
-	Object(Geometry *, std::string const &, Type);
+	Object(Geometry &, Type);
+	Object(Geometry *, Type);
 };
 
 # include				"Geometry.hpp"

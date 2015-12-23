@@ -33,7 +33,6 @@ Explosion::Explosion(Explosion::Type type, bool hurting, t2Vector<int> position)
 
 	this->geometry = new Geometry(Rectangle<float>(this->size, position));
 	this->geometry->attachToObject(this);
-	this->name = "explosion";
 	this->type = Object::Force;
 	this->hurting = hurting;
 	this->id = Object::getId();
@@ -53,6 +52,14 @@ void					Explosion::start()
 		resourceBank->setAnimation(this->animationID, this->animation);
 	}
 	this->animation->changeEntity(this->entity);
+}
+
+Object					*Explosion::clone(SerializedObject *serializedObject)
+{
+	Explosion			*newObject = new Explosion(this->explosionType, this->hurting, this->geometry->getPosition());
+
+	newObject->setValues(serializedObject);
+	return (newObject);
 }
 
 void					Explosion::interact(Object *object)

@@ -10,7 +10,6 @@ Rocket::Rocket(t2Vector<int> position) : Object()
 {
     this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(10, 10), position), 1000, 2);
     this->geometry->attachToObject(this);
-    this->name = "rocket";
     this->type = Object::Projectile;
     this->id = Object::getId();
 	this->start();
@@ -34,6 +33,15 @@ Rocket::start()
 		resourceBank->setAnimation("Bullets", this->animation);
 	}
 	this->animation->changeEntity(this->entity);
+}
+
+Object *
+Rocket::clone(SerializedObject *serializedObject)
+{
+	Rocket				*newObject = new Rocket(this->geometry->getPosition());
+
+	newObject->setValues(serializedObject);
+	return (newObject);
 }
 
 void

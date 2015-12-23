@@ -16,6 +16,7 @@ public:
     Wall(int sizex, int sizey, int x, int y);
     virtual ~Wall() {};
 
+	virtual Object *clone(SerializedObject *serializedObject);
     virtual void interact(Object *);
 	virtual void lateUpdate();
 	virtual void start();
