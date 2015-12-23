@@ -3,7 +3,6 @@
 
 # include								<cstddef>
 # include								<string>
-# include								"SerializedObject.hpp"
 # include 								"Timer.hpp"
 # include								"AnimationEntity.hpp"
 
@@ -60,6 +59,7 @@ protected:
 	Object(Geometry *, Type);
 };
 
-# include				"Geometry.hpp"
+# include								"Geometry.hpp"
+# include								"SerializedObject.hpp"
 
 #endif /* !OBJECT_H_ */
