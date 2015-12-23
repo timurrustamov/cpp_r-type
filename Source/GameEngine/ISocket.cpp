@@ -40,6 +40,11 @@ ISocket::getServer(int port, const std::string &proto, bool _new)
 {
     static std::map<std::string, ISocket *> instance;
 
+    if (_new && instance[proto] != NULL) {
+        delete instance[proto];
+        instance = NULL;
+    }
+
     if (instance[proto] == NULL) {
 
     #ifdef _WIN_32

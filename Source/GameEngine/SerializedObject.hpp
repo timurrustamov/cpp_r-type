@@ -18,7 +18,6 @@ struct ObjectAttributes
     unsigned int    playerId;
     Object::Type    type;
 	unsigned int	identifier;
-    std::string     name;
     int             sizex;
     int             sizey;
     float           positionx;
