@@ -7,8 +7,11 @@
 
 #include <cstddef>
 #include <cstring>
+#include <vector>
 #include "Object.h"
 #include "Player.hpp"
+
+class Object;
 
 struct ObjectAttributes
 {

@@ -99,6 +99,18 @@ public:
         return (*this);
     }
 
+	Geometry &setMaxVelocity(float maxVelocity)
+	{
+		this->_terminalVelocity = maxVelocity;
+		return (*this);
+	}
+
+	Geometry &setInertie(float inertie)
+	{
+		this->_inertiaRatio = inertie;
+		return (*this);
+	}
+
     t2Vector<float> &velocity();
 
     const t2Vector<float> getAcceleration() const;

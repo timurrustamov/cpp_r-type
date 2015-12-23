@@ -23,6 +23,7 @@ public:
 	Explosion(Explosion::Type type, bool hurting, t2Vector<int> position);
 	virtual ~Explosion() {};
 
+	virtual Object			*clone(SerializedObject *serializedObject);
 	virtual void			interact(Object *);
 	virtual void			lateUpdate();
 	virtual void			start();

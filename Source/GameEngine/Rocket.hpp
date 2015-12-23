@@ -17,6 +17,7 @@ public:
     Rocket(t2Vector<int> position);
     virtual ~Rocket() {};
 
+	virtual Object *clone(SerializedObject *serializedObject);
     virtual void interact(Object *);
 	virtual void lateUpdate();
 	virtual void start();

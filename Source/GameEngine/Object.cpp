@@ -1,13 +1,13 @@
 #include				"Object.h"
 
-Object::Object(Geometry *_geo, std::string const &_name, Type _type) : geometry(_geo), name(_name), type(_type)
+Object::Object(Geometry *_geo, Type _type) : geometry(_geo), type(_type)
 {
 	this->to_delete = false;
 	this->id = getNewId();
 	this->entity.setId(this->id);
 }
 
-Object::Object(Geometry &_geo, std::string const &_name, Type _type) : geometry(&_geo), name(_name), type(_type)
+Object::Object(Geometry &_geo, Type _type) : geometry(&_geo), type(_type)
 {
 	this->to_delete = false;
 	this->id = getNewId();
@@ -61,8 +61,11 @@ bool Object::setToDelete()
 	return (true);
 }
 
-const std::string &
-Object::getName() const {
-
-	return (this->name);
+void Object::setValues(SerializedObject *serializedObject)
+{
+	this->geometry->setPosition(t2Vector<float>(serializedObject->attr.positionx, serializedObject->attr.positiony));
+	this->geometry->setVelocity(t2Vector<float>(serializedObject->attr.velocityx, serializedObject->attr.velocityy));
+	this->geometry->setSize(t2Vector<float>(serializedObject->attr.sizex, serializedObject->attr.sizey));
+	this->geometry->setInertie(serializedObject->attr.intertia);
+	this->geometry->setMaxVelocity(serializedObject->attr.maxVelocity);
 }

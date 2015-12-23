@@ -19,6 +19,8 @@ public:
     virtual ~Player() {};
 
     unsigned int getPlayerNo() const;
+
+	virtual Object *clone(SerializedObject *serializedObject);
     virtual void interact(Object *);
 	virtual void lateUpdate();
 	virtual void start();

@@ -7,7 +7,6 @@
 SerializedObject::SerializedObject(Object &obj)
 {
     this->attr.id = obj.getId();
-    this->attr.name = obj.getName();
     if ((this->attr.type = obj.getType()) == Object::Character)
         this->attr.playerId = (dynamic_cast<Player &>(obj)).getPlayerNo();
     else
