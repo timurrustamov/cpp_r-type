@@ -28,12 +28,12 @@ int							main()
 		std::cerr << "RType Exception: " << err.what() << std::endl;
 		system("pause");
 		return (1);
-	}/*
+	}
 	catch (const std::exception &err)
 	{
 		std::cerr << "std::exception: " << err.what() << std::endl;
 		system("pause");
 		return (1);
-	}*/
+	}
 	return (0);
 }

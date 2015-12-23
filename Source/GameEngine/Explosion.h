@@ -5,14 +5,14 @@
 #ifndef EXPLOSION_H_
 # define EXPLOSION_H_
 
-# include				"Object.h"
-# include				"../System/Animation.h"
-# include				"../System/ResourcesBank.h"
+# include					"Object.h"
+# include					"../System/Animation.h"
+# include					"../System/ResourcesBank.h"
 
-class Explosion :		public Object
+class Explosion :			public Object
 {
 public:
-	enum				Type
+	enum					Type
 	{
 		SmallEnergy,
 		Energy,
@@ -23,17 +23,20 @@ public:
 	Explosion(Explosion::Type type, bool hurting, t2Vector<int> position);
 	virtual ~Explosion() {};
 
-	virtual void		interact(Object *);
-	virtual void		lateUpdate();
-	virtual void		start();
+	virtual void			interact(Object *);
+	virtual void			lateUpdate();
+	virtual void			start();
 
 protected:
-	Animation			*animation;
-	AnimationEntity		*entity;
-	unsigned int		collisionNo;
+	Animation				*animation;
+	AnimationEntity			*entity;
+	unsigned int			collisionNo;
 
-	Explosion::Type		explosionType;
-	bool				hurting;
+	const char				*animationID;
+	Explosion::Type			explosionType;
+	bool					hurting;
+	t2Vector<int>			size;
+	t2Vector<unsigned int>	grid;
 };
 
 #endif /* !EXPLOSION_H_ */

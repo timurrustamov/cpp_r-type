@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <level>
   <title>Level 0</title>
-  <BGT>background_0.png</BGT>
+  <BGT>background_1.png</BGT>
   <BGM>sfox2-opening.ogg</BGM>
   <parameters>
     <scrollspeed>10</scrollspeed>

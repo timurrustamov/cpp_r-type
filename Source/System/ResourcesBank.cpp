@@ -1,7 +1,7 @@
 #include						"ResourcesBank.h"
 #include						"../System/RTypeException.h"
 
-ResourcesBank::ResourcesBank()
+ResourcesBank::ResourcesBank() : animationBank(NULL)
 {}
 
 ResourcesBank::~ResourcesBank()
@@ -34,15 +34,18 @@ sf::SoundBuffer						*ResourcesBank::getSoundBuffer(const std::string &name)
 
 std::map<std::string, Animation *>	*ResourcesBank::getAnimations() const
 {
+	if (this->animationBank == NULL)
+		throw RTypeException("access error: the animation bank has not been initialized (on function getAnimations())");
 	return (this->animationBank);
 }
 
 Animation							*ResourcesBank::getAnimation(const std::string &name)
 {
+	if (this->animationBank == NULL)
+		throw RTypeException("access error: the animation bank has not been initialized (on function getAnimations())");
 	try
 	{
-		if (this->animationBank)
-			return (this->animationBank->at(name));
+		return (this->animationBank->at(name));
 	}
 	catch (const std::out_of_range &)
 	{

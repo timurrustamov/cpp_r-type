@@ -24,6 +24,8 @@ void					OnLevel::loadLevel(Level *newLevel)
 	this->level->playMusic();
 	this->gameData->resourceBank->setTexture("Player", "../Assets/Graphics/Sprites/r-typesheet1.png");
 	this->gameData->resourceBank->setTexture("Bullets", "../Assets/Graphics/Sprites/Bullets.png");
+	this->gameData->resourceBank->setTexture("Explode2", "../Assets/Graphics/Sprites/Explode2.png");
+
 	this->animations["Background"] = new Animation("Background", this->level->getTexture(), t2Vector<unsigned int>(this->level->getSize(), this->gameData->getHeight()));
 	this->animations["Background"]->changeEntity(&this->backgroundEntity);
 	this->timer.addNewEvent("scrolling", static_cast<float>(this->level->getScrollSpeed()) / 100);

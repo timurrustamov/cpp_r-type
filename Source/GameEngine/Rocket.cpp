@@ -4,6 +4,7 @@
 
 #include "GameData.h"
 #include "Rocket.hpp"
+#include "Explosion.h"
 
 Rocket::Rocket(t2Vector<int> position) : Object()
 {
@@ -57,13 +58,19 @@ Rocket::interact(Object *object)
     }
 }
 
-void		Rocket::lateUpdate()
+void			Rocket::lateUpdate()
 {
+	GameData	*gameData;
+	Explosion	*explosion;
+
 	this->entity->setPosition(this->geometry->getPosition() - this->geometry->getSize() / 2);
 	if (this->timer.eventDone("autoDestruction"))
 		this->geometry->removeImpulse();
 	if (this->timer.eventDone("Destruction"))
 	{
+		gameData = GameData::getInstance();
+		explosion = new Explosion(Explosion::Type::SmallEnergy, true, this->geometry->getPosition());
+		gameData->world->createNewObject(explosion);
 		this->setToDelete();
 		this->animation->removeEntity(this->entity->getId());
 	}
