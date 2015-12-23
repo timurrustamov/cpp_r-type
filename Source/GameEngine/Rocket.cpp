@@ -69,7 +69,7 @@ void			Rocket::lateUpdate()
 	if (this->timer.eventDone("Destruction"))
 	{
 		gameData = GameData::getInstance();
-		explosion = new Explosion(Explosion::Type::SmallEnergy, true, this->geometry->getPosition());
+		explosion = new Explosion(Explosion::Physic, true, this->geometry->getPosition());
 		gameData->world->createNewObject(explosion);
 		this->setToDelete();
 		this->animation->removeEntity(this->entity->getId());

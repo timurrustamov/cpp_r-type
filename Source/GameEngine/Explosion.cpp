@@ -1,25 +1,25 @@
 #include				"Explosion.h"
 
-Explosion::Explosion(Explosion::Type type, bool hurting, t2Vector<int> position) : Object()
+Explosion::Explosion(Explosion::Type type, bool hurting, t2Vector<int> position) : Object(), explosionType(type)
 {
 	switch (this->explosionType)
 	{
-	case Explosion::Type::Energy:
+	case Explosion::Energy:
 		this->animationID = "Explode4";
 		this->size = t2Vector<int>(47, 46);
 		this->grid = t2Vector<unsigned int>(4, 2);
 		break;
-	case Explosion::Type::Physic:
+	case Explosion::Physic:
 		this->animationID = "Explode3";
 		this->size = t2Vector<int>(47, 46);
 		this->grid = t2Vector<unsigned int>(4, 2);
 		break;
-	case Explosion::Type::SmallPhysic:
+	case Explosion::SmallPhysic:
 		this->animationID = "Explode1";
 		this->size = t2Vector<int>(24, 23);
 		this->grid = t2Vector<unsigned int>(8, 1);
 		break;
-	case Explosion::Type::SmallEnergy:
+	case Explosion::SmallEnergy:
 		this->animationID = "Explode2";
 		this->size = t2Vector<int>(24, 23);
 		this->grid = t2Vector<unsigned int>(6, 1);
@@ -35,7 +35,6 @@ Explosion::Explosion(Explosion::Type type, bool hurting, t2Vector<int> position)
 	this->geometry->attachToObject(this);
 	this->name = "explosion";
 	this->type = Object::Force;
-	this->explosionType = type;
 	this->hurting = hurting;
 	this->id = Object::getId();
 	this->start();

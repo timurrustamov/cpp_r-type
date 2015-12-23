@@ -31,6 +31,11 @@ unsigned int				Object::getId() const
 	return (this->id);
 }
 
+unsigned int				Object::getIdentifier() const
+{
+	return (this->identifier);
+}
+
 unsigned int
 Object::getNewId()
 {
