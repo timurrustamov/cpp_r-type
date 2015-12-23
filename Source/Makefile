@@ -1,7 +1,7 @@
 CC	=	g++
 RM	=	rm -f
 
-SRC_SERV	=	serv_test.cpp			\
+SRC_SERV	=		serv_test.cpp			\
 				System/Animation.cpp		\
 				System/RTypeException.cpp	\
 				System/ResourcesBank.cpp	\
@@ -27,6 +27,8 @@ SRC_SERV	=	serv_test.cpp			\
 				GameEngine/World.cpp 		\
 				GameEngine/GameRoom.cpp		\
 				GameEngine/User.cpp		\
+				GameEngine/Explosion.cpp	\
+				GameEngine/Instruction.cpp	\
 				GameEngine/RTypeServer.cpp	
 
 OBJ_SERV	=	$(SRC_SERV:.cpp=.o)
@@ -57,6 +59,8 @@ SRC_CLIENT	=	clie_test.cpp			\
 				GameEngine/World.cpp 		\
 				GameEngine/GameRoom.cpp		\
 				GameEngine/User.cpp		\
+				GameEngine/Explosion.cpp	\
+				GameEngine/Instruction.cpp	\
 				GameEngine/RTypeServer.cpp
 
 OBJ_CLIENT	=	$(SRC_CLIENT:.cpp=.o)

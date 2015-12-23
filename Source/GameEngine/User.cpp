@@ -48,11 +48,15 @@ User::attachRoom(GameRoom *room) {
 void
 User::detachRoom() {
 
+    GameRoom *tmp;
+
     IMutex *mutex = (*MutexVault::getMutexVault())["user" + this->name];
     mutex->lock(true);
-    if (this->room != NULL)
-        this->room->removeUser(this);
-    this->room = NULL;
+    if ((tmp = this->room) != NULL)
+    {
+        this->room = NULL;
+        tmp->removeUser(this);
+    }
     mutex->unlock();
 }
 

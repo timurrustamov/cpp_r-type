@@ -99,6 +99,8 @@ public:
             return (reinterpret_cast<T *>(this->getIntVector()));
         else if (typeid(T) == typeid(Rsa))
             return (reinterpret_cast<T *>(this->getRsa()));
+        else if (typeid(T) == typeid(Instruction))
+            return (reinterpret_cast<T *>(this->getInstruction()));
         return (NULL);
     };
 
@@ -124,6 +126,7 @@ protected:
     std::string                             *getString();
     std::vector<int>                        *getIntVector();
     Rsa                                     *getRsa();
+    Instruction                             *getInstruction();
 };
 
 #endif //CPP_BABEL_PACKET_H

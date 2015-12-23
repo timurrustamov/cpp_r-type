@@ -8,17 +8,13 @@ Instruction::Instruction(std::string string, Instruction::TypeName name)
 {
     this->listNames.push_back(string);
     this->instruction = name;
-    this->nb = 1;
 }
 
-Instruction::Instruction(std::vector<std::string> vector, Instruction::TypeName name)
+Instruction::Instruction(const std::vector<std::string> &vector, Instruction::TypeName name)
 {
-    this->listNames.reserve(vector.size());
-    this->listNames.resize(vector.size());
-    for (std::vector<std::string>::iterator it = vector.begin(); it != vector.end(); it++)
+    for (std::vector<std::string>::const_iterator it = vector.begin(); it != vector.end(); it++)
         this->listNames.push_back(*it);
     this->instruction = name;
-    this->nb = static_cast<unsigned int>(this->listNames.size());
 }
 
 Instruction::~Instruction()
@@ -46,5 +42,13 @@ bool Instruction::addName(std::string str)
 
 unsigned int Instruction::getNb() const
 {
-    return this->nb;
+    return static_cast<unsigned int>(this->listNames.size());
+}
+
+const std::string &
+Instruction::operator[](unsigned int pos) const {
+
+    if (pos >= this->listNames.size())
+        return (this->empty);
+    return (this->listNames[pos]);
 }

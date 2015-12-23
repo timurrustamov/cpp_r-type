@@ -22,10 +22,14 @@ class									World
 	std::map<unsigned int, Object *>	_objects;
 	std::vector<unsigned int>			_playersId;
 	QuadTree _qt;
+    std::map<unsigned int, Object *>    _samples;
 
 public:
 	World(t2Vector<int> size, bool verticalWalls = true, bool horizontalWalls = false);
     ~World();
+
+    //transfer the ownership to world
+    World &                             addSample(Object *);
 
     template <typename T>
     unsigned int						createNewObject(const t2Vector<int> &position)
@@ -49,6 +53,8 @@ public:
     };
 
 	unsigned int						createNewObject(Object *object);
+
+    unsigned int                        createNewObject(Object::Type type);
 
     unsigned int						createNewPlayer(const t2Vector<int> &position, unsigned int playerNo)
     {

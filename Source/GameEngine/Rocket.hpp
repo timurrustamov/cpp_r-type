@@ -7,6 +7,7 @@
 
 #include <cstddef>
 #include "Object.h"
+#include "Explosion.h"
 #include "../System/Animation.h"
 #include "../System/ResourcesBank.h"
 
