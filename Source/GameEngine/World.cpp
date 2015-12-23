@@ -36,25 +36,6 @@ World::~World()
         delete (it->second);
 }
 
-template <typename T>
-unsigned int						createNewObject(const t2Vector<int> &position)
-{
-	Object							*newobj;
-
-	if (typeid(T) == typeid(Player))
-		return (BAD_ID);
-	newobj = new T(position);
-	this->_objects[newobj->getId()] = newobj;
-	this->_qt.insert(newobj->geometry);
-	return (newobj->getId());
-};
-
-template							<typename T>
-unsigned int						createNewObject(int x, int y)
-{
-	return (this->createNewObject<T>(t2Vector<int>(x, y)));
-};
-
 unsigned int						World::createNewObject(Object *newobj)
 {
 	Player							*playerptr = dynamic_cast<Player *>(newobj);
@@ -64,6 +45,13 @@ unsigned int						World::createNewObject(Object *newobj)
 	this->_objects[newobj->getId()] = newobj;
 	this->_qt.insert(newobj->geometry);
 	return (newobj->getId());
+}
+
+
+unsigned int
+World::createNewObject(Object::Type type) {
+
+    return (0);
 }
 
 World &
@@ -125,8 +113,17 @@ World::loadSnapshot(Snapshot *snap)
                 this->_objects[it->second->attr.id]->geometry->setVelocity(t2Vector<float>(it->second->attr.velocityx, it->second->attr.velocityy));
                 this->_objects[it->second->attr.id]->geometry->setPosition(t2Vector<float>(it->second->attr.positionx, it->second->attr.positiony));
             }
-            //else load new objects
+            else if (this->_samples[it->second->attr.identifier] != NULL) {
+                this->_objects[it->second->attr.id] = this->_samples[it->second->attr.identifier]->clone(it->second);
+            }//else load new objects
         }
     }
+    return (*this);
+}
+
+World &
+World::addSample(Object *object) {
+
+    this->_samples[object->getIdentifier()] = object;
     return (*this);
 }

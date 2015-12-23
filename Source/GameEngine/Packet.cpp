@@ -36,18 +36,24 @@ Packet::Packet(Rsa &rsa) : _type(Packet::SSLPublicKey)
 
 Packet::Packet(Instruction &instr) : _type(Packet::Instruct)
 {
-    std::string str;
+    Instruction::TypeName typeName = instr.getInstruct();
+    std::vector<std::string> data = instr.getListNames();
     unsigned int elemNo = instr.getNb();
-    char *ptr = reinterpret_cast<char *>(&elemNo);
+    unsigned char *ptr = reinterpret_cast<unsigned char *>(&typeName);
 
+    for (unsigned int i = 0; i < sizeof(Instruction::TypeName); i++)
+        this->_data.push_back(ptr[i]);
+    ptr = reinterpret_cast<unsigned char *>(&elemNo);
     for (unsigned int i = 0; i < sizeof(unsigned int); i++)
         this->_data.push_back(ptr[i]);
-    for (std::vector<std::string>::iterator it = instr.getListNames().begin(); it != instr.getListNames().end(); it++)
+    for (std::vector<std::string>::iterator it = data.begin(); it != data.end(); it++)
     {
-        Packet *p = new Packet();
+        Packet *p = Packet::pack(*it);
         std::vector<unsigned char> *build = p->build();
         this->_data.insert(this->_data.end(), build->begin(), build->end());
         delete p;
+        delete build;
+        //std::cout << this->_data.size() << std::endl;
     }
     this->_encrypted = false;
 }
@@ -68,11 +74,8 @@ Packet *
 Packet::fromStream(std::vector<unsigned char> &data, Rsa* rsa)
 {
     unsigned int headerSize = Packet::getHeaderSize();
-    if (data.size() <= headerSize) {
-
-        std::cout << "plus haut" << std::endl;
+    if (data.size() <= headerSize)
         return (NULL);
-    }
     unsigned int *r_magic = reinterpret_cast<unsigned int *>(&data[0]);
     Packet::Type *r_type = reinterpret_cast<Packet::Type *>(&data[sizeof(unsigned int)]);
     unsigned int *r_size = reinterpret_cast<unsigned int *>(&data[sizeof(unsigned int) * 2]);
@@ -217,6 +220,40 @@ Packet::getRsa()
         {
             std::cerr << e.what() << std::endl;
         }
+    }
+    return (result);
+}
+
+Instruction *
+Packet::getInstruction() {
+
+    Instruction *result = NULL;
+
+    Instruction::TypeName typeName;
+    std::vector<std::string> vectorTmp;
+    std::string *stringPtr;
+    Packet *p;
+
+    unsigned int elemNo = 0;
+    if (this->_type == Packet::Instruct)
+    {
+        typeName = *(reinterpret_cast<Instruction::TypeName *>(&this->_data[0]));
+        elemNo = *(reinterpret_cast<unsigned int *>(&this->_data[sizeof(Instruction::TypeName)]));
+        //consume this flux
+        this->_data.erase(this->_data.begin(), this->_data.begin() + (sizeof(Instruction::TypeName) + sizeof(unsigned int)));
+
+        for (unsigned int i = 0; i < elemNo; i++) {
+            if ((p = Packet::fromStream(this->_data)) != NULL &&
+                p->getType() == Packet::String) {
+                if ((stringPtr = p->unpack<std::string>()) != NULL) {
+                    vectorTmp.push_back(*stringPtr);
+                    delete stringPtr;
+                }
+                delete p;
+            }
+        }
+
+        result = new Instruction(vectorTmp, typeName);
     }
     return (result);
 }

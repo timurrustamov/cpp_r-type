@@ -59,7 +59,7 @@ protected:
 	Object(Geometry *, Type);
 };
 
-# include								"Geometry.hpp"
-# include								"SerializedObject.hpp"
+# include				"SerializedObject.hpp"
+# include				"Geometry.hpp"
 
 #endif /* !OBJECT_H_ */

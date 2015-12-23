@@ -21,6 +21,8 @@ RTypeServer::~RTypeServer()
     this->tcpServer->cancel();
     this->udpServer->cancel();
     sleep(1);
+    for (std::map<ISocket *, User *>::iterator it = this->userLinks.begin(); it != this->userLinks.end(); it++)
+        delete it->second;
     delete this->tcpServer;
     delete this->udpServer;
 }
@@ -96,7 +98,7 @@ RTypeServer::newUser(const std::string &userName, ISocket *client) {
     bool res = false;
 
     mutex->lock(true);
-    if (this->userLinks.find(client) == this->userLinks.end() && !this->userNameExists(userName))
+    if (!userName.empty() && this->userLinks.find(client) == this->userLinks.end() && !this->userNameExists(userName))
     {
         this->userLinks[client] = new User(userName);
         res = true;
@@ -139,23 +141,58 @@ RTypeServer::tcpGuestRoom(ISocket *client) {
 
     Packet *packet;
     std::string *str;
+    Instruction *instruct;
+    bool success;
 
-    std::cout << "Received from " << client->getIp() << " : " << std::endl;
     //get packet
     while ((packet = client->readPacket()) != NULL) {
 
-        if (packet->getType() == Packet::String &&
-            (str = packet->unpack<std::string>()) != NULL) {
+        if (packet->getType() == Packet::Instruct &&
+            (instruct = packet->unpack<Instruction>()) != NULL)
+        {
+            if (instruct->getInstruct() == Instruction::CONNEXION) {
 
-            std::cout << *str << std::endl;
-            delete str;
+                if ((success = RTypeServer::getInstance()->newUser((*instruct)[0], client))) {
+                    client->attachOnReceive(RTypeServer::tcpMemberRoom);
+                    std::cout << "new user : " << (*instruct)[0] << std::endl;
+                }
+                Instruction i("", success ? (Instruction::OK) : (Instruction::KO));
+                client->writePacket(Packet::pack(i));
+            }
+            delete instruct;
         }
+        delete packet;
     }
 }
 
 void
 RTypeServer::tcpMemberRoom(ISocket *client) {
 
+    Packet *packet;
+    std::string *str;
+    Instruction *instruct;
+    bool success;
+
+    if (RTypeServer::getInstance()->userLinks[client] == NULL)
+    {
+        client->attachOnReceive(RTypeServer::tcpGuestWelcomeRoom);
+        return (RTypeServer::tcpGuestWelcomeRoom(client));
+    }
+
+    while ((packet = client->readPacket()) != NULL) {
+
+        if (packet->getType() == Packet::Instruct &&
+            (instruct = packet->unpack<Instruction>()) != NULL)
+        {
+            if (instruct->getInstruct() == Instruction::DECONNEXION) {
+
+                Instruction i("", Instruction::OK);
+                client->writePacket(Packet::pack(i));
+            }
+            delete instruct;
+        }
+        delete packet;
+    }
 }
 
 void
