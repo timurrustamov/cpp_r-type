@@ -15,6 +15,7 @@ struct ObjectAttributes
     unsigned int    id;
     unsigned int    playerId;
     Object::Type    type;
+	unsigned int	identifier;
     std::string     name;
     int             sizex;
     int             sizey;
@@ -42,6 +43,7 @@ public:
 private:
     bool                       inited;
     std::vector<unsigned char> binaryString;
+	std::string				   config;
 };
 
 

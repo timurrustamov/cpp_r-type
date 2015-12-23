@@ -1,0 +1,100 @@
+
+
+
+
+Pinate Team                                                     N. Pinatel
+RFC Russian                                                   	Epitech
+Category: Informational                             			December 2015
+
+
+								R-Type RFC
+
+Abstract
+
+	This document describe the Network Game Protocol for the R-Type.
+
+Status of This Memo
+
+	This document specifies an Internet standards track protocol for the
+	R-Type project, and requests discussion and suggestions for
+	improvements.  Please refer to the current edition of the "Internet
+	Official Protocol Standards" (STD 1) for the standardization state
+	and status of this protocol.  Distribution of this memo is unlimited.
+   
+Copyright Notice
+
+	Copyright (c) 2015 IETF Trust and the persons identified as the
+	document authors.  All rights reserved.
+
+	This document is subject to BCP 78 and the IETF Trust's Legal
+	Provisions Relating to IETF Documents in effect on the date of
+	publication of this document (http://trustee.ietf.org/license-info).
+	Please review these documents carefully, as they describe your rights
+	and restrictions with respect to this document.
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Pinatel                  	Informational                     [Page 1]
+
+Russian RFC               	 R-Type RFC              	 December 2015
+
+
+Table of Contents
+
+	1. Introduction .................................................1
+		1.1. Conventions Used in This Document ......................1
+	2. Transfert protocols ..........................................1
+		2.1 TCP .....................................................1
+		2.2 UDP .....................................................3
+	3. Pre Game Message Exchanges ...................................2
+	4. Pre Game Data Unit Format ....................................3
+	5. Pre Game Request & Responses Values ..........................4
+      5.1. Request Values ...........................................4
+      5.2. Responses Values .........................................4
+	  5.3. Login Request ............................................4
+	  5.4  Get Rooms request ........................................5
+	  5.5. Join Room Request ........................................6
+	  5.6. Create Room Request ......................................6
+	  5.7. Room Informations ........................................7
+	  5.8. Other Requests ...........................................7
+	  5.9. Server Answers ...........................................8
+   6. In Game Session Management ....................................8
+
+1.  Introduction
+
+	This document provides a full documentation for the Network Game
+	Protocol of the R-Type Game.
+	It provides all the necessary information to understand how to
+	communicate with the R-Type server and with the R-Type client: commands,
+	protocols, packets format...
+
+1.1.  Conventions Used in This Document
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in [RFC2119].
+
+2.  Transfert Protocol
+
+   The R-Type Network Communication Protocol is based on the TCP and UDP
+   network protocols.
+
+2.1	TCP
+
+	The TCP protocol is used for all the commands that are not related to
+	a game action.
+	This protocol has been chosen to provide a safe client-server
+	communication for important commands.
