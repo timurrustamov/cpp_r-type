@@ -113,7 +113,9 @@ World::loadSnapshot(Snapshot *snap)
                 this->_objects[it->second->attr.id]->geometry->setVelocity(t2Vector<float>(it->second->attr.velocityx, it->second->attr.velocityy));
                 this->_objects[it->second->attr.id]->geometry->setPosition(t2Vector<float>(it->second->attr.positionx, it->second->attr.positiony));
             }
-            //else load new objects
+            else if (this->_samples[it->second->attr.identifier] != NULL) {
+                this->_objects[it->second->attr.id] = this->_samples[it->second->attr.identifier]->clone(it->second);
+            }//else load new objects
         }
     }
     return (*this);
@@ -122,6 +124,6 @@ World::loadSnapshot(Snapshot *snap)
 World &
 World::addSample(Object *object) {
 
-    this->_samples[object->]
+    this->_samples[object->getIdentifier()] = object;
     return (*this);
 }

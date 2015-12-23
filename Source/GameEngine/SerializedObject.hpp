@@ -8,7 +8,6 @@
 #include <cstddef>
 #include <cstring>
 #include <vector>
-#include "Object.h"
 #include "Player.hpp"
 
 class Object;
@@ -49,5 +48,6 @@ private:
 	std::string				   config;
 };
 
+#include "Object.h"
 
 #endif //CPP_R_TYPECPY2_SERIALIZEDOBJECT_HPP
