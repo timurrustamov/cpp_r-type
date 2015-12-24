@@ -3,34 +3,35 @@
 //
 
 #ifndef CPP_R_TYPECPY2_PLAYER_HPP
-#define CPP_R_TYPECPY2_PLAYER_HPP
+# define CPP_R_TYPECPY2_PLAYER_HPP
 
-#include <cstddef>
-#include "Object.h"
-#include "../System/Animation.h"
-#include "../System/ResourcesBank.h"
+# include				<cstddef>
+# include				"Object.h"
+# include				"Rocket.hpp"
+# include				"../System/Animation.h"
+# include				"../System/ResourcesBank.h"
 
-class Player : public Object {
-
+class Player :			public Object
+{
 public:
-
     Player(t2Vector<int> position, unsigned int);
     Player(int x, int y, unsigned int);
     virtual ~Player() {};
 
-    unsigned int getPlayerNo() const;
+    unsigned int		getPlayerNo() const;
 
-	virtual Object *clone(SerializedObject *serializedObject);
-    virtual void interact(Object *);
-	virtual void lateUpdate();
-	virtual void start();
+	virtual Object		*clone(SerializedObject *serializedObject);
+    virtual void		interact(Object *);
+	virtual void		lateUpdate();
+	virtual void		start();
+
+	void				launchRocket(Rocket::Type type);
 
 
 protected:
-	Animation *animation;
-	AnimationEntity *entity;
-    unsigned int playerNo;
+	Animation			*animation;
+	AnimationEntity		*entity;
+    unsigned int		playerNo;
 };
 
-
-#endif //CPP_R_TYPECPY2_PLAYER_HPP
+#endif /* !CPP_R_TYPECPY2_PLAYER_HPP */

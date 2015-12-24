@@ -11,7 +11,9 @@ class					AnimationEntity
 	t2Vector<int>		position;
 
 public:
-	AnimationEntity(unsigned int _id, unsigned int _state, t2Vector<int> _position) : id(_id), state(_state), position(_position) {};
+	AnimationEntity(unsigned int _id, unsigned int _state, t2Vector<int> _position) : id(_id), state(_state), position(_position) {
+		std::cout << "CREATION" << std::endl;
+	};
 	AnimationEntity() : id(0), state(0), position(t2Vector<int>(0, 0)) {};
 	~AnimationEntity() {};
 

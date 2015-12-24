@@ -144,9 +144,9 @@ public:
     t2Vector<T> normalize() const
     {
         float length = this->length();
-        t2Vector<T> vec(this->_x / length, this->_y / length);
-
-        return (vec);
+		if (length != 0)
+			return (t2Vector<T>(this->_x / length, this->_y / length));
+		return (*this);
     }
 
     template <typename U>

@@ -1,7 +1,3 @@
-//
-// Created by rustam_t on 12/15/15.
-//
-
 #ifndef EXPLOSION_H_
 # define EXPLOSION_H_
 
@@ -20,7 +16,7 @@ public:
 		Physic,
 	};
 
-	Explosion(Explosion::Type type, bool hurting, t2Vector<int> position);
+	Explosion(Explosion::Type type, t2Vector<int> position = t2Vector<int>(0, 0));
 	virtual ~Explosion() {};
 
 	virtual Object			*clone(SerializedObject *serializedObject);
@@ -31,13 +27,13 @@ public:
 protected:
 	Animation				*animation;
 	AnimationEntity			*entity;
-	unsigned int			collisionNo;
 
-	const char				*animationID;
-	Explosion::Type			explosionType;
-	bool					hurting;
 	t2Vector<int>			size;
 	t2Vector<unsigned int>	grid;
+
+	Explosion::Type			explosionType;
+	const char				*animationID;
+	unsigned char			impulseFactor;
 };
 
 #endif /* !EXPLOSION_H_ */

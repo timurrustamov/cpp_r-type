@@ -1,6 +1,6 @@
 #include				"Explosion.h"
 
-Explosion::Explosion(Explosion::Type type, bool hurting, t2Vector<int> position) : Object(), explosionType(type)
+Explosion::Explosion(Explosion::Type type, t2Vector<int> position) : Object(), explosionType(type)
 {
 	switch (this->explosionType)
 	{
@@ -8,33 +8,37 @@ Explosion::Explosion(Explosion::Type type, bool hurting, t2Vector<int> position)
 		this->animationID = "Explode4";
 		this->size = t2Vector<int>(47, 46);
 		this->grid = t2Vector<unsigned int>(4, 2);
+		this->impulseFactor = 100;
 		break;
 	case Explosion::Physic:
 		this->animationID = "Explode3";
 		this->size = t2Vector<int>(47, 46);
 		this->grid = t2Vector<unsigned int>(4, 2);
+		this->impulseFactor = 150;
 		break;
 	case Explosion::SmallPhysic:
 		this->animationID = "Explode1";
 		this->size = t2Vector<int>(24, 23);
 		this->grid = t2Vector<unsigned int>(8, 1);
+		this->impulseFactor = 75;
 		break;
 	case Explosion::SmallEnergy:
 		this->animationID = "Explode2";
 		this->size = t2Vector<int>(24, 23);
 		this->grid = t2Vector<unsigned int>(6, 1);
+		this->impulseFactor = 50;
 		break;
 	default:
 		this->animationID = "Explode2";
 		this->size = t2Vector<int>(24, 23);
 		this->grid = t2Vector<unsigned int>(6, 1);
+		this->impulseFactor = 50;
 		break;
 	}
 
 	this->geometry = new Geometry(Rectangle<float>(this->size, position));
 	this->geometry->attachToObject(this);
 	this->type = Object::Force;
-	this->hurting = hurting;
 	this->id = Object::getId();
 	this->start();
 }
@@ -45,6 +49,7 @@ void					Explosion::start()
 
 	this->entity = new AnimationEntity(this->getId(), 0, this->geometry->getPosition());
 	this->timer.addNewEvent("nextStep", 0.1f);
+	this->timer.addNewEvent("impulseEnd", 0.15f);
 
 	if (!(this->animation = resourceBank->getAnimation(this->animationID)))
 	{
@@ -56,7 +61,7 @@ void					Explosion::start()
 
 Object					*Explosion::clone(SerializedObject *serializedObject)
 {
-	Explosion			*newObject = new Explosion(this->explosionType, this->hurting, this->geometry->getPosition());
+	Explosion			*newObject = new Explosion(this->explosionType, this->geometry->getPosition());
 
 	newObject->setValues(serializedObject);
 	return (newObject);
@@ -64,7 +69,17 @@ Object					*Explosion::clone(SerializedObject *serializedObject)
 
 void					Explosion::interact(Object *object)
 {
-	return;
+	Geometry *geo1 = this->geometry;
+	Geometry *geo2 = object->geometry;
+
+	if (this->timer.eventDone("impulseEnd"))
+		return;
+	switch (object->getType())
+	{
+	default:
+		geo2->applyImpulse((geo2->getPosition() - geo1->getPosition()).normalize() * static_cast<float>(this->impulseFactor) / 10, 0.1);
+		break;
+	}
 }
 
 void					Explosion::lateUpdate()

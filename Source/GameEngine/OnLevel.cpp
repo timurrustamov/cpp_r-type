@@ -41,8 +41,6 @@ void					OnLevel::loadLevel(Level *newLevel)
 
 void					OnLevel::keyPressed(sf::Keyboard::Key key)
 {
-	unsigned int		id;
-
 	switch (key)
 	{
 	case sf::Keyboard::Escape:
@@ -53,8 +51,22 @@ void					OnLevel::keyPressed(sf::Keyboard::Key key)
 		break;
 	case sf::Keyboard::Space:
 		if (!this->timer.eventDone("shoot")) break;
-		id = this->world->createNewObject<Rocket>(this->player->geometry->getPosition() + t2Vector<unsigned int>(25, 0));
-		this->world->getObject(id)->geometry->applyImpulse(t2Vector<float>(30, 0), 0.1f);
+		this->player->launchRocket(Rocket::LowEnergy);
+		this->timer.reset("shoot");
+		break;
+	case sf::Keyboard::X:
+		if (!this->timer.eventDone("shoot")) break;
+		this->player->launchRocket(Rocket::Energy);
+		this->timer.reset("shoot");
+		break;
+	case sf::Keyboard::C:
+		if (!this->timer.eventDone("shoot")) break;
+		this->player->launchRocket(Rocket::LowPhysic);
+		this->timer.reset("shoot");
+		break;
+	case sf::Keyboard::V:
+		if (!this->timer.eventDone("shoot")) break;
+		this->player->launchRocket(Rocket::Physic);
 		this->timer.reset("shoot");
 		break;
 	default:
