@@ -27,7 +27,7 @@ public:
 
     const std::string &getName() const;
     void attachRoom(GameRoom *room);
-    void detachRoom();
+    bool detachRoom();
     GameRoom *getRoom() const;
     State getState() const;
     void setState(State state);

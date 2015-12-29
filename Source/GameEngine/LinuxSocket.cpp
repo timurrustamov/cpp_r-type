@@ -386,6 +386,9 @@ LinuxSocket::LinuxSocket(int port, const std::string &proto) : ISocket(ISocket::
         throw BBException("socket failed");
     else if (this->_proto == "UDP" && (this->_socket = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
         throw BBException("socket failed");
+    int enable = 1;
+    if (setsockopt(this->_socket, SOL_SOCKET, SO_REUSEPORT, &enable, sizeof(int)) < 0)
+        throw BBException("socket failed");
     this->_status = ISocket::Ready;
     s_in.sin_family = AF_INET;
     s_in.sin_port = htons(static_cast<uint16_t>(port));

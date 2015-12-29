@@ -89,6 +89,7 @@ RTypeServer::leaveRoom(User *user, const std::string &roomName) {
     if (user->getRoom() != NULL)
         user->getRoom()->removeUser(user);
     mutex->unlock();
+    return (res);
 }
 
 bool
@@ -98,7 +99,8 @@ RTypeServer::newUser(const std::string &userName, ISocket *client) {
     bool res = false;
 
     mutex->lock(true);
-    if (!userName.empty() && this->userLinks.find(client) == this->userLinks.end() && !this->userNameExists(userName))
+    std::cout << userName << std::endl;
+    if (!userName.empty() && !this->userNameExists(userName))
     {
         this->userLinks[client] = new User(userName);
         res = true;
@@ -115,7 +117,7 @@ RTypeServer::userNameExists(const std::string &username) {
 
     mutex->lock(true);
     for (std::map<ISocket *, User *>::iterator it = this->userLinks.begin(); it != this->userLinks.end(); it++)
-        if (it->second->getName() == username) {
+        if (it->second != NULL && it->second->getName() == username) {
             res = true;
             break;
         }
@@ -140,10 +142,11 @@ void
 RTypeServer::tcpGuestRoom(ISocket *client) {
 
     Packet *packet;
-    std::string *str;
+    Instruction ko(Instruction::KO);
     Instruction *instruct;
     bool success;
 
+    std::cout << "guest" << std::endl;
     //get packet
     while ((packet = client->readPacket()) != NULL) {
 
@@ -156,8 +159,12 @@ RTypeServer::tcpGuestRoom(ISocket *client) {
                     client->attachOnReceive(RTypeServer::tcpMemberRoom);
                     std::cout << "new user : " << (*instruct)[0] << std::endl;
                 }
-                Instruction i("", success ? (Instruction::OK) : (Instruction::KO));
+                Instruction i(success ? (Instruction::OK) : (Instruction::KO));
                 client->writePacket(Packet::pack(i));
+            }
+            else
+            {
+                client->writePacket(Packet::pack(ko));
             }
             delete instruct;
         }
@@ -168,15 +175,17 @@ RTypeServer::tcpGuestRoom(ISocket *client) {
 void
 RTypeServer::tcpMemberRoom(ISocket *client) {
 
+    RTypeServer *server = RTypeServer::getInstance();
     Packet *packet;
-    std::string *str;
     Instruction *instruct;
-    bool success;
+    Instruction res(Instruction::KO);
+    Instruction ko(Instruction::KO);
+    Instruction ok(Instruction::OK);
 
     if (RTypeServer::getInstance()->userLinks[client] == NULL)
     {
-        client->attachOnReceive(RTypeServer::tcpGuestWelcomeRoom);
-        return (RTypeServer::tcpGuestWelcomeRoom(client));
+        client->attachOnReceive(RTypeServer::tcpGuestRoom);
+        return (RTypeServer::tcpGuestRoom(client));
     }
 
     while ((packet = client->readPacket()) != NULL) {
@@ -185,10 +194,48 @@ RTypeServer::tcpMemberRoom(ISocket *client) {
             (instruct = packet->unpack<Instruction>()) != NULL)
         {
             if (instruct->getInstruct() == Instruction::DECONNEXION) {
-
-                Instruction i("", Instruction::OK);
-                client->writePacket(Packet::pack(i));
+                server->removeUser(client);
+                client->writePacket(Packet::pack(ok));
+                return;
             }
+            else if (instruct->getInstruct() == Instruction::GETALLUSERNAMES)
+            {
+                res.setInstruct(Instruction::GETALLUSERNAMES);
+                IMutex *mutex = (*MutexVault::getMutexVault())["serverType"];
+                mutex->lock(true);
+
+                for (std::map<ISocket *, User *>::iterator it = server->userLinks.begin(); it != server->userLinks.end(); it++)
+                    res.addName(it->second->getName());
+                mutex->unlock();
+                client->writePacket(Packet::pack(res));
+            }
+            else if (instruct->getInstruct() == Instruction::JOIN_ROOM && instruct->getNb() != 0 &&
+                        server->joinRoom(server->userLinks[client], (*instruct)[0]))
+            {
+                client->writePacket(Packet::pack(ok));
+                client->attachOnReceive(RTypeServer::tcpWaitingRoom);
+            }
+            else if (instruct->getInstruct() == Instruction::CREATE_ROOM && instruct->getNb() != 0 &&
+                    server->createRoom(server->userLinks[client], (*instruct)[0]) &&
+                    server->joinRoom(server->userLinks[client], (*instruct)[0]))
+            {
+                client->writePacket(Packet::pack(ok));
+                client->attachOnReceive(RTypeServer::tcpWaitingRoom);
+            }
+            else if (instruct->getInstruct() == Instruction::GETALLROOMNAMES)
+            {
+                res.setInstruct(Instruction::GETALLROOMNAMES);
+
+                IMutex *mutex = (*MutexVault::getMutexVault())["serverType"];
+                mutex->lock(true);
+
+                for (std::vector<GameRoom *>::iterator it = server->rooms.begin(); it != server->rooms.end(); it++)
+                    res.addName((*it)->getName());
+                mutex->unlock();
+                client->writePacket(Packet::pack(res));
+            }
+            else
+                client->writePacket(Packet::pack(ko));
             delete instruct;
         }
         delete packet;
@@ -198,6 +245,29 @@ RTypeServer::tcpMemberRoom(ISocket *client) {
 void
 RTypeServer::tcpWaitingRoom(ISocket *client) {
 
+    Packet *packet;
+    Instruction ko(Instruction::KO);
+    Instruction *instruct;
+    bool success;
+
+    //get packet
+    while ((packet = client->readPacket()) != NULL) {
+
+        if (packet->getType() == Packet::Instruct &&
+            (instruct = packet->unpack<Instruction>()) != NULL)
+        {
+            if (instruct->getInstruct() == Instruction::LEAVE_ROOM &&
+                    RTypeServer::getInstance()->userLinks[client]->detachRoom())
+            {
+                Instruction i(Instruction::OK);
+                client->writePacket(Packet::pack(i));
+            }
+            else
+                client->writePacket(Packet::pack(ko));
+            delete instruct;
+        }
+        delete packet;
+    }
 }
 
 RTypeServer *RTypeServer::getInstance(int tcpPort, int udpPort) {
@@ -223,4 +293,72 @@ void RTypeServer::tcpGuestWelcomeRoom(ISocket *client) {
 void RTypeServer::tcpGuestGoodbyeRoom(ISocket *client) {
 
     std::cout << "Client disconnected " << client->getIp() << std::endl;
+}
+
+bool RTypeServer::removeUser(ISocket *client) {
+
+    IMutex *mutex = (*MutexVault::getMutexVault())["serverType"];
+    bool res = false;
+
+    mutex->lock(true);
+    if (this->userLinks[client] != NULL)
+    {
+        this->userLinks[client]->detachRoom();
+        delete this->userLinks[client];
+        this->userLinks[client] = NULL;
+        client->attachOnReceive(RTypeServer::tcpGuestRoom);
+        res = true;
+    }
+    mutex->unlock();
+    return (res);
+}
+
+bool RTypeServer::removeRoom(GameRoom *room) {
+
+    std::vector<GameRoom *>::iterator it;
+    IMutex *mutex = (*MutexVault::getMutexVault())["serverType"];
+    bool res = false;
+
+    mutex->lock(true);
+    if ((it = std::find(this->rooms.begin(), this->rooms.end(), room)) != this->rooms.end())
+    {
+        delete *it;
+        this->rooms.erase(it);
+        res = true;
+    }
+    mutex->unlock();
+    return (res);
+}
+
+bool RTypeServer::sendToClient(User *user, Instruction &instruct) {
+
+    IMutex *mutex = (*MutexVault::getMutexVault())["serverType"];
+    mutex->lock(true);
+    bool res = false;
+
+    for (std::map<ISocket *, User *>::iterator it = this->userLinks.begin(); it != this->userLinks.end(); it++)
+        if (it->second == user)
+        {
+            it->first->writePacket(Packet::pack(instruct));
+            res = true;
+            break;
+        }
+    mutex->unlock();
+    return (res);
+}
+
+ISocket *RTypeServer::getUserSocket(User *user) {
+
+    IMutex *mutex = (*MutexVault::getMutexVault())["serverType"];
+    mutex->lock(true);
+    ISocket *client = NULL;
+
+    for (std::map<ISocket *, User *>::iterator it = this->userLinks.begin(); it != this->userLinks.end(); it++)
+        if (it->second == user)
+        {
+            client = it->first;
+            break;
+        }
+    mutex->unlock();
+    return (client);
 }

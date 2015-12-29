@@ -52,3 +52,16 @@ Instruction::operator[](unsigned int pos) const {
         return (this->empty);
     return (this->listNames[pos]);
 }
+
+Instruction::Instruction(TypeName type) : instruction(type) {
+
+}
+
+void Instruction::setInstruct(TypeName type) {
+    this->instruction = type;
+}
+
+void Instruction::eraseNames() {
+
+    this->listNames.clear();
+}

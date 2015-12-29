@@ -30,6 +30,8 @@ GameRoom::addUser(User *user)
     return (res);
 }
 
+
+
 bool GameRoom::removeUser(User *user) {
 
     IMutex *mutex = (*MutexVault::getMutexVault())["room" + this->name];
@@ -39,8 +41,13 @@ bool GameRoom::removeUser(User *user) {
     if (this->hasUser(user)) {
 
         this->users.erase(std::find(this->users.begin(), this->users.end(), user));
-        if (user->getRoom() != NULL)
+        if (user->getRoom() != NULL) {
             user->detachRoom();
+            if (this->owner == user) {
+                this->removeAllUsers();
+                RTypeServer::getInstance()->removeRoom(this);
+            }
+        }
         res = true;
     }
     mutex->unlock();
@@ -73,7 +80,7 @@ GameRoom::setState(State state, User *user)
         for (std::vector<User *>::iterator it = this->users.begin(); it != this->users.end(); it++)
             (*it)->setState(User::Playing);
     mutex->unlock();
-    return (false);
+    return (true);
 }
 
 GameRoom::State
@@ -94,3 +101,19 @@ GameRoom::getUsers() const {
     return (this->users);
 }
 
+bool GameRoom::removeAllUsers() {
+
+    RTypeServer *server = RTypeServer::getInstance();
+    IMutex *mutex = (*MutexVault::getMutexVault())["room" + this->name];
+    Instruction instruct(Instruction::LEAVE_ROOM);
+
+    mutex->lock(true);
+    for (std::vector<User *>::iterator it = this->users.begin(); it != this->users.end(); it++) {
+
+        server->sendToClient(*it, instruct);
+        (*it)->detachRoom();
+        this->users.erase(it);
+    }
+    mutex->unlock();
+    return (true);
+}

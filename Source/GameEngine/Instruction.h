@@ -18,13 +18,16 @@ public:
         KO,
         CONNEXION,
         DECONNEXION,
+        GETALLUSERNAMES,
         START_GAME,
         END_GAME,
+        GETALLROOMNAMES,
+        CREATE_ROOM,
         JOIN_ROOM,
         LEAVE_ROOM
     };
 
-
+    Instruction(TypeName type);
     Instruction(std::string, TypeName);
     Instruction(const std::vector<std::string> &, TypeName);
 
@@ -32,6 +35,8 @@ public:
 
     std::vector<std::string> getListNames() const;
     TypeName getInstruct() const;
+    void eraseNames();
+    void setInstruct(TypeName type);
     bool addName(std::string);
     unsigned int getNb() const;
     const std::string &operator[](unsigned int pos) const;

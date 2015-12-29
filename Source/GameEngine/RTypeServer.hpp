@@ -9,7 +9,9 @@
 #include <map>
 
 #include "LinuxSocket.h"
-#include "GameRoom.hpp"
+
+class User;
+class GameRoom;
 
 class RTypeServer {
 
@@ -21,10 +23,15 @@ public:
     bool roomNameExists(const std::string &roomName);
     bool joinRoom(User *user, const std::string &roomName);
     bool leaveRoom(User *user, const std::string &roomName);
+    bool sendToClient(User *user, Instruction &instruct);
+    bool removeRoom(GameRoom *room);
 
     bool newUser(const std::string &userName, ISocket *client);
+    bool removeUser(ISocket *client);
     bool userNameExists(const std::string &username);
     bool startGame(User *user);
+
+    ISocket *getUserSocket(User *user);
 
     static void tcpGuestWelcomeRoom(ISocket *client);
     static void tcpGuestGoodbyeRoom(ISocket *client);
@@ -43,5 +50,7 @@ protected:
     std::vector<GameRoom *> rooms;
 };
 
+#include "GameRoom.hpp"
+#include "User.hpp"
 
 #endif //CPP_R_TYPECPY2_RTYPESERVER_HPP

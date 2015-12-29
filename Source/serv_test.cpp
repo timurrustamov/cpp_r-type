@@ -4,6 +4,7 @@ int             main(int ac, char **av)
 {
     RTypeServer *server = RTypeServer::getInstance();
 
+    std::cout << ISocket::getServer()->getIp() << " " << ISocket::getServer()->getPort() << std::endl;
     std::string s = "";
     while (s != "quit") {
 

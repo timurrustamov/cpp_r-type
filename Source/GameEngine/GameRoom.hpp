@@ -10,6 +10,7 @@
 #include <vector>
 #include "ISocket.h"
 #include "User.hpp"
+#include "RTypeServer.hpp"
 
 class User;
 
@@ -30,6 +31,7 @@ public:
     const std::string &getName() const;
     bool addUser(User *);
     bool removeUser(User *);
+    bool removeAllUsers();
     bool hasUser(User *) const;
     const std::vector<User *> &getUsers() const;
     bool setState(State state, User *owner);

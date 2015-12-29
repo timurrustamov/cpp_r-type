@@ -45,19 +45,24 @@ User::attachRoom(GameRoom *room) {
     mutex->unlock();
 }
 
-void
+bool
 User::detachRoom() {
 
+    bool res = false;
     GameRoom *tmp;
+    RTypeServer *serv = RTypeServer::getInstance();
 
     IMutex *mutex = (*MutexVault::getMutexVault())["user" + this->name];
     mutex->lock(true);
     if ((tmp = this->room) != NULL)
     {
         this->room = NULL;
+        res = true;
         tmp->removeUser(this);
+        serv->getUserSocket(this)->attachOnReceive(RTypeServer::tcpMemberRoom);
     }
     mutex->unlock();
+    return (res);
 }
 
 GameRoom *

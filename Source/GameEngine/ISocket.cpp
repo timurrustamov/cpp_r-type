@@ -42,7 +42,7 @@ ISocket::getServer(int port, const std::string &proto, bool _new)
 
     if (_new && instance[proto] != NULL) {
         delete instance[proto];
-        instance = NULL;
+        instance[proto] = NULL;
     }
 
     if (instance[proto] == NULL) {
