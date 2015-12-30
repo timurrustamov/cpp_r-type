@@ -8,10 +8,10 @@ Packet::Packet()
 }
 
 //pbject specific constructors
-Packet::Packet(std::string &str) : _type(Packet::String)
+Packet::Packet(const std::string &str) : _type(Packet::String)
 {
     for (unsigned int i = 0; i < str.size(); i++)
-        this->_data.push_back(static_cast<unsigned char>(str[i]));
+        this->_data.push_back(static_cast<unsigned char>(str.at(i)));
     this->_encrypted = false;
 }
 
@@ -31,6 +31,46 @@ Packet::Packet(std::vector<int> &vec) : _type(Packet::IntVector)
 Packet::Packet(Rsa &rsa) : _type(Packet::SSLPublicKey)
 {
     this->_data = rsa.getPublicKey();
+    this->_encrypted = false;
+}
+
+Packet::Packet(SerializedObject &object) : _type(Packet::SerializedObj) {
+
+    Packet *tmp;
+
+    this->_data = object.toBinaryString();
+    tmp = Packet::pack(object.getConfig());
+    this->_data.insert(this->_data.end(), tmp->_data.begin(), tmp->_data.end());
+    this->_encrypted = false;
+}
+
+Packet::Packet(Snapshot &snapshot) : _type(Packet::Snap) {
+
+    int x = snapshot.size.getX();
+    int y = snapshot.size.getY();
+    size_t objnb = snapshot.objects.size();
+    Packet *p;
+    std::vector<unsigned char> *tmpvec;
+
+    unsigned char *tmpx = reinterpret_cast<unsigned char *>(&x);
+    unsigned char *tmpy = reinterpret_cast<unsigned char *>(&y);
+    unsigned char *tmpobjnb = reinterpret_cast<unsigned char *>(&objnb);
+
+    for (unsigned int i = 0; i < sizeof(x); i++)
+        this->_data.push_back(tmpx[i]);
+    for (unsigned int i = 0; i < sizeof(y); i++)
+        this->_data.push_back(tmpy[i]);
+    for (unsigned int i = 0; i < sizeof(objnb); i++)
+        this->_data.push_back(tmpobjnb[i]);
+
+    for (size_t i = 0; i < objnb; i++) {
+
+        p = Packet::pack(*(snapshot.objects[i]));
+        tmpvec = p->build();
+        this->_data.insert(this->_data.end(), tmpvec->begin(), tmpvec->end());
+        delete tmpvec;
+        delete p;
+    }
     this->_encrypted = false;
 }
 
@@ -254,6 +294,57 @@ Packet::getInstruction() {
         }
 
         result = new Instruction(vectorTmp, typeName);
+    }
+    return (result);
+}
+
+SerializedObject *
+Packet::getSerializedObject() {
+
+    SerializedObject *result = NULL;
+    std::string *tmp;
+    Packet *p;
+
+    if (this->_type == Packet::SerializedObj)
+    {
+        result = new SerializedObject(this->_data);
+        if ((p = Packet::fromStream(this->_data)) != NULL)
+        {
+            if ((tmp = p->unpack<std::string>()) != NULL) {
+                result->setConfig(*tmp);
+                delete tmp;
+            }
+            delete p;
+        }
+    }
+    return (result);
+}
+
+Snapshot *
+Packet::getSnapshot() {
+
+    Snapshot *result = NULL;
+    SerializedObject *objTmp;
+    Packet *p;
+    size_t objNb;
+
+    if (this->_type == Packet::Snap)
+    {
+        result = new Snapshot();
+        result->size.setX(*(reinterpret_cast<int *>(&this->_data[0])));
+        result->size.setY(*(reinterpret_cast<int *>(&this->_data[sizeof(int)])));
+
+        objNb = *(reinterpret_cast<size_t *>(&this->_data[sizeof(int) + sizeof(int)]));
+        this->_data.erase(this->_data.begin(), this->_data.begin() + (sizeof(int) * 2 + sizeof(size_t)));
+        for (size_t i = 0; i < objNb; i++)
+        {
+            if ((p = Packet::fromStream(this->_data)) != NULL)
+            {
+                if ((objTmp = p->unpack<SerializedObject>()) != NULL)
+                    result->objects[objTmp->attr.id] = objTmp;
+                delete p;
+            }
+        }
     }
     return (result);
 }

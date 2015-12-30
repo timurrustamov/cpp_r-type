@@ -26,6 +26,7 @@ SerializedObject::SerializedObject(std::vector<unsigned char> &binaryString)
 {
     if (binaryString.size() >= sizeof(ObjectAttributes)) {
         std::memcpy(&(this->attr), &binaryString[0], sizeof(ObjectAttributes));
+        binaryString.erase(binaryString.begin(), binaryString.begin() + sizeof(ObjectAttributes));
         this->inited = true;
     }
 }
@@ -49,4 +50,16 @@ SerializedObject::SerializedObject(unsigned char *tmp, unsigned long int length)
         return;
     std::memcpy(&this->attr, tmp, sizeof(ObjectAttributes));
     this->inited = true;
+}
+
+const std::string &
+SerializedObject::getConfig() const
+{
+    return (this->config);
+}
+
+void
+SerializedObject::setConfig(const std::string &config)
+{
+    this->config = config;
 }

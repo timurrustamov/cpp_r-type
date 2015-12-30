@@ -51,7 +51,6 @@ bool
 User::detachRoom() {
 
     bool res = false;
-    GameRoom *tmp;
     RTypeServer *serv = RTypeServer::getInstance();
 
     IMutex *mutex = (*MutexVault::getMutexVault())["user" + this->name];

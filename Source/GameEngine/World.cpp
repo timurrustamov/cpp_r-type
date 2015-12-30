@@ -38,13 +38,13 @@ World::~World()
 
 unsigned int						World::createNewObject(Object *newobj)
 {
-	Player							*playerptr = dynamic_cast<Player *>(newobj);
+    Player							*playerptr = dynamic_cast<Player *>(newobj);
 
-	if (playerptr != NULL)
-		return (BAD_ID);
-	this->_objects[newobj->getId()] = newobj;
-	this->_qt.insert(newobj->geometry);
-	return (newobj->getId());
+    if (playerptr != NULL)
+        return (BAD_ID);
+    this->_objects[newobj->getId()] = newobj;
+    this->_qt.insert(newobj->geometry);
+    return (newobj->getId());
 }
 
 
@@ -60,11 +60,11 @@ World::tick(float seconds)
     std::map<Geometry *, std::vector<Geometry *> > interactionmap;
 
     for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++) {
-		if (it->second != NULL)
-		{
-			this->_qt.testCollision(it->second->geometry, interactionmap)->attach(&(this->_qt)).tick(seconds);
-			it->second->lateUpdate();
-		}
+        if (it->second != NULL)
+        {
+            this->_qt.testCollision(it->second->geometry, interactionmap)->attach(&(this->_qt)).tick(seconds);
+            it->second->lateUpdate();
+        }
     }
 
     //check players first
@@ -100,23 +100,19 @@ World::getSnapshot() {
 World &
 World::loadSnapshot(Snapshot *snap)
 {
-    if (snap->isInited())
-    {
-        //look for integrity of objects
-        for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++)
-            if (it->second != NULL && !it->second->mustBeDeleted() && snap->objects.find(it->second->getId()) == snap->objects.end())
-                it->second->setToDelete();
+    //look for integrity of objects
+    for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++)
+        if (it->second != NULL && !it->second->mustBeDeleted() && snap->objects.find(it->second->getId()) == snap->objects.end())
+            it->second->setToDelete();
 
-        //replace and load new objects
-        for (std::map<unsigned int, SerializedObject *>::iterator it = snap->objects.begin(); it != snap->objects.end(); it++) {
-            if (this->_objects.find(it->second->attr.id) != this->_objects.end()) {
-                this->_objects[it->second->attr.id]->geometry->setVelocity(t2Vector<float>(it->second->attr.velocityx, it->second->attr.velocityy));
-                this->_objects[it->second->attr.id]->geometry->setPosition(t2Vector<float>(it->second->attr.positionx, it->second->attr.positiony));
-            }
-            else if (this->_samples[it->second->attr.identifier] != NULL) {
-                this->_objects[it->second->attr.id] = this->_samples[it->second->attr.identifier]->clone(it->second);
-            }//else load new objects
+    //replace and load new objects
+    for (std::map<unsigned int, SerializedObject *>::iterator it = snap->objects.begin(); it != snap->objects.end(); it++) {
+        if (this->_objects.find(it->second->attr.id) != this->_objects.end()) {
+            this->_objects[it->second->attr.id]->geometry->setVelocity(t2Vector<float>(it->second->attr.velocityx, it->second->attr.velocityy));
+            this->_objects[it->second->attr.id]->geometry->setPosition(t2Vector<float>(it->second->attr.positionx, it->second->attr.positiony));
         }
+        else if (this->_samples[it->second->attr.identifier] != NULL)
+            this->createNewObject(it->second->attr.identifier, it->second);
     }
     return (*this);
 }
@@ -126,4 +122,14 @@ World::addSample(Object *object) {
 
     this->_samples[object->getIdentifier()] = object;
     return (*this);
+}
+
+unsigned int
+World::createNewObject(unsigned int identifier, SerializedObject *serializedObject) {
+
+    unsigned int id = BAD_ID;
+
+    if (this->_samples.find(identifier) != this->_samples.end())
+        this->createNewObject(this->_samples[identifier]->clone(serializedObject));
+    return (id);
 }

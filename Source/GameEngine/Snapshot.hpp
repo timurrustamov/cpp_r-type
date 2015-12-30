@@ -17,20 +17,12 @@ class Snapshot {
 
 public:
 
+    Snapshot() {};
     Snapshot(const t2Vector<int> &size, std::vector<SerializedObject *> &objects);
-    Snapshot(std::vector<unsigned char> &binary);
     ~Snapshot();
-
-    std::vector<unsigned char>  &toBinary();
-    bool                        isInited() const;
 
     t2Vector<int>                   size;
     std::map<unsigned int, SerializedObject *> objects;
-
-private:
-
-    bool                            inited;
-    std::vector<unsigned char>      binaryString;
 };
 
 

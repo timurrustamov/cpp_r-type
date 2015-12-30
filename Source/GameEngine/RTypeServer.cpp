@@ -48,11 +48,17 @@ RTypeServer::createRoom(User *user, const std::string &roomName) {
     IMutex *mutex = (*MutexVault::getMutexVault())["serverType"];
     bool res = false;
     GameRoom *room;
+    std::vector<User *> users;
 
     mutex->lock(true);
+    std::cout << "Ask for room creation from " << user->getName() << " roomname : " << roomName << std::endl;
     if (!roomName.empty() && !this->roomNameExists(roomName) && this->rooms.size() < 4)
     {
         room = new GameRoom(roomName, user);
+        Instruction joined = room->getUsersInstruction();
+        users = room->getUsers();
+        for (std::vector<User *>::iterator iit = users.begin(); iit != users.end(); iit++)
+            RTypeServer::getInstance()->sendToClient(*iit, joined);
         this->rooms.push_back(room);
         res = true;
     }
@@ -64,13 +70,20 @@ bool
 RTypeServer::joinRoom(User *user, const std::string &roomName) {
 
     IMutex *mutex = (*MutexVault::getMutexVault())["serverType"];
+    std::vector<User *> users;
 
     bool res = false;
     mutex->lock(true);
     for (std::vector<GameRoom *>::iterator it = this->rooms.begin(); it != this->rooms.end(); it++)
         if ((*it)->getName() == roomName)
         {
-            res = (*it)->addUser(user);
+            if ((res = (*it)->addUser(user))) {
+
+                Instruction joined = (*it)->getUsersInstruction();
+                users = (*it)->getUsers();
+                for (std::vector<User *>::iterator iit = users.begin(); iit != users.end(); iit++)
+                    RTypeServer::getInstance()->sendToClient(*iit, joined);
+            }
             break;
         }
     mutex->unlock();

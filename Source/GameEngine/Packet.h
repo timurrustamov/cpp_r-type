@@ -10,6 +10,8 @@
 #include <typeinfo>
 #include "Instruction.h"
 #include "Rsa.h"
+#include "SerializedObject.hpp"
+#include "Snapshot.hpp"
 
 #define _MAGIC_ 0x0101010
 
@@ -29,14 +31,18 @@ public:
         Inst = 0x51515151,
         SSLPublicKey = 0x4ab2321a,
         Sound = 0x98765432,
-        Instruct = 0x69696969
+        Instruct = 0x69696969,
+        SerializedObj = 0x98765432,
+        Snap = 0x13371337
     };
 
     //object specific constructors
-    Packet(std::string &str);
+    Packet(const std::string &str);
     Packet(std::vector<int> &vec);
     Packet(Rsa &);
     Packet(Instruction &);
+    Packet(SerializedObject &);
+    Packet(Snapshot &);
 
     static std::vector<unsigned char>& stringToStream(char *buf, int const size)
     {
@@ -101,6 +107,10 @@ public:
             return (reinterpret_cast<T *>(this->getRsa()));
         else if (typeid(T) == typeid(Instruction))
             return (reinterpret_cast<T *>(this->getInstruction()));
+        else if (typeid(T) == typeid(SerializedObject))
+            return (reinterpret_cast<T *>(this->getSerializedObject()));
+        else if (typeid(T) == typeid(Snapshot))
+            return (reinterpret_cast<T *>(this->getSnapshot()));
         return (NULL);
     };
 
@@ -127,6 +137,8 @@ protected:
     std::vector<int>                        *getIntVector();
     Rsa                                     *getRsa();
     Instruction                             *getInstruction();
+    SerializedObject                        *getSerializedObject();
+    Snapshot                                *getSnapshot();
 };
 
 #endif //CPP_BABEL_PACKET_H

@@ -115,13 +115,6 @@ GameRoom::removeAllUsers() {
         server->sendToClient(this->users[0], instruct);
         this->users[0]->detachRoom();
     }
-//    for (std::vector<User *>::iterator it = this->users.begin(); it != this->users.end(); it++) {
-//
-//        server->sendToClient(*it, instruct);
-//        (*it)->detachRoom();
-//        //this->users.erase(it);
-//    }
-    //this->users.clear();
     mutex->unlock();
     return (true);
 }
