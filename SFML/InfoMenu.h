@@ -7,8 +7,10 @@
 
 #include <string>
 #include <SFML/Graphics.hpp>
+#include <sstream>
 #include "Gameplay.h"
 #include "MainMenu.h"
+#include "../Source/GameEngine/ISocket.h"
 
 class MainMenu;
 
@@ -19,8 +21,8 @@ public:
     ~InfoMenu();
 
     void init();
-    void showUserForm(char);
-    void showIpForm(char);
+    void showUserForm();
+    void showIpForm();
 
     void addLetters(sf::Event*);
     void addNumbers(sf::Event*);
@@ -28,16 +30,26 @@ public:
     int cutIP();
 
     void  getNext();
+    void  checkUsername();
 
-    std::string getIP() const;
-    std::string getUsername() const;
-    std::string getPort() const;
+    static ISocket *getClient(const std::string&, int, const std::string&);
+    static void recieveHandler(ISocket*);
+
+    const std::string &getIP() const;
+    const std::string &getUsername() const;
+    int getPort() const;
+
+    static InfoMenu *getInstance();
+
+    bool checkIp();
 
 private:
     bool                        isDone;
+    bool                        _error;
     std::string                 username;
     std::string                 ip;
     std::string                 port;
+    int                         _port;
     std::vector<sf::Texture*>   fileImg;
     std::vector<sf::Sprite*>    sprites;
     std::vector<sf::Text*>      texts;

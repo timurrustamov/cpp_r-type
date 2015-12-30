@@ -15,6 +15,7 @@ InfoMenu::InfoMenu()
     this->texts.reserve(3);
     this->texts.resize(3);
     this->isDone = false;
+    this->_error = false;
 }
 
 InfoMenu::~InfoMenu()
@@ -46,18 +47,15 @@ void InfoMenu::init()
     this->font->loadFromFile("fonts/batmfa__.ttf");
 }
 
-void InfoMenu::showUserForm(char c)
+void InfoMenu::showUserForm()
 {
     sf::Color   color(0, 0, 0);
 
     this->isDone = false;
     this->username = "";
-    if (c == 0)
-        this->texts[0] = new sf::Text("Enter your username:", *this->font, 20);
-    else
-        this->texts[0] = new sf::Text("Username is already used:", *this->font, 20);
     this->texts[1] = new sf::Text("(max 8 characters)", *this->font, 10);
     this->texts[2] = new sf::Text(this->username, *this->font, 30);
+    this->texts[0] = new sf::Text("Enter your username:", *this->font, 20);
     this->texts[0]->setPosition(10, 90);
     this->texts[1]->setPosition(10, 120);
     this->texts[2]->setPosition(20, 143);
@@ -78,6 +76,10 @@ void InfoMenu::showUserForm(char c)
             std::cout << "GO" << std::endl;
             return;
         }
+        if (!this->_error)
+            this->texts[0]->setString("Enter your username:");
+        else
+            this->texts[0]->setString("Username is already used:");
         this->texts[2]->setString(this->username);
         this->window->clear();
         this->window->draw(*this->sprites[0]);
@@ -89,19 +91,13 @@ void InfoMenu::showUserForm(char c)
     }
 }
 
-void InfoMenu::showIpForm(char status)
+void InfoMenu::showIpForm()
 {
     sf::Color   color(0, 0, 0);
     this->isDone = false;
-    if (status == 0)
-        this->texts[0] = new sf::Text("Enter the ip address and port:", *this->font, 20);
-    else
-    {
-        this->ip = "";
-        this->texts[0] = new sf::Text("Wrong ip address, try again:", *this->font, 20);
-    }
     this->texts[1] = new sf::Text("(Ex: 192.168.10.20:4242)", *this->font, 10);
     this->texts[2] = new sf::Text(this->ip, *this->font, 30);
+    this->texts[0] = new sf::Text("Enter the ip address and port:", *this->font, 20);
     this->texts[0]->setPosition(10, 90);
     this->texts[1]->setPosition(10, 120);
     this->texts[2]->setPosition(20, 143);
@@ -112,7 +108,8 @@ void InfoMenu::showIpForm(char status)
     {
         if (this->isDone)
         {
-            this->window->clear();
+            this->_error = false;
+            this->showUserForm();
             return;
         }
         sf::Event  event;
@@ -121,6 +118,13 @@ void InfoMenu::showIpForm(char status)
             this->addNumbers(&event);
             if (event.type == sf::Event::Closed)
                 this->window->close();
+        }
+        if (!this->_error)
+            this->texts[0]->setString("Enter the ip address and port:");
+        else
+        {
+            this->ip = "";
+            this->texts[0]->setString("Wrong ip address, try again:");
         }
         this->texts[2]->setString(this->ip);
         this->window->draw(*this->sprites[0]);
@@ -132,19 +136,19 @@ void InfoMenu::showIpForm(char status)
     }
 }
 
-std::string InfoMenu::getIP() const
+const std::string &InfoMenu::getIP() const
 {
     return this->ip;
 }
 
-std::string InfoMenu::getUsername() const
+const std::string &InfoMenu::getUsername() const
 {
     return this->username;
 }
 
-std::string InfoMenu::getPort() const
+int InfoMenu::getPort() const
 {
-    return this->port;
+    return this->_port;
 }
 
 void InfoMenu::getNext()
@@ -164,7 +168,7 @@ void InfoMenu::addLetters(sf::Event *event)
             if (this->username.length() != 0)
                 this->username.erase(this->username.begin() + this->username.length() - 1);
         if (event->text.unicode == 13)
-            this->isDone = true;
+            this->checkUsername();
     }
 }
 
@@ -179,7 +183,12 @@ void InfoMenu::addNumbers(sf::Event *event)
             if (this->ip.length() != 0)
                 this->ip.erase(this->ip.begin() + this->ip.length() - 1);
         if (event->text.unicode == 13)
-            this->isDone = true;
+        {
+            if (!this->checkIp())
+                this->_error = true;
+            else
+                this->isDone = true;
+        }
     }
 }
 
@@ -192,7 +201,7 @@ int InfoMenu::cutIP()
     if (((found = this->ip.find(":")) != std::string::npos) && !this->ip.empty())
     {
         this->port = this->ip.substr(found + 1, this->ip.size());
-        this->ip = this->ip.substr(0, found - 1);
+        this->ip = this->ip.substr(0, found);
     }
     if (found == std::string::npos)
     {
@@ -202,4 +211,65 @@ int InfoMenu::cutIP()
     }
     else
         return 0;
+}
+
+ISocket *InfoMenu::getClient(const std::string& ip, int port, const std::string& proto)
+{
+    static std::map<std::string, ISocket *> clients;
+
+    if (clients[proto] == NULL)
+        clients[proto] = ISocket::getClient(ip, port, proto);
+    return clients[proto];
+}
+
+bool InfoMenu::checkIp()
+{
+    this->cutIP();
+    std::cout << "IP : " << this->ip << std::endl;
+    std::istringstream   buff(this->port);
+    buff >> this->_port;
+    std::cout << "PORT : " << this->_port << std::endl;
+    ISocket *client = InfoMenu::getClient(this->ip, this->_port, "TCP");
+    client->attachOnReceive(this->recieveHandler);
+    return (client->start() != -1);
+}
+
+void InfoMenu::recieveHandler(ISocket *client)
+{
+    Packet      *packet;
+    Instruction *instruct;
+    InfoMenu    *tmp = InfoMenu::getInstance();
+
+    while ((packet = client->readPacket()) != NULL)
+    {
+        if (packet->getType() == Packet::Instruct &&
+            (instruct = packet->unpack<Instruction>()) != NULL)
+        {
+            if (instruct->getInstruct() == Instruction::OK)
+                tmp->isDone = true;
+            else if (instruct->getInstruct() == Instruction::KO)
+                tmp->_error = true;
+            else
+                std::cout << "ERROR" << std::endl;
+            delete instruct;
+        }
+        delete packet;
+    }
+}
+
+void InfoMenu::checkUsername()
+{
+    ISocket     *client = InfoMenu::getClient(this->ip, this->_port, "TCP");
+    Instruction i(this->username, Instruction::CONNEXION);
+
+    client->writePacket(Packet::pack(i));
+}
+
+InfoMenu *InfoMenu::getInstance()
+{
+    static InfoMenu *menu;
+
+    if (menu == NULL)
+        menu = new InfoMenu();
+    return menu;
 }
