@@ -29,9 +29,7 @@ void					Player::start()
 {
 	ResourcesBank		*resourceBank = ResourcesBank::getInstance();
 
-	this->entity = new AnimationEntity(this->getId(), 0, this->geometry->getPosition());
-	if (!resourceBank->getAnimations())
-		return;
+	this->entity = new AnimationEntity(this->getId(), 2, this->geometry->getPosition());
 	if (!(this->animation = resourceBank->getAnimation("Player")))
 	{
 		this->animation = new Animation("Player", t2Vector<unsigned int>(33, 18), t2Vector<unsigned int>(101, 0), t2Vector<unsigned int>(10, 1));

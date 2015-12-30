@@ -63,6 +63,7 @@ bool Object::setToDelete()
 
 void Object::setValues(SerializedObject *serializedObject)
 {
+	if (serializedObject == NULL) return;
 	this->geometry->setPosition(t2Vector<float>(serializedObject->attr.positionx, serializedObject->attr.positiony));
 	this->geometry->setVelocity(t2Vector<float>(serializedObject->attr.velocityx, serializedObject->attr.velocityy));
 	this->geometry->setSize(t2Vector<float>(serializedObject->attr.sizex, serializedObject->attr.sizey));

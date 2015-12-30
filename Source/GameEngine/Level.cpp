@@ -37,6 +37,7 @@ void								Level::load()
 	if (!this->bgm.openFromFile(ASSET_FOLDER BGM_LOCATION + this->bgmPath) || !this->bgt.loadFromFile(ASSET_FOLDER BGT_LOCATION + this->bgtPath))
 		throw RTypeException("Wrong background music path or background texture path, cannot load level");
 	this->size = (this->size) ? this->size : this->bgt.getSize().x;
+	this->bgm.setLoop(true);
 	this->loaded = true;
 }
 

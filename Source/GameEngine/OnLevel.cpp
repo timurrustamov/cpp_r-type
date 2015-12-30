@@ -59,16 +59,6 @@ void					OnLevel::keyPressed(sf::Keyboard::Key key)
 		this->player->launchRocket(Rocket::Energy);
 		this->timer.reset("shoot");
 		break;
-	case sf::Keyboard::C:
-		if (!this->timer.eventDone("shoot")) break;
-		this->player->launchRocket(Rocket::LowPhysic);
-		this->timer.reset("shoot");
-		break;
-	case sf::Keyboard::V:
-		if (!this->timer.eventDone("shoot")) break;
-		this->player->launchRocket(Rocket::Physic);
-		this->timer.reset("shoot");
-		break;
 	default:
 		break;
 	}

@@ -21,6 +21,7 @@ public:
 		Ennemy,
 		Character,
 		Projectile,
+		Laser,
 		Force,
 		Other
 	};
