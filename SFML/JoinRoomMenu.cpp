@@ -9,6 +9,7 @@ JoinRoomMenu::JoinRoomMenu(sf::RenderWindow *win)
 {
     int i = 0;
     this->nbRooms = 0;
+    this->waitRoom = false;
     this->currentRoom = 0;
     this->transp = 255;
     this->window = win;
@@ -50,6 +51,12 @@ void JoinRoomMenu::RenderFrame()
     float   time = 0;
 
     usleep(100000);
+    InfoMenu    *tmp = InfoMenu::getInstance();
+    ISocket     *client = InfoMenu::getClient(tmp->getIP(), tmp->getPort(), "TCP");
+    Instruction i(Instruction::GETALLROOMNAMES);
+
+    client->attachOnReceive(this->handlerRooms);
+    client->writePacket(Packet::pack(i));
     while (this->window->isOpen())
     {
         time = this->clock->getElapsedTime().asMilliseconds();
@@ -69,6 +76,14 @@ void JoinRoomMenu::RenderFrame()
             }
             if (event.type == sf::Event::Closed)
                 this->window->close();
+            if (this->waitRoom)
+            {
+                this->transp = 255;
+                this->waitingRoom = WaitingRoom::getInstance(this->window, false);
+                this->waitingRoom->RenderFrame();
+                this->waitRoom = false;
+                return;
+            }
         }
         this->window->clear();
         this->window->draw(*this->sprite);
@@ -106,40 +121,67 @@ int JoinRoomMenu::getKeys()
         this->texts[this->currentRoom]->setColor(*this->yellow);
         this->texts[--this->currentRoom]->setColor(*this->green);
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-    {
-        std::cout << "LOLILOL" << std::endl;
-        this->addRoom();
-        usleep(120000);
-    }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
-    {
-        if (this->texts[this->currentRoom]->getString() != "<Room not available>")
-        {
-            std::cout << "WAITING ROOM" << std::endl;
-            this->waitingRoom = WaitingRoom::getInstance(this->window, false);
-            this->waitingRoom->RenderFrame();
-        }
-    }
+        this->JoinRoom();
     return 0;
 }
 
-bool JoinRoomMenu::addRoom()
+void JoinRoomMenu::handlerRooms(ISocket *client)
 {
-    if (this->nbRooms > 3)
-        return false;
-    std::string name = "         Room ";
-    std::stringstream   ss;
-    //ss << ++this->nbRooms;
-    name += ss.str();
-    if (this->nbRooms - 1 >= 0)
-        this->texts[this->nbRooms - 1]->setString(name);
-    return true;
+    Packet          *packet;
+    Instruction     *instruct;
+    JoinRoomMenu    *tmp = JoinRoomMenu::getInstance();
+
+    while ((packet = client->readPacket()) != NULL)
+    {
+        if (packet->getType() == Packet::Instruct &&
+            (instruct = packet->unpack<Instruction>()) != NULL)
+        {
+            if (instruct->getInstruct() == Instruction::GETALLROOMNAMES)
+            {
+                for (unsigned int i = 0; i < instruct->getNb(); i++)
+                {
+                    if ((*instruct)[i] != "")
+                        tmp->texts[i]->setString((*instruct)[i]);
+                    else
+                        tmp->texts[i]->setString("<Room not available>");
+                }
+            }
+            else
+                std::cout << "ERROR" << std::endl;
+            delete instruct;
+        }
+        delete packet;
+    }
 }
 
-bool JoinRoomMenu::removeRoom(int i)
+void JoinRoomMenu::handlerJoin(ISocket *client)
 {
-    this->texts[i]->setString("<Room not available>");
-    --this->nbRooms;
-    return true ;
+    Packet          *packet;
+    Instruction     *instruct;
+    JoinRoomMenu    *tmp = JoinRoomMenu::getInstance();
+
+    while ((packet = client->readPacket()) != NULL)
+    {
+        if (packet->getType() == Packet::Instruct &&
+            (instruct = packet->unpack<Instruction>()) != NULL)
+        {
+            if (instruct->getInstruct() == Instruction::OK)
+                tmp->waitRoom = true;
+            else
+                std::cout << "ERROR" << std::endl;
+            delete instruct;
+        }
+        delete packet;
+    }
+}
+
+void JoinRoomMenu::JoinRoom()
+{
+    InfoMenu    *tmp = InfoMenu::getInstance();
+    ISocket     *client = InfoMenu::getClient(tmp->getIP(), tmp->getPort(), "TCP");
+    Instruction i(static_cast<std::string>(this->texts[this->currentRoom]->getString()), Instruction::JOIN_ROOM);
+
+    client->attachOnReceive(this->handlerJoin);
+    client->writePacket(Packet::pack(i));
 }

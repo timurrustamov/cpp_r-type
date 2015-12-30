@@ -26,6 +26,8 @@ CreateRoomMenu::CreateRoomMenu(sf::RenderWindow *win)
     this->fondu = new sf::Sprite(*this->texture);
     this->fondu->setColor(sf::Color(0, 0, 0, static_cast<sf::Uint8>(this->transp)));
     this->fondu->setPosition(0, 0);
+    this->waitRoom = false;
+    this->joinRoom = false;
 }
 
 CreateRoomMenu::~CreateRoomMenu()
@@ -57,6 +59,24 @@ void CreateRoomMenu::RenderFrame()
             {
                 this->input = "";
                 this->transp = 255;
+                return;
+            }
+            if (this->waitRoom)
+            {
+                this->waitingRoom = WaitingRoom::getInstance(this->window, true);
+                this->input = "";
+                this->transp = 255;
+                this->waitingRoom->RenderFrame();
+                this->waitRoom = false;
+                return;
+            }
+            else if (this->joinRoom)
+            {
+                JoinRoomMenu *join = JoinRoomMenu::getInstance(this->window);
+                this->input = "";
+                this->transp = 255;
+                join->RenderFrame();
+                this->joinRoom = false;
                 return;
             }
             if (event.type == sf::Event::Closed)
@@ -114,15 +134,9 @@ void    CreateRoomMenu::handlerCreate(ISocket *client)
             (instruct = packet->unpack<Instruction>()) != NULL)
         {
             if (instruct->getInstruct() == Instruction::OK)
-            {
-                tmp->waitingRoom = WaitingRoom::getInstance(tmp->window, true);
-                tmp->waitingRoom->RenderFrame();
-            }
+                tmp->waitRoom = true;
             else if (instruct->getInstruct() == Instruction::KO)
-            {
-                JoinRoomMenu    *menu = JoinRoomMenu::getInstance(tmp->window);
-                menu->RenderFrame();
-            }
+                tmp->joinRoom = true;
             else
                 std::cout << "ERROR" << std::endl;
             delete instruct;
@@ -137,7 +151,6 @@ void    CreateRoomMenu::checkRoom()
     ISocket     *client = InfoMenu::getClient(tmp->getIP(), tmp->getPort(), "TCP");
     Instruction i(this->input, Instruction::CREATE_ROOM);
 
-    std::cout << "ROOM :" << this->input << std::endl;
     client->attachOnReceive(this->handlerCreate);
     client->writePacket(Packet::pack(i));
 }

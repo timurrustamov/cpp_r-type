@@ -31,6 +31,8 @@ public:
 
 private:
     sf::RenderWindow    *window;
+    bool                waitRoom;
+    bool                joinRoom;
     float               transp;
     sf::Texture         *texture;
     sf::Sprite          *sprite;

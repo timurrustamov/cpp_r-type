@@ -18,17 +18,18 @@ public:
     JoinRoomMenu(sf::RenderWindow *);
     ~JoinRoomMenu();
 
-    static JoinRoomMenu *getInstance(sf::RenderWindow *);
+    static JoinRoomMenu *getInstance(sf::RenderWindow *win = NULL);
+    static void handlerRooms(ISocket *);
+    static void handlerJoin(ISocket *);
 
     void RenderFrame();
-
-    bool addRoom();
-    bool removeRoom(int);
+    void JoinRoom();
 
     int getKeys();
 
 private:
     float                   transp;
+    bool                    waitRoom;
     int                     nbRooms;
     int                     currentRoom;
     sf::RenderWindow        *window;
