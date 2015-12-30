@@ -8,6 +8,7 @@
 #include <sstream>
 #include "MainMenu.h"
 #include "WaitingRoom.h"
+#include "../Source/GameEngine/ISocket.h"
 
 class WaitingRoom;
 

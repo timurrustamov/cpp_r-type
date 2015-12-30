@@ -2,6 +2,7 @@
 // Created by rivatn on 12/9/15.
 //
 
+#include <unistd.h>
 #include "CreateRoomMenu.h"
 
 CreateRoomMenu::CreateRoomMenu(sf::RenderWindow *win)
@@ -87,8 +88,8 @@ int CreateRoomMenu::getKeys(sf::Event *event)
         return -1;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !this->input.empty())
     {
-        this->waitingRoom = WaitingRoom::getInstance(this->window, true);
-        this->waitingRoom->RenderFrame();
+        this->checkRoom();
+        usleep(120000);
     }
     if (event->type == sf::Event::TextEntered && this->input.size() < 9)
     {
@@ -99,4 +100,44 @@ int CreateRoomMenu::getKeys(sf::Event *event)
             this->input.erase(this->input.begin() + this->input.length() - 1);
     }
     return 0;
+}
+
+void    CreateRoomMenu::handlerCreate(ISocket *client)
+{
+    Packet          *packet;
+    Instruction     *instruct;
+    CreateRoomMenu  *tmp = CreateRoomMenu::getInstance();
+
+    while ((packet = client->readPacket()) != NULL)
+    {
+        if (packet->getType() == Packet::Instruct &&
+            (instruct = packet->unpack<Instruction>()) != NULL)
+        {
+            if (instruct->getInstruct() == Instruction::OK)
+            {
+                tmp->waitingRoom = WaitingRoom::getInstance(tmp->window, true);
+                tmp->waitingRoom->RenderFrame();
+            }
+            else if (instruct->getInstruct() == Instruction::KO)
+            {
+                JoinRoomMenu    *menu = JoinRoomMenu::getInstance(tmp->window);
+                menu->RenderFrame();
+            }
+            else
+                std::cout << "ERROR" << std::endl;
+            delete instruct;
+        }
+        delete packet;
+    }
+}
+
+void    CreateRoomMenu::checkRoom()
+{
+    InfoMenu    *tmp = InfoMenu::getInstance();
+    ISocket     *client = InfoMenu::getClient(tmp->getIP(), tmp->getPort(), "TCP");
+    Instruction i(this->input, Instruction::CREATE_ROOM);
+
+    std::cout << "ROOM :" << this->input << std::endl;
+    client->attachOnReceive(this->handlerCreate);
+    client->writePacket(Packet::pack(i));
 }

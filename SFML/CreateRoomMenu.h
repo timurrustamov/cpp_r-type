@@ -7,6 +7,7 @@
 
 
 #include <SFML/Graphics/RenderWindow.hpp>
+#include "../Source/GameEngine/ISocket.h"
 #include "MainMenu.h"
 #include "WaitingRoom.h"
 
@@ -20,9 +21,13 @@ public:
     ~CreateRoomMenu();
 
     void RenderFrame();
+
     int getKeys(sf::Event *);
 
-    static CreateRoomMenu *getInstance(sf::RenderWindow*);
+    void checkRoom();
+
+    static CreateRoomMenu *getInstance(sf::RenderWindow* win = NULL);
+    static void handlerCreate(ISocket *);
 
 private:
     sf::RenderWindow    *window;

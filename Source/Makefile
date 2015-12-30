@@ -33,8 +33,7 @@ SRC_SERV	=		serv_test.cpp			\
 
 OBJ_SERV	=	$(SRC_SERV:.cpp=.o)
 
-SRC_CLIENT	=	clie_test.cpp			\
-				System/Animation.cpp		\
+SRC_CLIENT	=	System/Animation.cpp		\
 				System/RTypeException.cpp	\
 				System/ResourcesBank.cpp	\
 				System/window.cpp		\
@@ -61,15 +60,22 @@ SRC_CLIENT	=	clie_test.cpp			\
 				GameEngine/User.cpp		\
 				GameEngine/Explosion.cpp	\
 				GameEngine/Instruction.cpp	\
-				GameEngine/RTypeServer.cpp
+				GameEngine/RTypeServer.cpp	\
+				../SFML/CreateRoomMenu.cpp	\
+				../SFML/InfoMenu.cpp	\
+				../SFML/JoinRoomMenu.cpp	\
+				../SFML/main.cpp	\
+				../SFML/MainMenu.cpp	\
+				../SFML/WaitingRoom.cpp	\
+
 
 OBJ_CLIENT	=	$(SRC_CLIENT:.cpp=.o)
 
 NAME_S		=	serv
 
-NAME_C      =   clie
+NAME_C      =   ../SFML/clie
 
-LIBS		=	-lpthread -lcrypto -lssl -lsfml-graphics -lsfml-system -lsfml-window -lsfml-audio -W -Wall -Wextra
+LIBS		=	-lpthread -lcrypto -lssl -g3 -lsfml-graphics -lsfml-system -lsfml-window -lsfml-audio -W -Wall -Wextra
 
 all	:	$(NAME_S) $(NAME_C)
 
