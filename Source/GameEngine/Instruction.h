@@ -22,6 +22,7 @@ public:
         START_GAME,
         END_GAME,
         GETALLROOMNAMES,
+        GETALLUSERSINROOM,
         CREATE_ROOM,
         JOIN_ROOM,
         LEAVE_ROOM

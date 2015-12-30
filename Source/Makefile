@@ -69,7 +69,7 @@ NAME_S		=	serv
 
 NAME_C      =   clie
 
-LIBS		=	-lpthread -lcrypto -lssl -lsfml-graphics -lsfml-system -lsfml-window -lsfml-audio -W -Wall -Wextra
+LIBS		=	-g3 -lpthread -lcrypto -lssl -lsfml-graphics -lsfml-system -lsfml-window -lsfml-audio -W -Wall -Wextra
 
 all	:	$(NAME_S) $(NAME_C)
 

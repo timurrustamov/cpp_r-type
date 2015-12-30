@@ -34,6 +34,7 @@ public:
     bool removeAllUsers();
     bool hasUser(User *) const;
     const std::vector<User *> &getUsers() const;
+    Instruction getUsersInstruction() const;
     bool setState(State state, User *owner);
     State getState() const;
 
