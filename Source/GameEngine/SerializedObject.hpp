@@ -32,6 +32,7 @@ class SerializedObject {
 
 public:
 
+	SerializedObject() {};
     SerializedObject(Object &obj);
     SerializedObject(std::vector<unsigned char> &binaryString);
     SerializedObject(unsigned char *tmp, unsigned long int length);
@@ -39,6 +40,8 @@ public:
 
     bool                        isInited() const;
     std::vector<unsigned char>  &toBinaryString();
+	void 						setConfig(const std::string &config);
+	const std::string 			&getConfig() const;
     ObjectAttributes attr;
 
 private:

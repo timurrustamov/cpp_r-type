@@ -56,6 +56,8 @@ public:
 
     unsigned int                        createNewObject(Object::Type type);
 
+    unsigned int                        createNewObject(unsigned int identifier, SerializedObject *serializedObject = NULL);
+
     unsigned int						createNewPlayer(const t2Vector<int> &position, unsigned int playerNo)
     {
         Object *newobj;

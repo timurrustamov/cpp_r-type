@@ -2,6 +2,7 @@
 // Created by rivatn on 12/9/15.
 //
 
+#include <unistd.h>
 #include "CreateRoomMenu.h"
 
 CreateRoomMenu::CreateRoomMenu(sf::RenderWindow *win)
@@ -25,6 +26,8 @@ CreateRoomMenu::CreateRoomMenu(sf::RenderWindow *win)
     this->fondu = new sf::Sprite(*this->texture);
     this->fondu->setColor(sf::Color(0, 0, 0, static_cast<sf::Uint8>(this->transp)));
     this->fondu->setPosition(0, 0);
+    this->waitRoom = false;
+    this->joinRoom = false;
 }
 
 CreateRoomMenu::~CreateRoomMenu()
@@ -58,6 +61,24 @@ void CreateRoomMenu::RenderFrame()
                 this->transp = 255;
                 return;
             }
+            if (this->waitRoom)
+            {
+                this->waitingRoom = WaitingRoom::getInstance(this->window, true);
+                this->input = "";
+                this->transp = 255;
+                this->waitingRoom->RenderFrame();
+                this->waitRoom = false;
+                return;
+            }
+            else if (this->joinRoom)
+            {
+                JoinRoomMenu *join = JoinRoomMenu::getInstance(this->window);
+                this->input = "";
+                this->transp = 255;
+                join->RenderFrame();
+                this->joinRoom = false;
+                return;
+            }
             if (event.type == sf::Event::Closed)
                 this->window->close();
         }
@@ -87,8 +108,8 @@ int CreateRoomMenu::getKeys(sf::Event *event)
         return -1;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !this->input.empty())
     {
-        this->waitingRoom = WaitingRoom::getInstance(this->window, true);
-        this->waitingRoom->RenderFrame();
+        this->checkRoom();
+        usleep(120000);
     }
     if (event->type == sf::Event::TextEntered && this->input.size() < 9)
     {
@@ -99,4 +120,37 @@ int CreateRoomMenu::getKeys(sf::Event *event)
             this->input.erase(this->input.begin() + this->input.length() - 1);
     }
     return 0;
+}
+
+void    CreateRoomMenu::handlerCreate(ISocket *client)
+{
+    Packet          *packet;
+    Instruction     *instruct;
+    CreateRoomMenu  *tmp = CreateRoomMenu::getInstance();
+
+    while ((packet = client->readPacket()) != NULL)
+    {
+        if (packet->getType() == Packet::Instruct &&
+            (instruct = packet->unpack<Instruction>()) != NULL)
+        {
+            if (instruct->getInstruct() == Instruction::OK)
+                tmp->waitRoom = true;
+            else if (instruct->getInstruct() == Instruction::KO)
+                tmp->joinRoom = true;
+            else
+                std::cout << "ERROR" << std::endl;
+            delete instruct;
+        }
+        delete packet;
+    }
+}
+
+void    CreateRoomMenu::checkRoom()
+{
+    InfoMenu    *tmp = InfoMenu::getInstance();
+    ISocket     *client = InfoMenu::getClient(tmp->getIP(), tmp->getPort(), "TCP");
+    Instruction i(this->input, Instruction::CREATE_ROOM);
+
+    client->attachOnReceive(this->handlerCreate);
+    client->writePacket(Packet::pack(i));
 }

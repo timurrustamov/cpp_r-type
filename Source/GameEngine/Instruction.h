@@ -14,17 +14,18 @@ class Instruction
 public:
     enum TypeName
     {
-        OK,
-        KO,
-        CONNEXION,
-        DECONNEXION,
-        GETALLUSERNAMES,
-        START_GAME,
-        END_GAME,
-        GETALLROOMNAMES,
-        CREATE_ROOM,
-        JOIN_ROOM,
-        LEAVE_ROOM
+        OK = 0,
+        KO = 1,
+        CONNEXION = 2,
+        DECONNEXION = 3,
+        GETALLUSERNAMES = 4,
+        START_GAME = 5,
+        END_GAME = 6,
+        GETALLROOMNAMES = 7,
+        GETALLUSERSINROOM = 8,
+        CREATE_ROOM = 9,
+        JOIN_ROOM = 10,
+        LEAVE_ROOM = 11
     };
 
     Instruction(TypeName type);

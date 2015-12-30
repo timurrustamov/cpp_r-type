@@ -40,6 +40,12 @@ void            recvHandler(ISocket *client)
             {
                 std::cout << "ok pas de souci gros" << std::endl;
             }
+            else if (instruct->getInstruct() == Instruction::GETALLUSERSINROOM)
+            {
+                std::cout << "users in room : " << std::endl;
+                for (unsigned int i = 0; i < instruct->getNb(); i++)
+                    std::cout << (*instruct)[i] << std::endl;
+            }
             delete instruct;
         }
         delete packet;
@@ -82,6 +88,11 @@ int             main(int ac, char **av)
                 instruct.addName(s);
                 servTcp->writePacket(Packet::pack(instruct));
             }
+        }
+        else if (s == "roomusers") {
+
+            instruct.setInstruct(Instruction::GETALLUSERSINROOM);
+            servTcp->writePacket(Packet::pack(instruct));
         }
         else if (s == "users")
         {
