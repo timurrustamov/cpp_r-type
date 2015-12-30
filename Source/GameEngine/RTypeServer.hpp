@@ -22,7 +22,7 @@ public:
     bool createRoom(User *user, const std::string &roomName);
     bool roomNameExists(const std::string &roomName);
     bool joinRoom(User *user, const std::string &roomName);
-    bool leaveRoom(User *user, const std::string &roomName);
+    bool leaveRoom(User *user);
     bool sendToClient(User *user, Instruction &instruct);
     bool removeRoom(GameRoom *room);
 

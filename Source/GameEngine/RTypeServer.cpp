@@ -91,15 +91,28 @@ RTypeServer::joinRoom(User *user, const std::string &roomName) {
 }
 
 bool
-RTypeServer::leaveRoom(User *user, const std::string &roomName) {
+RTypeServer::leaveRoom(User *user) {
 
     IMutex *mutex = (*MutexVault::getMutexVault())["serverType"];
     GameRoom *room;
+    bool mustSend = false;
 
     bool res = false;
     mutex->lock(true);
-    if (user->getRoom() != NULL)
+    if ((room = user->getRoom()) != NULL) {
+
+        if (room->owner != user)
+            mustSend = true;
         user->getRoom()->removeUser(user);
+        if (mustSend)
+        {
+            std::vector<User *> tmp = room->getUsers();
+            Instruction i = room->getUsersInstruction();
+            for (std::vector<User *>::iterator it = tmp.begin(); it != tmp.end(); it++)
+                RTypeServer::getInstance()->getInstance()->sendToClient(*it, i);
+        }
+        res = true;
+    }
     mutex->unlock();
     return (res);
 }
@@ -270,7 +283,7 @@ RTypeServer::tcpWaitingRoom(ISocket *client) {
             (instruct = packet->unpack<Instruction>()) != NULL)
         {
             if (instruct->getInstruct() == Instruction::LEAVE_ROOM &&
-                    RTypeServer::getInstance()->userLinks[client]->detachRoom())
+                    RTypeServer::getInstance()->leaveRoom(RTypeServer::getInstance()->userLinks[client]))
             {
                 Instruction i(Instruction::OK);
                 client->writePacket(Packet::pack(i));
@@ -325,7 +338,7 @@ bool RTypeServer::removeUser(ISocket *client) {
     if ((it = this->userLinks.find(client)) != this->userLinks.end())
     {
         std::cout << "Removing user : " << this->userLinks[client]->getName() << std::endl;
-        it->second->detachRoom();
+        RTypeServer::getInstance()->leaveRoom(RTypeServer::getInstance()->userLinks[client]);
         delete it->second;
         client->attachOnReceive(RTypeServer::tcpGuestRoom);
         this->userLinks.erase(it);

@@ -26,7 +26,10 @@ public:
     };
 
     GameRoom(const std::string &name, User *);
-    ~GameRoom() {};
+    ~GameRoom()
+    {
+        this->removeAllUsers();
+    };
 
     const std::string &getName() const;
     bool addUser(User *);
@@ -38,12 +41,12 @@ public:
     bool setState(State state, User *owner);
     State getState() const;
 
+    User *owner;
 protected:
 
     std::string name;
     State state;
     //not own those ptrs
-    User *owner;
     std::vector<User *> users;
 };
 
