@@ -6,18 +6,21 @@ Explosion::Explosion(Explosion::Type type, t2Vector<int> position) : Object(), e
 	{
 	case Explosion::Energy:
 		this->animationID = "Explode4";
+		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("Explosion2"));
 		this->size = t2Vector<int>(47, 46);
 		this->grid = t2Vector<unsigned int>(4, 2);
 		this->impulseFactor = 100;
 		break;
 	case Explosion::Physic:
 		this->animationID = "Explode3";
+		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("Explosion1"));
 		this->size = t2Vector<int>(47, 46);
 		this->grid = t2Vector<unsigned int>(4, 2);
 		this->impulseFactor = 150;
 		break;
 	case Explosion::SmallPhysic:
 		this->animationID = "Explode1";
+		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("Explosion3"));
 		this->size = t2Vector<int>(24, 23);
 		this->grid = t2Vector<unsigned int>(8, 1);
 		this->impulseFactor = 75;
@@ -57,6 +60,8 @@ void					Explosion::start()
 		resourceBank->setAnimation(this->animationID, this->animation);
 	}
 	this->animation->changeEntity(this->entity);
+	if (this->se.getBuffer() != NULL)
+		this->se.play();
 }
 
 Object					*Explosion::clone(SerializedObject *serializedObject)

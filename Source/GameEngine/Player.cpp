@@ -30,10 +30,21 @@ void					Player::start()
 	ResourcesBank		*resourceBank = ResourcesBank::getInstance();
 
 	this->entity = new AnimationEntity(this->getId(), 2, this->geometry->getPosition());
+	this->chargeShotEntity = new AnimationEntity(this->getId(), 0, this->geometry->getPosition());
+	this->timer.addNewEvent("loadingChargeShot", 0.07f);
+
+	this->chargeShot1.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("ChargeShot"));
+	this->chargeShot2.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("ChargeShot2"));
+	this->chargeShot1.setVolume(66.6);
+	this->chargeShot2.setVolume(66.6);
+
 	if (!(this->animation = resourceBank->getAnimation("Player")))
 	{
 		this->animation = new Animation("Player", t2Vector<unsigned int>(33, 18), t2Vector<unsigned int>(101, 0), t2Vector<unsigned int>(10, 1));
+		this->chargeShotLoading = new Animation("LoadingChargeShot", ResourcesBank::getInstance()->getTexture("Player"), t2Vector<unsigned int>(31, 32), t2Vector<unsigned int>(2, 51), t2Vector<unsigned int>(8, 1));
+
 		resourceBank->setAnimation("Player", this->animation);
+		resourceBank->setAnimation("LoadingChargeShot", this->chargeShotLoading);
 	}
 	this->animation->changeEntity(this->entity);
 }
@@ -62,6 +73,8 @@ void					Player::interact(Object *object)
 		break;
 	case (Object::Force):
 		break;
+	case (Object::Radiation):
+		break;
 	default:
 		geo1->removeImpulse();
 		geo2->applyImpulse((geo2->getPosition() - geo1->getPosition()) * 500, 0.1);
@@ -78,6 +91,12 @@ void					Player::interact(Object *object)
 void					Player::lateUpdate()
 {
 	this->entity->setPosition(this->geometry->getPosition() - this->geometry->getSize() / 2);
+	this->chargeShotEntity->setPosition(this->geometry->getPosition() - this->geometry->getSize() / 2 + t2Vector<int>(20, 0));
+	if (this->timer.eventDone("loadingChargeShot"))
+	{
+		this->chargeShotEntity->setState((this->chargeShotEntity->getState() + 1) % 7);
+		this->timer.reset("loadingChargeShot");
+	}
 }
 
 void					Player::launchRocket(Rocket::Type rocketType)
@@ -86,4 +105,51 @@ void					Player::launchRocket(Rocket::Type rocketType)
 
 	rocket->geometry->applyImpulse(t2Vector<float>(30, 0), 0.1f);
 	GameData::getInstance()->world->createNewObject(rocket);
+}
+
+void					Player::laser(Laser::Type laserType)
+{
+	Laser				*laser = new Laser(laserType, this->geometry->getPosition() + t2Vector<unsigned int>(25, 0));
+
+	laser->geometry->applyImpulse(t2Vector<float>(30, 0), 0.1f);
+	GameData::getInstance()->world->createNewObject(laser);
+}
+
+void					Player::chargeShot()
+{
+	if (this->timer.eventExists("chargeShot1"))
+	{
+		this->chargeShotLoading->changeEntity(this->chargeShotEntity);
+		if (this->timer.eventDone("chargeShot1") && !this->timer.eventExists("chargeShot2"))
+		{
+			this->timer.addNewEvent("chargeShot2", 2.1f);
+			this->chargeShot2.play();
+		}
+	}
+	else
+	{
+		this->timer.addNewEvent("chargeShot1", 2.4f);
+		this->chargeShot1.play();
+	}
+}
+
+void					Player::unleashShot()
+{
+	Laser				*laser = NULL;
+
+	this->chargeShotLoading->removeEntity(this->chargeShotEntity->getId());
+	if (this->timer.eventDone("chargeShot2"))
+		laser = new Laser(Laser::ChargeShot, this->geometry->getPosition() + t2Vector<unsigned int>(30, 0));
+	else if (this->timer.eventDone("chargeShot1"))
+		laser = new Laser(Laser::MiddleChargeShot, this->geometry->getPosition() + t2Vector<unsigned int>(27, 0));
+	
+	this->chargeShot1.stop();
+	this->chargeShot2.stop();
+	this->timer.removeEvent("chargeShot1").removeEvent("chargeShot2");
+	
+	if (laser != NULL)
+	{
+		laser->geometry->applyImpulse(t2Vector<float>(30, 0), 0.1f);
+		GameData::getInstance()->world->createNewObject(laser);
+	}
 }

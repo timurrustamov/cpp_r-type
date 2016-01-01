@@ -1,23 +1,23 @@
-#ifndef EXPLOSION_H_
-# define EXPLOSION_H_
+#ifndef CPP_LASER_H_
+# define CPP_LASER_H_
 
 # include					"Object.h"
+# include					"Explosion.h"
 # include					"../System/Animation.h"
 # include					"../System/ResourcesBank.h"
 
-class Explosion :			public Object
+class Laser :				public Object
 {
 public:
 	enum					Type
 	{
-		SmallEnergy,
-		Energy,
-		SmallPhysic,
-		Physic,
+		Shot,
+		MiddleChargeShot,
+		ChargeShot
 	};
 
-	Explosion(Explosion::Type type, t2Vector<int> position = t2Vector<int>(0, 0));
-	virtual ~Explosion() {};
+	Laser(Laser::Type type, t2Vector<int> position);
+	virtual ~Laser() {};
 
 	virtual Object			*clone(SerializedObject *serializedObject);
 	virtual void			interact(Object *);
@@ -29,12 +29,9 @@ protected:
 	AnimationEntity			*entity;
 	sf::Sound				se;
 
-	t2Vector<int>			size;
-	t2Vector<unsigned int>	grid;
-
-	Explosion::Type			explosionType;
+	Laser::Type				laserType;
 	const char				*animationID;
-	unsigned char			impulseFactor;
+	t2Vector<unsigned int>	gridPosition;
 };
 
-#endif /* !EXPLOSION_H_ */
+#endif /* !CPP_LASER_H_ */

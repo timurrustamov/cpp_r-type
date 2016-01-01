@@ -7,6 +7,7 @@
 # include									"GameData.h"
 # include									"Level.h"
 # include									"../System/Animation.h"
+# include									"Snapshot.hpp"
 # include									"Timer.hpp"
 
 class										OnLevel : public IGameplay
@@ -19,6 +20,7 @@ class										OnLevel : public IGameplay
 	AnimationEntity							backgroundEntity;
 	Timer									timer;
 	Player									*player;
+	Snapshot								*snap;
 
 public:
 	OnLevel();

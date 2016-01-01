@@ -12,8 +12,6 @@ OnLevel::OnLevel() : level(static_cast<Level *>(0)), backgroundEntity(0, 0, t2Ve
 OnLevel::~OnLevel()
 {}
 
-#include "Rocket.hpp"
-
 void					OnLevel::loadLevel(Level *newLevel)
 {
 	this->level = newLevel;
@@ -22,21 +20,19 @@ void					OnLevel::loadLevel(Level *newLevel)
 		throw RTypeException("Could not load level" + this->level->getTitle());
 
 	this->level->playMusic();
-	this->gameData->resourceBank->setTexture("Player", "../Assets/Graphics/Sprites/r-typesheet1.png");
-	this->gameData->resourceBank->setTexture("Bullets", "../Assets/Graphics/Sprites/Bullets.png");
-	this->gameData->resourceBank->setTexture("Explode4", "../Assets/Graphics/Sprites/Explode4.png");
-	this->gameData->resourceBank->setTexture("Explode3", "../Assets/Graphics/Sprites/Explode3.png");
-	this->gameData->resourceBank->setTexture("Explode2", "../Assets/Graphics/Sprites/Explode2.png");
-	this->gameData->resourceBank->setTexture("Explode1", "../Assets/Graphics/Sprites/Explode1.png");
-
 	this->animations["Background"] = new Animation("Background", this->level->getTexture(), t2Vector<unsigned int>(this->level->getSize(), this->gameData->getHeight()));
 	this->animations["Background"]->changeEntity(&this->backgroundEntity);
 	this->timer.addNewEvent("scrolling", static_cast<float>(this->level->getScrollSpeed()) / 100);
-	this->timer.addNewEvent("shoot", 0.2f);
+	this->timer.addNewEvent("laser", 0.1f);
+	this->timer.addNewEvent("bomb", 0.5f);
+	
 	this->world = new World(t2Vector<int>(this->gameData->getWidth(), this->gameData->getHeight()), true, true);
 	this->gameData->world = this->world;
 	this->world->createNewPlayer(t2Vector<unsigned int>(this->gameData->getWidth() / 10, this->gameData->getHeight() / 2), 0);
 	this->player = dynamic_cast<Player *>(this->world->getPlayerObject(0));
+
+	this->snap = this->world->getSnapshot();
+	this->timer.addNewEvent("snap", 1);
 }
 
 void					OnLevel::keyPressed(sf::Keyboard::Key key)
@@ -49,15 +45,10 @@ void					OnLevel::keyPressed(sf::Keyboard::Key key)
 	case sf::Keyboard::F:
 		this->gameData->setFullscreen(!this->gameData->getFullscreen());
 		break;
-	case sf::Keyboard::Space:
-		if (!this->timer.eventDone("shoot")) break;
-		this->player->launchRocket(Rocket::LowEnergy);
-		this->timer.reset("shoot");
-		break;
-	case sf::Keyboard::X:
-		if (!this->timer.eventDone("shoot")) break;
+	case sf::Keyboard::B:
+		if (!this->timer.eventDone("bomb")) break;
 		this->player->launchRocket(Rocket::Energy);
-		this->timer.reset("shoot");
+		this->timer.reset("bomb");
 		break;
 	default:
 		break;
@@ -72,6 +63,13 @@ void					OnLevel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void					OnLevel::updateLogic(sf::Time *time)
 {
+	/*
+	if (this->timer.eventDone("snap"))
+	{
+		this->world->loadSnapshot(this->snap);
+		this->timer.reset("snap");
+	}
+	*/
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		this->player->geometry->addImpulse(t2Vector<float>(-1, 0));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -80,6 +78,18 @@ void					OnLevel::updateLogic(sf::Time *time)
 		this->player->geometry->addImpulse(t2Vector<float>(0, -1));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		this->player->geometry->addImpulse(t2Vector<float>(0, 1));
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+		this->player->chargeShot();
+	else
+	{
+		this->player->unleashShot();
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->timer.eventDone("laser"))
+		{
+			this->player->laser(Laser::Shot);
+			this->timer.reset("laser");
+		}
+	}
 	this->world->tick(time->asSeconds());
 }
 

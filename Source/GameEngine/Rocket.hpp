@@ -32,6 +32,7 @@ public:
 protected:
 	Animation				*animation;
 	AnimationEntity			*entity;
+	sf::Sound				se;
 
 	Rocket::Type			rocketType;
 	unsigned char			initialState;

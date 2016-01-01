@@ -10,26 +10,25 @@ Rocket::Rocket(Rocket::Type _type, t2Vector<int> _position) : Object(), rocketTy
 {
 	switch (this->rocketType)
 	{
-	case Rocket::LowEnergy:
-		this->explosionEnum = static_cast<unsigned char >(Explosion::SmallEnergy);
-		this->timer.addNewEvent("rotation", 0.2f);
-		this->initialState = 100;
-		break;
 	case Rocket::Energy:
 		this->explosionEnum = static_cast<unsigned char >(Explosion::Energy);
+		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("BombEnergy"));
 		this->initialState = 147;
 		break;
 	case Rocket::LowPhysic:
 		this->explosionEnum = static_cast<unsigned char >(Explosion::SmallPhysic);
+		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("Bomb"));
 		this->timer.addNewEvent("rotation", 0.2f);
 		this->initialState = 104;
 		break;
 	case Rocket::Physic:
 		this->explosionEnum = static_cast<unsigned char >(Explosion::Physic);
+		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("BombPhysic"));
 		this->initialState = 139;
 		break;
-	default:
+	default: // Rocket::LowEnergy
 		this->explosionEnum = static_cast<unsigned char >(Explosion::SmallEnergy);
+		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("BombLaser"));
 		this->timer.addNewEvent("rotation", 0.2f);
 		this->initialState = 100;
 		break;
@@ -56,6 +55,7 @@ void						Rocket::start()
 		resourceBank->setAnimation("Bullets", this->animation);
 	}
 	this->animation->changeEntity(this->entity);
+	this->se.play();
 }
 
 Object						*Rocket::clone(SerializedObject *serializedObject)
@@ -68,9 +68,6 @@ Object						*Rocket::clone(SerializedObject *serializedObject)
 
 void						Rocket::interact(Object *object)
 {
-    Geometry *geo1 = this->geometry;
-    Geometry *geo2 = object->geometry;
-
 	switch (object->getType())
 	{
 	case (Object::Character):
@@ -85,6 +82,8 @@ void						Rocket::lateUpdate()
 {
 	Explosion				*explosion;
 
+	if (this->mustBeDeleted())
+		this->animation->removeEntity(this->entity->getId());
 	this->entity->setPosition(this->geometry->getPosition() - this->geometry->getSize() / 2);
 	if (this->timer.eventDone("autoDestruction"))
 		this->geometry->removeImpulse();
