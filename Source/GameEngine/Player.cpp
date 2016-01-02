@@ -71,11 +71,10 @@ void					Player::interact(Object *object)
 
     switch (object->getType())
     {
-	case (Object::Projectile):
-		break;
-	case (Object::Force):
-		break;
-	case (Object::Radiation):
+	case (Object::Projectile) :
+	case (Object::Force) :
+	case (Object::Radiation) :
+	case (Object::Other) :
 		break;
 	default:
 		geo1->removeImpulse();

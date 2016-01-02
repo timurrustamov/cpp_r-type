@@ -2,6 +2,7 @@
 
 #include						"../Monsters/BasicShip.h"
 #include						"../Monsters/Meteora.h"
+#include						"../Monsters/Nautilus.h"
 
 Monster::Monster(std::string _dll, t2Vector<int> _position) : Object(), dll(_dll)
 {
@@ -16,9 +17,14 @@ Monster::Monster(std::string _dll, t2Vector<int> _position) : Object(), dll(_dll
 		this->setIdentifier(66); // NUL A CHIER A CHANGER
 		this->behaviour = new Meteora();
 	}
-	else
+	else if (this->dll == "Nautilus")
 	{
 		this->setIdentifier(67); // NUL A CHIER A CHANGER
+		this->behaviour = new Nautilus();
+	}
+	else
+	{
+		this->setIdentifier(68); // NUL A CHIER A CHANGER
 		this->behaviour = new BasicShip();
 	}
 }

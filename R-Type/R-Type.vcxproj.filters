@@ -111,6 +111,9 @@
     <ClCompile Include="..\Source\Monsters\Meteora.cpp">
       <Filter>Fichiers sources\Monsters</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Monsters\Nautilus.cpp">
+      <Filter>Fichiers sources\Monsters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\GameEngine\QuadTree.hpp">
@@ -195,6 +198,9 @@
       <Filter>Fichiers d%27en-tête\Monsters</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Monsters\Meteora.h">
+      <Filter>Fichiers d%27en-tête\Monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Monsters\Nautilus.h">
       <Filter>Fichiers d%27en-tête\Monsters</Filter>
     </ClInclude>
   </ItemGroup>

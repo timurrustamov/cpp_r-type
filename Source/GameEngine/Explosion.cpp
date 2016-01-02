@@ -75,19 +75,16 @@ void					Explosion::interact(Object *object)
 	Geometry *geo1 = this->geometry;
 	Geometry *geo2 = object->geometry;
 
-	if (this->timer.eventDone("impulseEnd"))
+	if (this->timer.eventDone("impulseEnd") || object->getType() == Object::Radiation || object->getType() == Object::Type::Other)
 		return;
-	switch (object->getType())
-	{
-	default:
-		geo2->applyImpulse((geo2->getPosition() - geo1->getPosition()).normalize() * static_cast<float>(this->impulseFactor) / 10, 0.1);
-		break;
-	}
+	geo2->applyImpulse((geo2->getPosition() - geo1->getPosition()).normalize() * static_cast<float>(this->impulseFactor) / 10, 0.1);
 }
 
 void					Explosion::lateUpdate()
 {
 	this->entity->setPosition(this->geometry->getPosition() - this->geometry->getSize() / 2);
+	if (this->timer.eventDone("impulseEnd"))
+		this->type = Object::Other;
 	if (this->timer.eventDone("nextStep"))
 	{
 		this->entity->setState(this->entity->getState() + 1);

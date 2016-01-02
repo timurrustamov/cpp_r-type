@@ -71,14 +71,7 @@ Object						*Rocket::clone(SerializedObject *serializedObject)
 
 void						Rocket::interact(Object *object)
 {
-	switch (object->getType())
-	{
-	case (Object::Character):
-		return;
-	default:
-		this->timer.addNewEvent("Destruction", 0);
-		break;
-    }
+	this->timer.addNewEvent("Destruction", 0);
 }
 
 void						Rocket::lateUpdate()
