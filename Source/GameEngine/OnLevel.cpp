@@ -24,7 +24,7 @@ void					OnLevel::loadLevel(Level *newLevel)
 	this->animations["Background"]->changeEntity(&this->backgroundEntity);
 	this->timer.addNewEvent("scrolling", static_cast<float>(this->level->getScrollSpeed()) / 100);
 
-	// à automatiser
+	// ï¿½ automatiser
 	this->gameData->resourceBank->setTexture("BasicShip", "../Assets/Graphics/Sprites/r-typesheet5.png");
 	this->timer.addNewEvent("mobSpawn", 1);
 	
@@ -79,13 +79,13 @@ void					OnLevel::updateLogic(sf::Time *time)
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		this->player->geometry->addImpulse(t2Vector<float>(-1, 0));
+		this->player->geometry->addImpulse(t2Vector<float>(-10, 0));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		this->player->geometry->addImpulse(t2Vector<float>(1, 0));
+		this->player->geometry->addImpulse(t2Vector<float>(10, 0));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		this->player->geometry->addImpulse(t2Vector<float>(0, -1));
+		this->player->geometry->addImpulse(t2Vector<float>(0, -10));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		this->player->geometry->addImpulse(t2Vector<float>(0, 1));
+		this->player->geometry->addImpulse(t2Vector<float>(0, 10));
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
 		this->player->chargeShot();

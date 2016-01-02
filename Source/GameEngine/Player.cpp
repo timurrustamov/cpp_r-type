@@ -112,7 +112,7 @@ void					Player::lateUpdate()
 		this->entity->setState(3);
 	else
 		this->entity->setState(2);
-	std::cout << this->geometry->getVelocity().getY() << std::endl;
+	//std::cout << this->geometry->getVelocity().getY() << std::endl;
 }
 
 void					Player::launchRocket(Rocket::Type rocketType)

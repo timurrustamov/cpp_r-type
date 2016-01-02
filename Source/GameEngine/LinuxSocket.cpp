@@ -336,7 +336,6 @@ LinuxSocket::listenUdp(unsigned int __attribute__((__unused__)) thread_id, Linux
         //while protected -> summon onReceive
         read->unlock();
 
-
         if ((rv = poll(&ufd[1], 1, TIMEOUT)) == -1)
             server->_status = ISocket::Canceled;
         if (rv > 0)

@@ -30,15 +30,9 @@ Wall::clone(SerializedObject *serializedObject)
 }
 
 void
-Wall::interact(Object *object)
+Wall::interact(__attribute__((unused)) Object *object)
 {
-    switch (object->getType())
-    {
-        case (WallOfPain) :
-            return;
-        default :
-            return (object->interact(this));
-    }
+    return;
 }
 
 void Wall::lateUpdate() { return; };

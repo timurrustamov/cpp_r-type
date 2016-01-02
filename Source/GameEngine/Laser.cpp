@@ -7,20 +7,20 @@ Laser::Laser(Laser::Type _type, t2Vector<int> _position) : Object(), laserType(_
 	switch (this->laserType)
 	{
 	case Laser::MiddleChargeShot:
-		this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(48, 14), _position), 700);
+		this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(48, 14), _position), 700, 2);
 		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("Shoot2"));
 		this->gridPosition = t2Vector<unsigned int>(166, 136);
 		this->animationID = "MiddleChargeShot";
 		break;
 	case Laser::ChargeShot:
-		this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(80, 16), _position), 1400);
+		this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(80, 16), _position), 1400, 5);
 		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("Explosion2"));
 		this->gridPosition = t2Vector<unsigned int>(103, 170);
 		this->animationID = "ChargeShot";
 		this->timer.addNewEvent("invoke", 0.05f);
 		break;
 	default: // shot
-		this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(15, 4), _position), 350);
+		this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(15, 4), _position), 350, 1);
 		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("Shoot1"));
 		this->se.setVolume(66.6);
 		this->gridPosition = t2Vector<unsigned int>(234, 107);
@@ -92,8 +92,9 @@ void						Laser::lateUpdate()
 	}
 	if (this->timer.eventDone("invoke"))
 	{
-		Artifices *artifice = new Artifices(Artifices::Type::Explosion, this->geometry->getPosition());
+		Artifices *artifice = new Artifices(Artifices::Explosion, this->geometry->getPosition());
 		GameData::getInstance()->world->createNewObject(artifice);
 		this->timer.reset("invoke");
 	}
+	this->geometry->addImpulse(t2Vector<int>(15, 0));
 }

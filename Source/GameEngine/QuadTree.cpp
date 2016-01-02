@@ -199,6 +199,7 @@ void
 QuadTree::collision(Geometry *geo1, Geometry *geo2)
 {
     geo1->getObject()->interact(geo2->getObject());
+    geo2->getObject()->interact(geo1->getObject());
 }
 
 const t2Vector<int> &

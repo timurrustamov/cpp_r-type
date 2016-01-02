@@ -52,7 +52,7 @@ RTypeServer::createRoom(User *user, const std::string &roomName) {
 
     mutex->lock(true);
     std::cout << "Ask for room creation from " << user->getName() << " roomname : " << roomName << std::endl;
-    if (!roomName.empty() && !this->roomNameExists(roomName) && this->rooms.size() < 4)
+    if (!roomName.empty() && !this->roomNameExists(roomName) && this->rooms.size() < 1)
     {
         room = new GameRoom(roomName, user);
         Instruction joined = room->getUsersInstruction();
@@ -385,9 +385,9 @@ bool RTypeServer::sendToClient(User *user, Instruction &instruct) {
 
 ISocket *RTypeServer::getUserSocket(User *user) {
 
+    ISocket *client = NULL;
     IMutex *mutex = (*MutexVault::getMutexVault())["serverType"];
     mutex->lock(true);
-    ISocket *client = NULL;
 
     for (std::map<ISocket *, User *>::iterator it = this->userLinks.begin(); it != this->userLinks.end(); it++)
         if (it->second == user)
