@@ -1,5 +1,6 @@
 #include					"GameData.h"
 #include					"Laser.h"
+#include					"Artifices.h"
 
 Laser::Laser(Laser::Type _type, t2Vector<int> _position) : Object(), laserType(_type)
 {
@@ -16,16 +17,18 @@ Laser::Laser(Laser::Type _type, t2Vector<int> _position) : Object(), laserType(_
 		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("Explosion2"));
 		this->gridPosition = t2Vector<unsigned int>(103, 170);
 		this->animationID = "ChargeShot";
+		this->timer.addNewEvent("invoke", 0.05f);
 		break;
 	default: // shot
 		this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(15, 4), _position), 350);
 		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("Shoot1"));
+		this->se.setVolume(66.6);
 		this->gridPosition = t2Vector<unsigned int>(234, 107);
 		this->animationID = "Shot";
 		break;
 	}
 
-	this->timer.addNewEvent("Destruction", 10);
+	this->timer.addNewEvent("Destruction", 10.0f);
 	this->timer.addNewEvent("rotation", 0.2f);
 	this->geometry->attachToObject(this);
 	this->type = Object::Radiation;
@@ -45,7 +48,6 @@ void						Laser::start()
 		resourceBank->setAnimation(this->animationID, this->animation);
 	}
 	this->animation->changeEntity(this->entity);
-	this->se.setVolume(66.6);
 	this->se.play();
 }
 
@@ -59,7 +61,8 @@ Object						*Laser::clone(SerializedObject *serializedObject)
 
 void						Laser::interact(Object *object)
 {
-	if (this->type == Laser::ChargeShot) return;
+	if (this->laserType == Laser::ChargeShot)
+		return;
 	switch (object->getType())
 	{
 	case (Object::Character):
@@ -86,5 +89,11 @@ void						Laser::lateUpdate()
 	{
 		this->entity->setState(this->entity->getState() ^ 1);
 		this->timer.reset("rotation");
+	}
+	if (this->timer.eventDone("invoke"))
+	{
+		Artifices *artifice = new Artifices(Artifices::Type::Explosion, this->geometry->getPosition());
+		GameData::getInstance()->world->createNewObject(artifice);
+		this->timer.reset("invoke");
 	}
 }

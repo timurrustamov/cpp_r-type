@@ -28,6 +28,12 @@
     <Filter Include="Fichiers de ressources\Data">
       <UniqueIdentifier>{f03e110d-ff5a-49c0-9af8-87b8a8ebca83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Monsters">
+      <UniqueIdentifier>{4baa82b8-7707-4513-b6c8-51e5ffbd80a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Monsters">
+      <UniqueIdentifier>{64836c8d-8d01-4398-bf99-feea1147fb2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\GameEngine\Level.cpp">
@@ -92,6 +98,15 @@
     </ClCompile>
     <ClCompile Include="..\Source\GameEngine\Laser.cpp">
       <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Artifices.cpp">
+      <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Monster.cpp">
+      <Filter>Fichiers sources\GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Monsters\BasicShip.cpp">
+      <Filter>Fichiers sources\Monsters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +178,18 @@
     </ClInclude>
     <ClInclude Include="..\Source\GameEngine\Laser.h">
       <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\IMonsterBehaviour.h">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Monster.h">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Artifices.h">
+      <Filter>Fichiers d%27en-tête\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Monsters\BasicShip.h">
+      <Filter>Fichiers d%27en-tête\Monsters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

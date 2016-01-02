@@ -48,7 +48,6 @@ private:
 	unsigned int						static getNewId();
 
 protected:
-	AnimationEntity						entity;
 	Type								type;
 
 	unsigned int						identifier;

@@ -4,21 +4,18 @@ Object::Object(Geometry *_geo, Type _type) : geometry(_geo), type(_type)
 {
 	this->to_delete = false;
 	this->id = getNewId();
-	this->entity.setId(this->id);
 }
 
 Object::Object(Geometry &_geo, Type _type) : geometry(&_geo), type(_type)
 {
 	this->to_delete = false;
 	this->id = getNewId();
-	this->entity.setId(this->id);
 }
 
 Object::Object()
 {
 	to_delete = false;
 	this->id = getNewId();
-	this->entity.setId(this->id);
 }
 
 Object::~Object()

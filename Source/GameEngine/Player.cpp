@@ -31,7 +31,10 @@ void					Player::start()
 
 	this->entity = new AnimationEntity(this->getId(), 2, this->geometry->getPosition());
 	this->chargeShotEntity = new AnimationEntity(this->getId(), 0, this->geometry->getPosition());
+
 	this->timer.addNewEvent("loadingChargeShot", 0.07f);
+	this->timer.addNewEvent("laser", 0.1f);
+	this->timer.addNewEvent("rocket", 0.5f);
 
 	this->chargeShot1.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("ChargeShot"));
 	this->chargeShot2.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("ChargeShot2"));
@@ -99,20 +102,34 @@ void					Player::lateUpdate()
 	}
 }
 
+#include				"Monster.h"
+
 void					Player::launchRocket(Rocket::Type rocketType)
 {
-	Rocket				*rocket = new Rocket(rocketType, this->geometry->getPosition() + t2Vector<unsigned int>(25, 0));
+	Rocket				*rocket;
+	Monster				*monster;
+	
+	if (!this->timer.eventDone("rocket")) return;
+	monster = new Monster("cool", this->geometry->getPosition() + t2Vector<unsigned int>(500, 0));
+	GameData::getInstance()->world->createNewObject(monster);
 
+	/*
+	rocket = new Rocket(rocketType, this->geometry->getPosition() + t2Vector<unsigned int>(25, 0));
 	rocket->geometry->applyImpulse(t2Vector<float>(30, 0), 0.1f);
 	GameData::getInstance()->world->createNewObject(rocket);
+	*/
+	this->timer.reset("rocket");
 }
 
 void					Player::laser(Laser::Type laserType)
 {
-	Laser				*laser = new Laser(laserType, this->geometry->getPosition() + t2Vector<unsigned int>(25, 0));
+	Laser				*laser;
 
+	if (!this->timer.eventDone("laser")) return;
+	laser = new Laser(laserType, this->geometry->getPosition() + t2Vector<unsigned int>(25, 0));
 	laser->geometry->applyImpulse(t2Vector<float>(30, 0), 0.1f);
 	GameData::getInstance()->world->createNewObject(laser);
+	this->timer.reset("laser");
 }
 
 void					Player::chargeShot()
@@ -122,13 +139,13 @@ void					Player::chargeShot()
 		this->chargeShotLoading->changeEntity(this->chargeShotEntity);
 		if (this->timer.eventDone("chargeShot1") && !this->timer.eventExists("chargeShot2"))
 		{
-			this->timer.addNewEvent("chargeShot2", 2.1f);
+			this->timer.addNewEvent("chargeShot2", 2);
 			this->chargeShot2.play();
 		}
 	}
 	else
 	{
-		this->timer.addNewEvent("chargeShot1", 2.4f);
+		this->timer.addNewEvent("chargeShot1", 2);
 		this->chargeShot1.play();
 	}
 }
@@ -136,12 +153,35 @@ void					Player::chargeShot()
 void					Player::unleashShot()
 {
 	Laser				*laser = NULL;
+	Rocket				*rocket = NULL;
 
 	this->chargeShotLoading->removeEntity(this->chargeShotEntity->getId());
 	if (this->timer.eventDone("chargeShot2"))
+	{
 		laser = new Laser(Laser::ChargeShot, this->geometry->getPosition() + t2Vector<unsigned int>(30, 0));
+		rocket = new Rocket(Rocket::Energy, this->geometry->getPosition() + t2Vector<int>(60, 30));
+		rocket->geometry->applyImpulse(t2Vector<float>(30, 15), 0.2f);
+		GameData::getInstance()->world->createNewObject(rocket);
+		rocket = new Rocket(Rocket::Energy, this->geometry->getPosition() + t2Vector<int>(60, -30));
+		rocket->geometry->applyImpulse(t2Vector<float>(30, -15), 0.2f);
+		GameData::getInstance()->world->createNewObject(rocket);
+		rocket = new Rocket(Rocket::Energy, this->geometry->getPosition() + t2Vector<int>(60, 14));
+		rocket->geometry->applyImpulse(t2Vector<float>(30, 7.5f), 0.2f);
+		GameData::getInstance()->world->createNewObject(rocket);
+		rocket = new Rocket(Rocket::Energy, this->geometry->getPosition() + t2Vector<int>(60, -14));
+		rocket->geometry->applyImpulse(t2Vector<float>(30, -7.5f), 0.2f);
+		GameData::getInstance()->world->createNewObject(rocket);
+	}
 	else if (this->timer.eventDone("chargeShot1"))
+	{
 		laser = new Laser(Laser::MiddleChargeShot, this->geometry->getPosition() + t2Vector<unsigned int>(27, 0));
+		rocket = new Rocket(Rocket::LowEnergy, this->geometry->getPosition() + t2Vector<int>(60, 14));
+		rocket->geometry->applyImpulse(t2Vector<float>(30, 7.5f), 0.2f);
+		GameData::getInstance()->world->createNewObject(rocket);
+		rocket = new Rocket(Rocket::LowEnergy, this->geometry->getPosition() + t2Vector<int>(60, -14));
+		rocket->geometry->applyImpulse(t2Vector<float>(30, -7.5f), 0.2f);
+		GameData::getInstance()->world->createNewObject(rocket);
+	}
 	
 	this->chargeShot1.stop();
 	this->chargeShot2.stop();

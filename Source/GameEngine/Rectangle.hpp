@@ -14,7 +14,6 @@ class Rectangle {
 public:
 
     Rectangle() {};
-
     Rectangle(t2Vector<T> size, t2Vector<T> position) : _size(size), _position(position) {};
 
     Rectangle(T sizeX, T sizeY, T posX, T posY)

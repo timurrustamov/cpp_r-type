@@ -23,8 +23,9 @@ void					OnLevel::loadLevel(Level *newLevel)
 	this->animations["Background"] = new Animation("Background", this->level->getTexture(), t2Vector<unsigned int>(this->level->getSize(), this->gameData->getHeight()));
 	this->animations["Background"]->changeEntity(&this->backgroundEntity);
 	this->timer.addNewEvent("scrolling", static_cast<float>(this->level->getScrollSpeed()) / 100);
-	this->timer.addNewEvent("laser", 0.1f);
-	this->timer.addNewEvent("bomb", 0.5f);
+
+	// à automatiser
+	this->gameData->resourceBank->setTexture("BasicShip", "../Assets/Graphics/Sprites/r-typesheet5.png");
 	
 	this->world = new World(t2Vector<int>(this->gameData->getWidth(), this->gameData->getHeight()), true, true);
 	this->gameData->world = this->world;
@@ -46,9 +47,7 @@ void					OnLevel::keyPressed(sf::Keyboard::Key key)
 		this->gameData->setFullscreen(!this->gameData->getFullscreen());
 		break;
 	case sf::Keyboard::B:
-		if (!this->timer.eventDone("bomb")) break;
 		this->player->launchRocket(Rocket::Energy);
-		this->timer.reset("bomb");
 		break;
 	default:
 		break;
@@ -84,11 +83,8 @@ void					OnLevel::updateLogic(sf::Time *time)
 	else
 	{
 		this->player->unleashShot();
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->timer.eventDone("laser"))
-		{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 			this->player->laser(Laser::Shot);
-			this->timer.reset("laser");
-		}
 	}
 	this->world->tick(time->asSeconds());
 }
