@@ -11,6 +11,7 @@ Wall::Wall(t2Vector<int> size, t2Vector<int> position) {
     this->geometry->attachToObject(this);
     this->type = Object::WallOfPain;
     this->id = Object::getId();
+	this->identifier = GameData::WallOfPain;
 }
 
 Wall::Wall(int sizex, int sizey, int x, int y) {
@@ -19,6 +20,7 @@ Wall::Wall(int sizex, int sizey, int x, int y) {
     this->geometry->attachToObject(this);
     this->type = Object::WallOfPain;
     this->id = Object::getId();
+	this->identifier = GameData::WallOfPain;
 }
 
 Object *

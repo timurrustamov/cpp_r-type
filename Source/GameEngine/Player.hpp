@@ -30,7 +30,6 @@ public:
 	void				chargeShot();
 	void				unleashShot();
 
-
 protected:
 	Animation			*animation;
 	Animation			*chargeShotLoading;

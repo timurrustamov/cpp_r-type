@@ -17,12 +17,14 @@
 
 class					GameData
 {
+public:
 	enum				Identifier
 	{
 		Player1 = 0,
 		Player2,
 		Player3,
 		Player4,
+		WallOfPain,
 		Laser,
 		MiddleChargeShot,
 		ChargeShot,
@@ -36,6 +38,7 @@ class					GameData
 		ExplosionStrongPhysic,
 		ArtificeExplosion
 	};
+private:
 
 	bool				fullscreen;
 	bool				mustQuit;

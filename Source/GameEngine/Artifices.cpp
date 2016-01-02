@@ -1,10 +1,11 @@
+#include				"GameData.h"
 #include				"Artifices.h"
 
 Artifices::Artifices(Artifices::Type type, t2Vector<int> position) : Object(), artificeType(type)
 {
 	switch (this->artificeType)
 	{
-	case Artifices::Explosion:
+	default: // Artifices::Explosion:
 		this->animationID = "ExplosionArtifice";
 		this->textureName = "Player";
 		this->size = t2Vector<int>(34, 30);
@@ -12,18 +13,7 @@ Artifices::Artifices(Artifices::Type type, t2Vector<int> position) : Object(), a
 		this->grid = t2Vector<unsigned int>(6, 1);
 		this->minState = 0;
 		this->maxState = 5;
-
-		this->timer.addNewEvent("nextStep", 0.05f);
-		this->timer.addNewEvent("destruction", 0.3f);
-		break;
-	default:
-		this->animationID = "ExplosionArtifice";
-		this->textureName = "Player";
-		this->size = t2Vector<int>(34, 30);
-		this->gridPosition = t2Vector<unsigned int>(61, 342);
-		this->grid = t2Vector<unsigned int>(6, 1);
-		this->minState = 0;
-		this->maxState = 5;
+		this->identifier = GameData::ArtificeExplosion;
 		
 		this->timer.addNewEvent("nextStep", 0.05f);
 		this->timer.addNewEvent("destruction", 0.3f);
@@ -34,7 +24,6 @@ Artifices::Artifices(Artifices::Type type, t2Vector<int> position) : Object(), a
 	this->geometry->attachToObject(this);
 	this->type = Object::Other;
 	this->id = Object::getId();
-	this->start();
 }
 
 void					Artifices::start()

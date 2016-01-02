@@ -11,6 +11,7 @@ Laser::Laser(Laser::Type _type, t2Vector<int> _position) : Object(), laserType(_
 		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("Shoot2"));
 		this->gridPosition = t2Vector<unsigned int>(166, 136);
 		this->animationID = "MiddleChargeShot";
+		this->identifier = GameData::MiddleChargeShot;
 		break;
 	case Laser::ChargeShot:
 		this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(80, 16), _position), 1400, 5);
@@ -18,6 +19,7 @@ Laser::Laser(Laser::Type _type, t2Vector<int> _position) : Object(), laserType(_
 		this->gridPosition = t2Vector<unsigned int>(103, 170);
 		this->animationID = "ChargeShot";
 		this->timer.addNewEvent("invoke", 0.05f);
+		this->identifier = GameData::ChargeShot;
 		break;
 	default: // shot
 		this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(15, 4), _position), 350, 1);
@@ -25,6 +27,7 @@ Laser::Laser(Laser::Type _type, t2Vector<int> _position) : Object(), laserType(_
 		this->se.setVolume(66.6);
 		this->gridPosition = t2Vector<unsigned int>(234, 107);
 		this->animationID = "Shot";
+		this->identifier = GameData::Laser;
 		break;
 	}
 
@@ -33,7 +36,6 @@ Laser::Laser(Laser::Type _type, t2Vector<int> _position) : Object(), laserType(_
 	this->geometry->attachToObject(this);
 	this->type = Object::Radiation;
 	this->id = Object::getId();
-	this->start();
 }
 
 void						Laser::start()

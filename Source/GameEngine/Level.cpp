@@ -1,5 +1,11 @@
 #include							<boost/property_tree/ptree.hpp>
 #include							<boost/property_tree/xml_parser.hpp>
+#include							"Artifices.h"
+#include							"Rocket.hpp"
+#include							"Laser.h"
+#include							"Player.hpp"
+#include							"Explosion.h"
+#include							"WallOfPain.hpp"
 #include							"GameData.h"
 #include							"Level.h"
 
@@ -74,6 +80,39 @@ void								Level::load()
 	}
 
 	this->loaded = true;
+}
+
+#include							"Artifices.h"
+#include							"Rocket.hpp"
+#include							"Laser.h"
+#include							"Player.hpp"
+#include							"Explosion.h"
+#include							"WallOfPain.hpp"
+
+void								Level::loadIdentifiers() const
+{
+	World							*world = GameData::getInstance()->world;
+
+	world->addSample(new Player(t2Vector<int>(0, 0), 0));
+	world->addSample(new Player(t2Vector<int>(0, 0), 1));
+	world->addSample(new Player(t2Vector<int>(0, 0), 2));
+	world->addSample(new Player(t2Vector<int>(0, 0), 3));
+
+	world->addSample(new Rocket(Rocket::Energy, t2Vector<int>(0, 0)));
+	world->addSample(new Rocket(Rocket::LowEnergy, t2Vector<int>(0, 0)));
+	world->addSample(new Rocket(Rocket::Physic, t2Vector<int>(0, 0)));
+	world->addSample(new Rocket(Rocket::LowPhysic, t2Vector<int>(0, 0)));
+
+	world->addSample(new Explosion(Explosion::Energy, t2Vector<int>(0, 0)));
+	world->addSample(new Explosion(Explosion::SmallEnergy, t2Vector<int>(0, 0)));
+	world->addSample(new Explosion(Explosion::Physic, t2Vector<int>(0, 0)));
+	world->addSample(new Explosion(Explosion::SmallPhysic, t2Vector<int>(0, 0)));
+
+	world->addSample(new Artifices(Artifices::Explosion, t2Vector<int>(0, 0)));
+
+	world->addSample(new Laser(Laser::MiddleChargeShot, t2Vector<int>(0, 0)));
+	world->addSample(new Laser(Laser::ChargeShot, t2Vector<int>(0, 0)));
+	world->addSample(new Laser(Laser::Shot, t2Vector<int>(0, 0)));
 }
 
 void								Level::playMusic()

@@ -2,6 +2,7 @@
 // Created by rustam_t on 12/8/15.
 //
 
+#include "GameData.h"
 #include "World.hpp"
 
 World::World(t2Vector<int> size, bool verticalWalls, bool horizontalWalls) : _qt(Rectangle<int>(size, size / 2))
@@ -46,6 +47,7 @@ unsigned int						World::createNewObject(Object *newobj)
         return (BAD_ID);
     this->_objects[newobj->getId()] = newobj;
     this->_qt.insert(newobj->geometry);
+	newobj->start();
     return (newobj->getId());
 }
 
@@ -113,15 +115,18 @@ World::loadSnapshot(Snapshot *snap)
             this->_objects[it->second->attr.id]->geometry->setVelocity(t2Vector<float>(it->second->attr.velocityx, it->second->attr.velocityy));
             this->_objects[it->second->attr.id]->geometry->setPosition(t2Vector<float>(it->second->attr.positionx, it->second->attr.positiony));
         }
-        else if (this->_samples[it->second->attr.identifier] != NULL)
-            this->createNewObject(it->second->attr.identifier, it->second);
+		else if (this->_samples[it->second->attr.identifier] != NULL)
+		{
+			std::cout << it->second->attr.id << std::endl;
+			this->createNewObject(it->second->attr.identifier, it->second);
+		}
     }
     return (*this);
 }
 
 World &
 World::addSample(Object *object) {
-
+	std::cout << object->getIdentifier() << std::endl;
     this->_samples[object->getIdentifier()] = object;
     return (*this);
 }
@@ -131,7 +136,11 @@ World::createNewObject(unsigned int identifier, SerializedObject *serializedObje
 
     unsigned int id = BAD_ID;
 
-    if (this->_samples.find(identifier) != this->_samples.end())
-        this->createNewObject(this->_samples[identifier]->clone(serializedObject));
-    return (id);
+	if (this->_samples.find(identifier) != this->_samples.end())
+	{
+		id = this->createNewObject(this->_samples[identifier]->clone(serializedObject));
+		if (this->_samples[identifier]->getType() == Object::Character)
+			this->_playersId[this->_samples[identifier]->getIdentifier()] = id;
+	}
+	return (id);
 }

@@ -7,8 +7,10 @@ Monster::Monster(std::string _dll, t2Vector<int> _position) : Object(), dll(_dll
 	this->id = Object::getId();
 	this->geometry = new Geometry(Rectangle<float>(t2Vector<float>(0, 0), _position));
 	this->geometry->attachToObject(this);
+
+	// nul à changer =>
+	this->setIdentifier(67); // NUL A CHIER A CHANGER
 	this->behaviour = new BasicShip();
-	this->start();
 }
 
 void							Monster::start()

@@ -1,3 +1,4 @@
+#include				"GameData.h"
 #include				"Explosion.h"
 
 Explosion::Explosion(Explosion::Type type, t2Vector<int> position) : Object(), explosionType(type)
@@ -10,6 +11,7 @@ Explosion::Explosion(Explosion::Type type, t2Vector<int> position) : Object(), e
 		this->size = t2Vector<int>(47, 46);
 		this->grid = t2Vector<unsigned int>(4, 2);
 		this->impulseFactor = 100;
+		this->identifier = GameData::ExplosionStrongLaser;
 		break;
 	case Explosion::Physic:
 		this->animationID = "Explode3";
@@ -17,6 +19,7 @@ Explosion::Explosion(Explosion::Type type, t2Vector<int> position) : Object(), e
 		this->size = t2Vector<int>(47, 46);
 		this->grid = t2Vector<unsigned int>(4, 2);
 		this->impulseFactor = 150;
+		this->identifier = GameData::ExplosionStrongPhysic;
 		break;
 	case Explosion::SmallPhysic:
 		this->animationID = "Explode1";
@@ -24,18 +27,14 @@ Explosion::Explosion(Explosion::Type type, t2Vector<int> position) : Object(), e
 		this->size = t2Vector<int>(24, 23);
 		this->grid = t2Vector<unsigned int>(8, 1);
 		this->impulseFactor = 75;
+		this->identifier = GameData::ExplosionWeakPhysic;
 		break;
-	case Explosion::SmallEnergy:
+	default: // Explosion::SmallEnergy
 		this->animationID = "Explode2";
 		this->size = t2Vector<int>(24, 23);
 		this->grid = t2Vector<unsigned int>(6, 1);
 		this->impulseFactor = 50;
-		break;
-	default:
-		this->animationID = "Explode2";
-		this->size = t2Vector<int>(24, 23);
-		this->grid = t2Vector<unsigned int>(6, 1);
-		this->impulseFactor = 50;
+		this->identifier = GameData::ExplosionWeakLaser;
 		break;
 	}
 
@@ -43,7 +42,6 @@ Explosion::Explosion(Explosion::Type type, t2Vector<int> position) : Object(), e
 	this->geometry->attachToObject(this);
 	this->type = Object::Force;
 	this->id = Object::getId();
-	this->start();
 }
 
 void					Explosion::start()

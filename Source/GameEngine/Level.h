@@ -31,6 +31,7 @@ public:
 	~Level();
 
 	void							load();
+	void							loadIdentifiers() const;
 	std::string const				&getTitle() const;
 	std::string const				&getBgmPath() const;
 	std::string const				&getBgtPath() const;

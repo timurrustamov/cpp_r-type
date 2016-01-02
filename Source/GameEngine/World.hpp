@@ -68,6 +68,7 @@ public:
         if (this->_playersId[playerNo] != BAD_ID)
             return (this->_playersId[playerNo]);
         newobj = new Player(position, playerNo);
+		newobj->start();
         id = newobj->getId();
         this->_objects[id] = newobj;
         this->_playersId[playerNo] = id;

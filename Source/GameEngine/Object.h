@@ -43,6 +43,7 @@ public:
 	bool								mustBeDeleted() const;
 	bool								setToDelete();
 	void								setValues(SerializedObject *serializedObject);
+	void								setIdentifier(unsigned int);
 
 private:
 	unsigned int						static getNewId();

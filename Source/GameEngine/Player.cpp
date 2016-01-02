@@ -12,7 +12,7 @@ Player::Player(t2Vector<int> position, unsigned int playerNo) : Object()
     this->type = Object::Character;
     this->id = Object::getId();
     this->playerNo = playerNo;
-	this->start();
+	this->identifier = playerNo;
 }
 
 Player::Player(int x, int y, unsigned int playerNo)
@@ -22,7 +22,6 @@ Player::Player(int x, int y, unsigned int playerNo)
     this->type = Object::Character;
     this->id = Object::getId();
     this->playerNo = playerNo;
-	this->start();
 }
 
 void					Player::start()
@@ -112,7 +111,6 @@ void					Player::lateUpdate()
 		this->entity->setState(3);
 	else
 		this->entity->setState(2);
-	//std::cout << this->geometry->getVelocity().getY() << std::endl;
 }
 
 void					Player::launchRocket(Rocket::Type rocketType)

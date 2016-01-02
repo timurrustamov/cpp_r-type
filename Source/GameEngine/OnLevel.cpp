@@ -12,6 +12,7 @@ OnLevel::OnLevel() : level(static_cast<Level *>(0)), backgroundEntity(0, 0, t2Ve
 OnLevel::~OnLevel()
 {}
 
+#include "Monster.h"
 void					OnLevel::loadLevel(Level *newLevel)
 {
 	this->level = newLevel;
@@ -23,18 +24,20 @@ void					OnLevel::loadLevel(Level *newLevel)
 	this->animations["Background"] = new Animation("Background", this->level->getTexture(), t2Vector<unsigned int>(this->level->getSize(), this->gameData->getHeight()));
 	this->animations["Background"]->changeEntity(&this->backgroundEntity);
 	this->timer.addNewEvent("scrolling", static_cast<float>(this->level->getScrollSpeed()) / 100);
-
-	// � automatiser
-	this->gameData->resourceBank->setTexture("BasicShip", "../Assets/Graphics/Sprites/r-typesheet5.png");
-	this->timer.addNewEvent("mobSpawn", 1);
-	
 	this->world = new World(t2Vector<int>(this->gameData->getWidth(), this->gameData->getHeight()), true, true);
 	this->gameData->world = this->world;
+
+	// a automatiser
+	this->gameData->resourceBank->setTexture("BasicShip", "../Assets/Graphics/Sprites/r-typesheet5.png");
+	this->timer.addNewEvent("mobSpawn", 1);
+	this->world->addSample(new Monster("BasicShip")); // A MODIFIER
+	this->level->loadIdentifiers();
+	
 	this->world->createNewPlayer(t2Vector<unsigned int>(this->gameData->getWidth() / 10, this->gameData->getHeight() / 2), 0);
 	this->player = dynamic_cast<Player *>(this->world->getPlayerObject(0));
 
-	this->snap = this->world->getSnapshot();
-	this->timer.addNewEvent("snap", 1);
+	this->snap = NULL;
+	this->timer.addNewEvent("snap", 2);
 }
 
 void					OnLevel::keyPressed(sf::Keyboard::Key key)
@@ -61,16 +64,16 @@ void					OnLevel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		animation->second->draw(target, states);
 }
 
-#include "Monster.h"
 void					OnLevel::updateLogic(sf::Time *time)
 {
-	/*
 	if (this->timer.eventDone("snap"))
 	{
-		this->world->loadSnapshot(this->snap);
+		this->snap = this->world->getSnapshot();
+		if (this->snap != NULL)
+			this->world->loadSnapshot(this->snap);
 		this->timer.reset("snap");
 	}
-	*/
+
 	if (this->timer.eventDone("mobSpawn"))
 	{
 		Monster *monster = new Monster("cool", t2Vector<unsigned int>(this->gameData->getWidth() - 25, rand() % this->gameData->getHeight()));

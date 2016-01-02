@@ -58,6 +58,11 @@ bool Object::setToDelete()
 	return (true);
 }
 
+void								Object::setIdentifier(unsigned int _newidentifier)
+{
+	this->identifier = _newidentifier;
+}
+
 void Object::setValues(SerializedObject *serializedObject)
 {
 	if (serializedObject == NULL) return;

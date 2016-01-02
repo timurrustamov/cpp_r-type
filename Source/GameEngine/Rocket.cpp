@@ -14,23 +14,27 @@ Rocket::Rocket(Rocket::Type _type, t2Vector<int> _position) : Object(), rocketTy
 		this->explosionEnum = static_cast<unsigned char >(Explosion::Energy);
 		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("BombEnergy"));
 		this->initialState = 147;
+		this->identifier = GameData::RocketStrongLaser;
 		break;
 	case Rocket::LowPhysic:
 		this->explosionEnum = static_cast<unsigned char >(Explosion::SmallPhysic);
 		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("Bomb"));
 		this->timer.addNewEvent("rotation", 0.2f);
 		this->initialState = 104;
+		this->identifier = GameData::RocketWeakPhysic;
 		break;
 	case Rocket::Physic:
 		this->explosionEnum = static_cast<unsigned char >(Explosion::Physic);
 		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("BombPhysic"));
 		this->initialState = 139;
+		this->identifier = GameData::RocketStrongPhysic;
 		break;
 	default: // Rocket::LowEnergy
 		this->explosionEnum = static_cast<unsigned char >(Explosion::SmallEnergy);
 		this->se.setBuffer(*ResourcesBank::getInstance()->getSoundBuffer("BombLaser"));
 		this->timer.addNewEvent("rotation", 0.2f);
 		this->initialState = 100;
+		this->identifier = GameData::RocketWeakLaser;
 		break;
 	}
 
@@ -38,7 +42,6 @@ Rocket::Rocket(Rocket::Type _type, t2Vector<int> _position) : Object(), rocketTy
 	this->geometry->attachToObject(this);
     this->type = Object::Projectile;
     this->id = Object::getId();
-	this->start();
 }
 
 void						Rocket::start()
