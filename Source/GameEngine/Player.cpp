@@ -100,24 +100,30 @@ void					Player::lateUpdate()
 		this->chargeShotEntity->setState((this->chargeShotEntity->getState() + 1) % 7);
 		this->timer.reset("loadingChargeShot");
 	}
-}
 
-#include				"Monster.h"
+	
+	if (this->geometry->getVelocity().getY() > this->geometry->getMaxVelocity() - 10)
+		this->entity->setState(0);
+	else if (this->geometry->getVelocity().getY() > this->geometry->getMaxVelocity() / 2)
+		this->entity->setState(1);
+	else if (this->geometry->getVelocity().getY() < -this->geometry->getMaxVelocity() + 10)
+		this->entity->setState(4);
+	else if (this->geometry->getVelocity().getY() < -this->geometry->getMaxVelocity() / 2)
+		this->entity->setState(3);
+	else
+		this->entity->setState(2);
+	std::cout << this->geometry->getVelocity().getY() << std::endl;
+}
 
 void					Player::launchRocket(Rocket::Type rocketType)
 {
 	Rocket				*rocket;
-	Monster				*monster;
-	
-	if (!this->timer.eventDone("rocket")) return;
-	monster = new Monster("cool", this->geometry->getPosition() + t2Vector<unsigned int>(500, 0));
-	GameData::getInstance()->world->createNewObject(monster);
 
-	/*
+	if (!this->timer.eventDone("rocket")) return;
 	rocket = new Rocket(rocketType, this->geometry->getPosition() + t2Vector<unsigned int>(25, 0));
 	rocket->geometry->applyImpulse(t2Vector<float>(30, 0), 0.1f);
 	GameData::getInstance()->world->createNewObject(rocket);
-	*/
+
 	this->timer.reset("rocket");
 }
 

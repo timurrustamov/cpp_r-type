@@ -26,6 +26,7 @@ void					OnLevel::loadLevel(Level *newLevel)
 
 	// à automatiser
 	this->gameData->resourceBank->setTexture("BasicShip", "../Assets/Graphics/Sprites/r-typesheet5.png");
+	this->timer.addNewEvent("mobSpawn", 1);
 	
 	this->world = new World(t2Vector<int>(this->gameData->getWidth(), this->gameData->getHeight()), true, true);
 	this->gameData->world = this->world;
@@ -60,6 +61,7 @@ void					OnLevel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		animation->second->draw(target, states);
 }
 
+#include "Monster.h"
 void					OnLevel::updateLogic(sf::Time *time)
 {
 	/*
@@ -69,6 +71,13 @@ void					OnLevel::updateLogic(sf::Time *time)
 		this->timer.reset("snap");
 	}
 	*/
+	if (this->timer.eventDone("mobSpawn"))
+	{
+		Monster *monster = new Monster("cool", t2Vector<unsigned int>(this->gameData->getWidth() - 25, rand() % this->gameData->getHeight()));
+		GameData::getInstance()->world->createNewObject(monster);
+		this->timer.reset("mobSpawn");
+	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		this->player->geometry->addImpulse(t2Vector<float>(-1, 0));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))

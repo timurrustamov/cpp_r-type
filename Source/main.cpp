@@ -13,6 +13,7 @@ int							main()
 	
 	try
 	{
+		srand(time(NULL));
 		gameplay.loadLevel(&level);
 		window.attachGameplay(dynamic_cast<IGameplay *>(&gameplay));
 
