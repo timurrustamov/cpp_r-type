@@ -7,8 +7,30 @@
 # include				"t2Vector.hpp"
 # include				"World.hpp"
 
+# define MAX_IDENTIFIER	42
+
 class					GameData
 {
+	enum				Identifier
+	{
+		Player1 = 0,
+		Player2,
+		Player3,
+		Player4,
+		Laser,
+		MiddleChargeShot,
+		ChargeShot,
+		RocketWeakLaser,
+		RocketStrongLaser,
+		RocketWeakPhysic,
+		RocketStrongPhysic,
+		ExplosionWeakLaser,
+		ExplosionStrongLaser,
+		ExplosionWeakPhysic,
+		ExplosionStrongPhysic,
+		ArtificeExplosion
+	};
+
 	bool				fullscreen;
 	bool				mustQuit;
 	unsigned int		width;
