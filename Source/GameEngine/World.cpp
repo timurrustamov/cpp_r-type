@@ -34,6 +34,8 @@ World::~World()
 {
     for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++)
         delete (it->second);
+    for (std::map<unsigned int, Object *>::iterator it = this->_samples.begin(); it != this->_samples.end(); it++)
+        delete (it->second);
 }
 
 unsigned int						World::createNewObject(Object *newobj)

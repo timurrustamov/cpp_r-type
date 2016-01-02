@@ -25,8 +25,6 @@ void							BasicShip::start(Object * const that)
 
 void							BasicShip::lateUpdate()
 {
-	if (this->object->mustBeDeleted())
-		this->animation->removeEntity(this->entity->getId());
 	this->entity->setPosition(this->object->geometry->getPosition() - this->object->geometry->getSize() / 2);
 	this->object->geometry->addImpulse(t2Vector<float>(-1, 0));
 	if (this->object->timer.eventDone("rotation"))
@@ -58,4 +56,6 @@ void        					BasicShip::onDestroy()
 {
 	Artifices					*artifice = new Artifices(Artifices::Explosion, this->object->geometry->getPosition());
 	GameData::getInstance()->world->createNewObject(artifice);
+
+	this->animation->removeEntity(this->entity->getId());
 }

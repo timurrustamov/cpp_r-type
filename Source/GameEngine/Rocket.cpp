@@ -34,7 +34,7 @@ Rocket::Rocket(Rocket::Type _type, t2Vector<int> _position) : Object(), rocketTy
 		break;
 	}
 
-	this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(12, 12), _position), 1000, 2);
+	this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(12, 12), _position), 1000, 1);
 	this->geometry->attachToObject(this);
     this->type = Object::Projectile;
     this->id = Object::getId();
