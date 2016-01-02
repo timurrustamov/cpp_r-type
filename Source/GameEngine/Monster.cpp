@@ -1,6 +1,8 @@
 ﻿#include						"Monster.h"
 
-#include "../Monsters/BasicShip.h"
+#include						"../Monsters/BasicShip.h"
+#include						"../Monsters/Meteora.h"
+
 Monster::Monster(std::string _dll, t2Vector<int> _position) : Object(), dll(_dll)
 {
 	this->type = Object::Ennemy;
@@ -9,8 +11,16 @@ Monster::Monster(std::string _dll, t2Vector<int> _position) : Object(), dll(_dll
 	this->geometry->attachToObject(this);
 
 	// nul à changer =>
-	this->setIdentifier(67); // NUL A CHIER A CHANGER
-	this->behaviour = new BasicShip();
+	if (this->dll == "Meteora")
+	{
+		this->setIdentifier(66); // NUL A CHIER A CHANGER
+		this->behaviour = new Meteora();
+	}
+	else
+	{
+		this->setIdentifier(67); // NUL A CHIER A CHANGER
+		this->behaviour = new BasicShip();
+	}
 }
 
 void							Monster::start()

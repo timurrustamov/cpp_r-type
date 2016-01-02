@@ -53,6 +53,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Source\Monsters\BasicShip.cpp" />
+    <ClCompile Include="..\Source\Monsters\Meteora.cpp" />
     <ClCompile Include="..\Source\System\Animation.cpp" />
     <ClCompile Include="..\Source\System\ResourcesBank.cpp" />
     <ClCompile Include="..\Source\System\RTypeException.cpp" />
@@ -98,6 +99,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Source\Monsters\BasicShip.h" />
+    <ClInclude Include="..\Source\Monsters\Meteora.h" />
     <ClInclude Include="..\Source\System\Animation.h" />
     <ClInclude Include="..\Source\System\ResourcesBank.h" />
     <ClInclude Include="..\Source\System\RTypeException.h" />

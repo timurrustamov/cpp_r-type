@@ -36,7 +36,8 @@ public:
 		ExplosionStrongLaser,
 		ExplosionWeakPhysic,
 		ExplosionStrongPhysic,
-		ArtificeExplosion
+		ArtificeExplosion,
+		ArtificeMeteoraExplosion
 	};
 private:
 

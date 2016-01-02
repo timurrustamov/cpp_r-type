@@ -5,6 +5,20 @@ Artifices::Artifices(Artifices::Type type, t2Vector<int> position) : Object(), a
 {
 	switch (this->artificeType)
 	{
+	case Type::MeteoraExplosion :
+		this->animationID = "MeteoraExplosion";
+		this->textureName = "MeteoraExplode";
+		this->size = t2Vector<int>(33, 33);
+		this->gridPosition = t2Vector<unsigned int>(0, 0);
+		this->grid = t2Vector<unsigned int>(4, 1);
+		this->minState = 0;
+		this->maxState = 3;
+		this->identifier = GameData::ArtificeMeteoraExplosion;
+
+		this->timer.addNewEvent("nextStep", 0.08f);
+		this->timer.addNewEvent("destruction", 0.32f);
+		break;
+
 	default: // Artifices::Explosion:
 		this->animationID = "ExplosionArtifice";
 		this->textureName = "Player";
