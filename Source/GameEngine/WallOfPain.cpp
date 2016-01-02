@@ -2,6 +2,7 @@
 // Created by rustam_t on 12/14/15.
 //
 
+#include "GameData.h"
 #include "WallOfPain.hpp"
 
 Wall::Wall(t2Vector<int> size, t2Vector<int> position) {
@@ -30,7 +31,7 @@ Wall::clone(SerializedObject *serializedObject)
 }
 
 void
-Wall::interact(__attribute__((unused)) Object *object)
+Wall::interact(ATTR_UNUSED Object *object)
 {
     return;
 }

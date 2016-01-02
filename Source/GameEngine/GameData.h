@@ -7,6 +7,12 @@
 # include				"t2Vector.hpp"
 # include				"World.hpp"
 
+# ifdef _GNUC
+#  define ATTR_UNUSED __attribute__((unused))
+# else
+#  define ATTR_UNUSED
+# endif
+
 # define MAX_IDENTIFIER	42
 
 class					GameData
