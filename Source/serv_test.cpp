@@ -1,5 +1,10 @@
 #include "GameEngine/RTypeServer.hpp"
 
+void                        sendUdp(World *world)
+{
+    return;
+}
+
 int             main(int ac, char **av)
 {
     RTypeServer *server = RTypeServer::getInstance();

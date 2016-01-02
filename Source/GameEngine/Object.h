@@ -38,6 +38,7 @@ public:
 
 	Type								getType() const;
 	unsigned int 						getId() const;
+	void 								setId(unsigned int);
 	unsigned int						getIdentifier() const;
 
 	bool								mustBeDeleted() const;

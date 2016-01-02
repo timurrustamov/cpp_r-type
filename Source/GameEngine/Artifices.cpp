@@ -5,7 +5,7 @@ Artifices::Artifices(Artifices::Type type, t2Vector<int> position) : Object(), a
 {
 	switch (this->artificeType)
 	{
-	case Type::MeteoraExplosion :
+		case Artifices::MeteoraExplosion :
 		this->animationID = "MeteoraExplosion";
 		this->textureName = "MeteoraExplode";
 		this->size = t2Vector<int>(33, 33);

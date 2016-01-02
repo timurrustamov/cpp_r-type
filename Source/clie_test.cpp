@@ -1,6 +1,11 @@
 #include "GameEngine/LinuxSocket.h"
 #include <algorithm>
 
+void                        sendUdp(World *world)
+{
+    return;
+}
+
 void            recvHandler2(ISocket *client)
 {
     Packet *p = client->readPacket();

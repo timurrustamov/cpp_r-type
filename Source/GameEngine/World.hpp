@@ -11,6 +11,7 @@
 # include								"Player.hpp"
 # include								"WallOfPain.hpp"
 # include								"Snapshot.hpp"
+# include                               "MutexVault.hpp"
 # include								<typeinfo>
 
 # define MAX_PLAYERS					4
@@ -62,16 +63,24 @@ public:
     {
         Object *newobj;
         unsigned int id;
+        IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
+        mutex->lock(true);
 
-        if (playerNo > MAX_PLAYERS)
+        if (playerNo > MAX_PLAYERS) {
+            mutex->unlock();
             return (BAD_ID);
-        if (this->_playersId[playerNo] != BAD_ID)
+        }
+        if (this->_playersId[playerNo] != BAD_ID) {
+
+            mutex->unlock();
             return (this->_playersId[playerNo]);
+        }
         newobj = new Player(position, playerNo);
 		newobj->start();
         id = newobj->getId();
         this->_objects[id] = newobj;
         this->_playersId[playerNo] = id;
+        mutex->unlock();
         return (id);
     }
 

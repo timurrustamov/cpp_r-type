@@ -17,17 +17,18 @@ class								Level
 	std::string						title;
 	std::string						bgtPath;
 	std::string						bgmPath;
+	std::string 					scenario;
 
 	sf::Texture						bgt;
 	sf::Music						bgm;
 
 	int								scrollSpeed;
 	unsigned int					size;
-	t2Vector<int>					gravity;
 	bool							loaded;
 	
 public:
 	Level(std::string const &);
+	Level(const std::string &title, const std::string &bgtPath, const std::string &bgmPath, const std::string &, unsigned int size, int scrollSpeed);
 	~Level();
 
 	void							load();
@@ -37,7 +38,7 @@ public:
 	std::string const				&getBgtPath() const;
 
 	sf::Texture						*getTexture();
-	t2Vector<int>					getGravity() const;
+	const std::string &				getScenario() const;
 	int								getScrollSpeed() const;
 	unsigned int					getSize() const;
 	bool							isLoaded() const;

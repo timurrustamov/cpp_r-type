@@ -12,6 +12,11 @@
 #include "User.hpp"
 #include "RTypeServer.hpp"
 
+#include					"../System/window.h"
+#include					"../GameEngine/OnLevel.h"
+#include					"../System/Animation.h"
+#include					"../System/ResourcesBank.h"
+
 class User;
 
 class GameRoom {
@@ -36,6 +41,7 @@ public:
     bool removeUser(User *);
     bool removeAllUsers();
     bool hasUser(User *) const;
+    bool startGame(User *) const;
     const std::vector<User *> &getUsers() const;
     Instruction getUsersInstruction() const;
     bool setState(State state, User *owner);
@@ -48,6 +54,10 @@ protected:
     State state;
     //not own those ptrs
     std::vector<User *> users;
+
+    Window	*window;
+    OnLevel	*gameplay;
+    Level *level;
 };
 
 

@@ -24,7 +24,6 @@ Level::Level(std::string const &filepath) : loaded(false)
 
 		this->scrollSpeed = ptree.get("level.parameters.scrollspeed", 100);
 		this->size = ptree.get("level.parameters.size", 0);
-		this->gravity.assign(ptree.get("level.parameters.gravity.x", 0), ptree.get("level.parameters.gravity.y", 0));
 	}
 	catch (const std::exception &err)
 	{
@@ -145,11 +144,6 @@ std::string const					&Level::getBgtPath() const
 	return (this->bgtPath);
 }
 
-t2Vector<int>						Level::getGravity() const
-{
-	return (this->gravity);
-}
-
 int									Level::getScrollSpeed() const
 {
 	return (this->scrollSpeed);
@@ -173,6 +167,22 @@ std::ostream						&operator<<(std::ostream& os, const Level& that)
 
 	os << std::endl << "Properties: " << std::endl;
 	os << "Size: " << that.getSize() << " | ScrollSpeed: " << that.getScrollSpeed() << std::endl;
-	os << "Default Gravity: " << that.getGravity() << std::endl;
 	return (os);
+}
+
+Level::Level(const std::string &title, const std::string &bgtPath, const std::string &bgmPath, const std::string &scenario, unsigned int size,
+			 int scrollSpeed) {
+
+	this->title = title;
+	this->bgtPath = bgtPath;
+	this->bgmPath = bgmPath;
+	this->scenario = scenario;
+	this->size = size;
+	this->scrollSpeed = scrollSpeed;
+	this->loaded = false;
+}
+
+const std::string &Level::getScenario() const {
+
+	return (this->scenario);
 }
