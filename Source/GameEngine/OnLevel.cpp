@@ -29,8 +29,16 @@ void					OnLevel::loadLevel(Level *newLevel)
 
 	// a automatiser
 	this->gameData->resourceBank->setTexture("BasicShip", "../Assets/Graphics/Sprites/r-typesheet5.png");
-	this->timer.addNewEvent("mobSpawn", 1);
+	this->gameData->resourceBank->setTexture("BasicShip-Hit", "../Assets/Graphics/Sprites/r-typesheet5-hit.png");
+
+	this->gameData->resourceBank->setTexture("Meteora", "../Assets/Graphics/Sprites/Meteora.png");
+	this->gameData->resourceBank->setTexture("Meteora-Hit", "../Assets/Graphics/Sprites/Meteora-Hit.png");
+	this->gameData->resourceBank->setTexture("MeteoraExplode", "../Assets/Graphics/Sprites/MeteoraExplode.png");
+
+	this->timer.addNewEvent("mobSpawn", 1.3f);
+	this->timer.addNewEvent("meteoraSpawn", 3);
 	this->world->addSample(new Monster("BasicShip")); // A MODIFIER
+	this->world->addSample(new Monster("Meteora")); // A MODIFIER
 	this->level->loadIdentifiers();
 	
 	this->world->createNewPlayer(t2Vector<unsigned int>(this->gameData->getWidth() / 10, this->gameData->getHeight() / 2), 0);
@@ -77,9 +85,16 @@ void					OnLevel::updateLogic(sf::Time *time)
 
 	if (this->timer.eventDone("mobSpawn"))
 	{
-		Monster *monster = new Monster("cool", t2Vector<unsigned int>(this->gameData->getWidth() - 25, rand() % this->gameData->getHeight()));
+		Monster *monster = new Monster("BasicShip", t2Vector<unsigned int>(this->gameData->getWidth() - 25, rand() % this->gameData->getHeight()));
 		GameData::getInstance()->world->createNewObject(monster);
 		this->timer.reset("mobSpawn");
+	}
+
+	if (this->timer.eventDone("meteoraSpawn"))
+	{
+		Monster *monster = new Monster("Meteora", t2Vector<unsigned int>(this->gameData->getWidth() - 25, rand() % this->gameData->getHeight()));
+		GameData::getInstance()->world->createNewObject(monster);
+		this->timer.reset("meteoraSpawn");
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))

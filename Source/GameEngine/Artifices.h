@@ -10,7 +10,8 @@ class Artifices :			public Object
 public:
 	enum					Type
 	{
-		Explosion
+		Explosion,
+		MeteoraExplosion
 	};
 
 	Artifices(Artifices::Type type, t2Vector<int> position = t2Vector<int>(0, 0));

@@ -1,10 +1,10 @@
-#ifndef BASICSHIP_H_
-# define BASICSHIP_H_
+#ifndef METEORA_H_
+# define METEORA_H_
 
 # include						"../GameEngine/Object.h"
 # include						"../GameEngine/IMonsterBehaviour.h"
 
-class BasicShip :				public IMonsterBehaviour
+class Meteora :					public IMonsterBehaviour
 {
 	int							life;
 	Object						*object;
@@ -13,8 +13,8 @@ class BasicShip :				public IMonsterBehaviour
 	AnimationEntity				*entity;
 
 public:
-	BasicShip() {};
-	~BasicShip() {};
+	Meteora() {};
+	~Meteora() {};
 
 	virtual void				lateUpdate();
 	virtual void				interact(Object *);
@@ -23,4 +23,4 @@ public:
 	virtual void				onDestroy();
 };
 
-#endif /* !BASICSHIP_H_ */
+#endif /* !METEORA_H_ */
