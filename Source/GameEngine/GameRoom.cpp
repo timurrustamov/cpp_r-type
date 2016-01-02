@@ -97,6 +97,7 @@ GameRoom::getState() const
     return (state);
 }
 
+
 const std::vector<User *> &
 GameRoom::getUsers() const {
 
@@ -130,4 +131,9 @@ GameRoom::getUsersInstruction() const {
         instruct.addName((*it)->getName());
     mutex->unlock();
     return (instruct);
+}
+
+bool
+GameRoom::startGame(User *user) const {
+    return false;
 }

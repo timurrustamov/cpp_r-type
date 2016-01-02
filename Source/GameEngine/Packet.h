@@ -12,6 +12,7 @@
 #include "Rsa.h"
 #include "SerializedObject.hpp"
 #include "Snapshot.hpp"
+#include "Level.h"
 
 #define _MAGIC_ 0x0101010
 
@@ -33,7 +34,8 @@ public:
         Sound = 0x98765432,
         Instruct = 0x69696969,
         SerializedObj = 0x98765432,
-        Snap = 0x13371337
+        Snap = 0x13371337,
+        L3v3l = 0x98467879
     };
 
     //object specific constructors
@@ -43,6 +45,7 @@ public:
     Packet(Instruction &);
     Packet(SerializedObject &);
     Packet(Snapshot &);
+    Packet(Level &);
 
     static std::vector<unsigned char>& stringToStream(char *buf, int const size)
     {
@@ -111,6 +114,8 @@ public:
             return (reinterpret_cast<T *>(this->getSerializedObject()));
         else if (typeid(T) == typeid(Snapshot))
             return (reinterpret_cast<T *>(this->getSnapshot()));
+        else if (typeid(T) == typeid(Level))
+            return (reinterpret_cast<T *>(this->getLevel()));
         return (NULL);
     };
 
@@ -139,6 +144,7 @@ protected:
     Instruction                             *getInstruction();
     SerializedObject                        *getSerializedObject();
     Snapshot                                *getSnapshot();
+    Level                                   *getLevel();
 };
 
 #endif //CPP_BABEL_PACKET_H

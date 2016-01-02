@@ -62,18 +62,17 @@ int							main()
     Level					level("../Data/level1.xml");
 
     ISocket *tcpClient = getClient(4242, "127.0.0.1", "TCP");
-    ISocket *udpClient = getClient(4243, "127.0.0.1", "UDP");
 
     tcpClient->attachOnReceive(udpGameHandler);
 
-    if (tcpClient->start() == -1 ||
-        udpClient->start() == -1)
+    if (tcpClient->start() == -1)
         std::cout << "Failed to start servers!" << std::endl;
     try
     {
         srand(time(NULL));
         gameplay.loadLevel(&level);
         gameplay.timer.removeEvent("mobSpawn");
+        gameplay.timer.removeEvent("meteoraSpawn");
         window.attachGameplay(dynamic_cast<IGameplay *>(&gameplay));
 
         window.launchWindow();

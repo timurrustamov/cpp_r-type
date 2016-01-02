@@ -44,10 +44,8 @@ int							main()
 	OnLevel					gameplay;
 	Level					level("../Data/level1.xml");
 	ISocket					*tcpServer = ISocket::getServer(4242, "TCP");
-	ISocket 				*udpServer = ISocket::getServer(4243, "UDP");
 
-	if (tcpServer->start() == -1 ||
-		udpServer->start() == -1)
+	if (tcpServer->start() == -1)
 		std::cout << "Failed to start servers!" << std::endl;
 	try
 	{

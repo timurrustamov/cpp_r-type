@@ -99,6 +99,43 @@ Packet::Packet(Instruction &instr) : _type(Packet::Instruct)
     this->_encrypted = false;
 }
 
+Packet::Packet(Level &level) : _type(Packet::L3v3l) {
+
+    int scrollSpeed = level.getScrollSpeed();
+    unsigned int size = level.getSize();
+    unsigned char *scrollSpeedC = reinterpret_cast<unsigned char *>(&scrollSpeed);
+    unsigned char *sizeC = reinterpret_cast<unsigned char *>(&size);
+    std::vector<unsigned char> *builds;
+
+    Packet *p;
+    for (unsigned int i = 0; i < sizeof(int); i++)
+        this->_data.push_back(sizeC[i]);
+    for (unsigned int i = 0; i < sizeof(unsigned int); i++)
+        this->_data.push_back(scrollSpeedC[i]);
+
+    p = Packet::pack(level.getTitle());
+    builds = p->build();
+    this->_data.insert(this->_data.end(), builds->begin(), builds->end());
+    delete p;
+    delete builds;
+    p = Packet::pack(level.getBgtPath());
+    builds = p->build();
+    this->_data.insert(this->_data.end(), builds->begin(), builds->end());
+    delete p;
+    delete builds;
+    p = Packet::pack(level.getBgmPath());
+    builds = p->build();
+    this->_data.insert(this->_data.end(), builds->begin(), builds->end());
+    delete p;
+    delete builds;
+    p = Packet::pack(level.getScenario());
+    builds = p->build();
+    this->_data.insert(this->_data.end(), builds->begin(), builds->end());
+    delete p;
+    delete builds;
+    this->_encrypted = false;
+}
+
 //static
 unsigned int
 Packet::getHeaderSize()
@@ -348,4 +385,57 @@ Packet::getSnapshot() {
         }
     }
     return (result);
+}
+
+
+Level *
+Packet::getLevel() {
+
+    int scrollSpeed;
+    unsigned int size;
+    std::string *title = NULL;
+    std::string *bgtPath = NULL;
+    std::string *bgmPath = NULL;
+    std::string *scenario = NULL;
+    Packet *p;
+    Level *level;
+
+    if (this->_type == Packet::L3v3l) {
+        size = *reinterpret_cast<unsigned int *>(&(this->_data[0]));
+        scrollSpeed = *reinterpret_cast<int *>(&(this->_data[sizeof(unsigned int)]));
+        this->_data.erase(this->_data.begin(), this->_data.begin() + sizeof(unsigned int) + sizeof(int));
+
+        if ((p = Packet::fromStream(this->_data)) != NULL)
+        {
+            title = p->unpack<std::string>();
+            delete p;
+        }
+        if ((p = Packet::fromStream(this->_data)) != NULL)
+        {
+            bgtPath = p->unpack<std::string>();
+            delete p;
+        }
+        if ((p = Packet::fromStream(this->_data)) != NULL)
+        {
+            bgmPath = p->unpack<std::string>();
+            delete p;
+        }
+        if ((p = Packet::fromStream(this->_data)) != NULL)
+        {
+            scenario = p->unpack<std::string>();
+            delete p;
+        }
+
+        if (title != NULL && bgmPath != NULL && bgmPath != NULL && scenario != NULL)
+            level = new Level(*title, *bgtPath, *bgmPath, *scenario, size, scrollSpeed);
+        if (title != NULL)
+            delete title;
+        if (bgmPath != NULL)
+            delete bgmPath;
+        if (bgtPath != NULL)
+            delete bgtPath;
+        if (scenario != NULL)
+            delete scenario;
+    }
+    return (level);
 }

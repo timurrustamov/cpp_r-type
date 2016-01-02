@@ -130,7 +130,7 @@ World::loadSnapshot(Snapshot *snap)
     //look for integrity of objects
     for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++) {
         if (it->second != NULL && !it->second->mustBeDeleted() &&
-            snap->objects.find(it->second->getId()) == snap->objects.end())
+            snap->objects.find(it->second->getId()) == snap->objects.end() && it->second->getType() != Object::Other && it->second->getType() != Object::Force)
             it->second->setToDelete();
     }
     //replace and load new objects
@@ -139,11 +139,8 @@ World::loadSnapshot(Snapshot *snap)
             this->_objects[it->second->attr.id]->geometry->setVelocity(t2Vector<float>(it->second->attr.velocityx, it->second->attr.velocityy));
             this->_objects[it->second->attr.id]->geometry->setPosition(t2Vector<float>(it->second->attr.positionx, it->second->attr.positiony));
         }
-		else if (this->_samples[it->second->attr.identifier] != NULL)
-		{
-			std::cout << it->second->attr.id << std::endl;
+		else if (this->_samples[it->second->attr.identifier] != NULL && this->_samples[it->second->attr.identifier]->getType() != Object::Force)
 			this->createNewObject(it->second->attr.identifier, it->second);
-		}
     }
     mutex->unlock();
     return (*this);
@@ -151,7 +148,7 @@ World::loadSnapshot(Snapshot *snap)
 
 World &
 World::addSample(Object *object) {
-	std::cout << object->getIdentifier() << std::endl;
+
     this->_samples[object->getIdentifier()] = object;
     return (*this);
 }
