@@ -66,9 +66,15 @@ void								Object::setIdentifier(unsigned int _newidentifier)
 void Object::setValues(SerializedObject *serializedObject)
 {
 	if (serializedObject == NULL) return;
+	this->id = serializedObject->attr.id;
 	this->geometry->setPosition(t2Vector<float>(serializedObject->attr.positionx, serializedObject->attr.positiony));
 	this->geometry->setVelocity(t2Vector<float>(serializedObject->attr.velocityx, serializedObject->attr.velocityy));
 	this->geometry->setSize(t2Vector<float>(serializedObject->attr.sizex, serializedObject->attr.sizey));
 	this->geometry->setInertie(serializedObject->attr.intertia);
 	this->geometry->setMaxVelocity(serializedObject->attr.maxVelocity);
+}
+
+void Object::setId(unsigned int i) {
+
+	this->id = i;
 }

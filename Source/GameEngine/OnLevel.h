@@ -9,6 +9,10 @@
 # include									"../System/Animation.h"
 # include									"Snapshot.hpp"
 # include									"Timer.hpp"
+# include   								"ISocket.h"
+
+void sendUdp(World *);
+void updGameHandler(ISocket *);
 
 class										OnLevel : public IGameplay
 {
@@ -18,13 +22,14 @@ class										OnLevel : public IGameplay
 
 	World									*world;
 	AnimationEntity							backgroundEntity;
-	Timer									timer;
 	Player									*player;
 	Snapshot								*snap;
 
 public:
 	OnLevel();
 	~OnLevel();
+
+	Timer									timer;
 
 	void									loadLevel(Level *newLevel);
 	void									keyPressed(sf::Keyboard::Key);

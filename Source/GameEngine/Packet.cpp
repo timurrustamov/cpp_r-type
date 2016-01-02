@@ -49,6 +49,7 @@ Packet::Packet(Snapshot &snapshot) : _type(Packet::Snap) {
     int x = snapshot.size.getX();
     int y = snapshot.size.getY();
     size_t objnb = snapshot.objects.size();
+    std::cout << "objects no " << objnb << std::endl;
     Packet *p;
     std::vector<unsigned char> *tmpvec;
 
@@ -63,9 +64,9 @@ Packet::Packet(Snapshot &snapshot) : _type(Packet::Snap) {
     for (unsigned int i = 0; i < sizeof(objnb); i++)
         this->_data.push_back(tmpobjnb[i]);
 
-    for (size_t i = 0; i < objnb; i++) {
-
-        p = Packet::pack(*(snapshot.objects[i]));
+    for (std::map<unsigned int, SerializedObject *>::iterator it = snapshot.objects.begin(); it != snapshot.objects.end(); it++)
+    {
+        p = Packet::pack(*(it->second));
         tmpvec = p->build();
         this->_data.insert(this->_data.end(), tmpvec->begin(), tmpvec->end());
         delete tmpvec;

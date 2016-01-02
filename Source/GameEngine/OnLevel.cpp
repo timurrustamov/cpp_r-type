@@ -66,6 +66,7 @@ void					OnLevel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void					OnLevel::updateLogic(sf::Time *time)
 {
+	sendUdp(this->world);
 	if (this->timer.eventDone("snap"))
 	{
 		this->snap = this->world->getSnapshot();
@@ -82,13 +83,13 @@ void					OnLevel::updateLogic(sf::Time *time)
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		this->player->geometry->addImpulse(t2Vector<float>(-10, 0));
+		this->player->geometry->addImpulse(t2Vector<float>(-5, 0));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		this->player->geometry->addImpulse(t2Vector<float>(10, 0));
+		this->player->geometry->addImpulse(t2Vector<float>(5, 0));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		this->player->geometry->addImpulse(t2Vector<float>(0, -10));
+		this->player->geometry->addImpulse(t2Vector<float>(0, -5));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		this->player->geometry->addImpulse(t2Vector<float>(0, 10));
+		this->player->geometry->addImpulse(t2Vector<float>(0, 5));
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
 		this->player->chargeShot();

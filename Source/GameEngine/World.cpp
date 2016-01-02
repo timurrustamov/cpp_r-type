@@ -4,6 +4,8 @@
 
 #include "GameData.h"
 #include "World.hpp"
+#include "IMutex.hpp"
+#include "MutexVault.hpp"
 
 World::World(t2Vector<int> size, bool verticalWalls, bool horizontalWalls) : _qt(Rectangle<int>(size, size / 2))
 {
@@ -39,15 +41,21 @@ World::~World()
         delete (it->second);
 }
 
-unsigned int						World::createNewObject(Object *newobj)
-{
-    Player							*playerptr = dynamic_cast<Player *>(newobj);
+unsigned int						World::createNewObject(Object *newobj) {
+    Player *playerptr = dynamic_cast<Player *>(newobj);
 
-    if (playerptr != NULL)
+    //IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
+
+    //mutex->lock(true);
+    if (playerptr != NULL) {
+
+       // mutex->unlock();
         return (BAD_ID);
+    }
     this->_objects[newobj->getId()] = newobj;
     this->_qt.insert(newobj->geometry);
 	newobj->start();
+    //mutex->unlock();
     return (newobj->getId());
 }
 
@@ -63,6 +71,9 @@ World::tick(float seconds)
 {
     std::map<Geometry *, std::vector<Geometry *> > interactionmap;
 
+    IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
+
+    mutex->lock(true);
     for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++) {
         if (it->second != NULL)
         {
@@ -86,6 +97,7 @@ World::tick(float seconds)
             delete (it->second);
             this->_objects.erase(it);
         }
+    mutex->unlock();
     return (*this);
 }
 
@@ -94,21 +106,33 @@ World::getSnapshot() {
 
     std::vector<SerializedObject *> objects;
 
-    for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++)
-        if (it->second != NULL && !it->second->mustBeDeleted())
-            objects.push_back(new SerializedObject(*it->second));
+    IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
 
+    mutex->lock(true);
+    for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++) {
+
+        if (it->second->getType() == Object::Other)
+            std::cout << "Other" << std::endl;
+        if (it->second != NULL && !it->second->mustBeDeleted() && it->second->getType() != Object::Other)
+            objects.push_back(new SerializedObject(*it->second));
+    }
+
+    mutex->unlock();
     return (new Snapshot(this->_qt.getSize(), objects));
 }
 
 World &
 World::loadSnapshot(Snapshot *snap)
 {
-    //look for integrity of objects
-    for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++)
-        if (it->second != NULL && !it->second->mustBeDeleted() && snap->objects.find(it->second->getId()) == snap->objects.end())
-            it->second->setToDelete();
+    IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
 
+    mutex->lock(true);
+    //look for integrity of objects
+    for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++) {
+        if (it->second != NULL && !it->second->mustBeDeleted() &&
+            snap->objects.find(it->second->getId()) == snap->objects.end())
+            it->second->setToDelete();
+    }
     //replace and load new objects
     for (std::map<unsigned int, SerializedObject *>::iterator it = snap->objects.begin(); it != snap->objects.end(); it++) {
         if (this->_objects.find(it->second->attr.id) != this->_objects.end()) {
@@ -121,6 +145,7 @@ World::loadSnapshot(Snapshot *snap)
 			this->createNewObject(it->second->attr.identifier, it->second);
 		}
     }
+    mutex->unlock();
     return (*this);
 }
 
@@ -136,11 +161,15 @@ World::createNewObject(unsigned int identifier, SerializedObject *serializedObje
 
     unsigned int id = BAD_ID;
 
+    //IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
+
+    //mutex->lock(true);
 	if (this->_samples.find(identifier) != this->_samples.end())
 	{
 		id = this->createNewObject(this->_samples[identifier]->clone(serializedObject));
 		if (this->_samples[identifier]->getType() == Object::Character)
 			this->_playersId[this->_samples[identifier]->getIdentifier()] = id;
 	}
+    //mutex->unlock();
 	return (id);
 }

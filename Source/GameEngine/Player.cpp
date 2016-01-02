@@ -7,7 +7,7 @@
 
 Player::Player(t2Vector<int> position, unsigned int playerNo) : Object()
 {
-    this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(33, 18), position), 320, 5);
+    this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(33, 18), position), 320, 10);
     this->geometry->attachToObject(this);
     this->type = Object::Character;
     this->id = Object::getId();
@@ -17,7 +17,7 @@ Player::Player(t2Vector<int> position, unsigned int playerNo) : Object()
 
 Player::Player(int x, int y, unsigned int playerNo)
 {
-    this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(33, 18), t2Vector<int>(x, y)), 320, 5);
+    this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(33, 18), t2Vector<int>(x, y)), 320, 10);
     this->geometry->attachToObject(this);
     this->type = Object::Character;
     this->id = Object::getId();
