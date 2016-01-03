@@ -9,10 +9,10 @@
 # include									"../System/Animation.h"
 # include									"Snapshot.hpp"
 # include									"Timer.hpp"
-# include   								"ISocket.h"
+//# include   								"ISocket.h"
 
-void sendUdp(World *);
-void updGameHandler(ISocket *);
+//void sendUdp(World *);
+//void updGameHandler(ISocket *);
 
 class										OnLevel : public IGameplay
 {

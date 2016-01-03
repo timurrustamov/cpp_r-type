@@ -1,6 +1,7 @@
 #include				<iostream>
 #include				"../System/RTypeException.h"
 #include				"../System/Animation.h"
+#include				"Monster.h"
 #include				"OnLevel.h"
 
 OnLevel::OnLevel() : level(static_cast<Level *>(0)), backgroundEntity(0, 0, t2Vector<int>(0, 0))
@@ -12,7 +13,6 @@ OnLevel::OnLevel() : level(static_cast<Level *>(0)), backgroundEntity(0, 0, t2Ve
 OnLevel::~OnLevel()
 {}
 
-#include "Monster.h"
 void					OnLevel::loadLevel(Level *newLevel)
 {
 	this->level = newLevel;
@@ -38,11 +38,17 @@ void					OnLevel::loadLevel(Level *newLevel)
 	this->gameData->resourceBank->setTexture("Nautilus", "../Assets/Graphics/Sprites/Nautilus.png");
 	this->gameData->resourceBank->setTexture("Nautilus-Hit", "../Assets/Graphics/Sprites/Nautilus-Hit.png");
 
+	this->gameData->resourceBank->setTexture("Robot", "../Assets/Graphics/Sprites/Robot.png");
+	this->gameData->resourceBank->setTexture("Robot-Hit", "../Assets/Graphics/Sprites/Robot-Hit.png");
+
 	this->timer.addNewEvent("mobSpawn", 1.3f);
 	this->timer.addNewEvent("meteoraSpawn", 3);
+	this->timer.addNewEvent("robotSpawn", 1);
+
 	this->world->addSample(new Monster("BasicShip")); // A MODIFIER
 	this->world->addSample(new Monster("Meteora")); // A MODIFIER
 	this->world->addSample(new Monster("Nautilus")); // A MODIFIER
+	this->world->addSample(new Monster("Robot")); // A MODIFIER
 	this->level->loadIdentifiers();
 	
 	this->world->createNewPlayer(t2Vector<unsigned int>(this->gameData->getWidth() / 10, this->gameData->getHeight() / 2), 0);
@@ -78,7 +84,6 @@ void					OnLevel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void					OnLevel::updateLogic(sf::Time *time)
 {
-	sendUdp(this->world);
 	if (this->timer.eventDone("snap"))
 	{
 		this->snap = this->world->getSnapshot();
@@ -86,6 +91,8 @@ void					OnLevel::updateLogic(sf::Time *time)
 			this->world->loadSnapshot(this->snap);
 		this->timer.reset("snap");
 	}
+
+	// ADD MOI LES DELETE DANS LE DESTRUCTEUR D'OBJETS POUR LES ENTITES GRAPHIQUES
 
 	if (this->timer.eventDone("mobSpawn"))
 	{
@@ -99,6 +106,13 @@ void					OnLevel::updateLogic(sf::Time *time)
 		Monster *monster = new Monster("Meteora", t2Vector<unsigned int>(this->gameData->getWidth() - 25, rand() % this->gameData->getHeight()));
 		GameData::getInstance()->world->createNewObject(monster);
 		this->timer.reset("meteoraSpawn");
+	}
+
+	if (this->timer.eventDone("robotSpawn"))
+	{
+		Monster *monster = new Monster("Robot", t2Vector<unsigned int>(this->gameData->getWidth() - 70, 300));
+		GameData::getInstance()->world->createNewObject(monster);
+		this->timer.reset("robotSpawn");
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
