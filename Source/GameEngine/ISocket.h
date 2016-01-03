@@ -86,12 +86,6 @@ public:
 
 	EventHandler getOnDisconnect() const;
 
-	void attachRsa(Rsa *);
-
-	Rsa *getSendRsa() const;
-
-	Rsa *getRecvRsa() const;
-
 	void setMustEncrypt(bool value);
 
 protected:
@@ -112,8 +106,6 @@ protected:
 	std::vector<unsigned char> _read_buffer;
 	std::vector<unsigned char> _write_buffer;
 
-	Rsa 					*_sendRsa;
-	Rsa 					*_recvRsa;
 	bool 					_mustEncrypt;
 };
 

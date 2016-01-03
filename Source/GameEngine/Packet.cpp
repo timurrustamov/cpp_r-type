@@ -28,12 +28,6 @@ Packet::Packet(std::vector<int> &vec) : _type(Packet::IntVector)
     this->_encrypted = false;
 }
 
-Packet::Packet(Rsa &rsa) : _type(Packet::SSLPublicKey)
-{
-    this->_data = rsa.getPublicKey();
-    this->_encrypted = false;
-}
-
 Packet::Packet(SerializedObject &object) : _type(Packet::SerializedObj) {
 
     Packet *tmp;
@@ -149,7 +143,7 @@ Packet::getHeaderSize()
 
 //get packet from bytestream (bytestream is then consumed)
 Packet *
-Packet::fromStream(std::vector<unsigned char> &data, Rsa* rsa)
+Packet::fromStream(std::vector<unsigned char> &data)
 {
     unsigned int headerSize = Packet::getHeaderSize();
     if (data.size() <= headerSize)
@@ -157,53 +151,41 @@ Packet::fromStream(std::vector<unsigned char> &data, Rsa* rsa)
     unsigned int *r_magic = reinterpret_cast<unsigned int *>(&data[0]);
     Packet::Type *r_type = reinterpret_cast<Packet::Type *>(&data[sizeof(unsigned int)]);
     unsigned int *r_size = reinterpret_cast<unsigned int *>(&data[sizeof(unsigned int) * 2]);
-    unsigned int *r_encrypted = reinterpret_cast<unsigned int *>(&data[sizeof(unsigned int) * 3]);
 
-    if (*r_magic != _MAGIC_ || *r_size + headerSize > data.size() || !(*r_encrypted == 0 || *r_encrypted == 1))
+    if (*r_magic != _MAGIC_ || *r_size + headerSize > data.size())
     {
         std::cout << (int)(*r_size) << std::cout;
         if (*r_magic != _MAGIC_)
             std::cout << "magic" << std::endl;
         if (*r_size + headerSize < data.size())
             std::cout << "size" << std::endl;
-        if (!(*r_encrypted == 0 || *r_encrypted == 1))
-            std::cout << "encr" << std::endl;
         return (NULL);
     }
     Packet *newPacket = new Packet;
     std::vector<unsigned char> new_data;
     newPacket->_type = *r_type;
-    newPacket->_encrypted = (*r_encrypted != 0);
     for (unsigned int i = 0; i < *r_size; i++)
         newPacket->_data.push_back(data[i + headerSize]);
     //consume flux
     data.erase(data.begin(), data.begin() + headerSize + *r_size);
-    if (rsa != NULL && newPacket->_encrypted)
-    {
-        newPacket->_data = rsa->decrypt(newPacket->_data);
-        newPacket->_encrypted = false;
-    }
 
     return (newPacket);
 }
 
 //get bytestream from packet
 std::vector<unsigned char> *
-Packet::build(Rsa *rsa)
+Packet::build()
 {
     unsigned char *magic_ptr;
     unsigned char *size_ptr;
     unsigned char *type_ptr;
-    unsigned char *encryption_ptr;
 
     unsigned int magic = _MAGIC_;
     unsigned int length = static_cast<unsigned int>(this->_data.size());
-    unsigned int encryption = (rsa == NULL ? 0 : 1);
 
     magic_ptr = reinterpret_cast<unsigned char *>(&magic);
     size_ptr = reinterpret_cast<unsigned char *>(&length);
     type_ptr = reinterpret_cast<unsigned char *>(&this->_type);
-    encryption_ptr = reinterpret_cast<unsigned char *>(&encryption);
 
     //allocate
     std::vector<unsigned char> *build = new std::vector<unsigned char>(Packet::getHeaderSize());
@@ -215,20 +197,8 @@ Packet::build(Rsa *rsa)
         (*build)[i + sizeof(unsigned int) * 1] = type_ptr[i];
         //size!
         (*build)[i + sizeof(unsigned int) * 2] = size_ptr[i];
-        //encryption
-        (*build)[i + sizeof(unsigned int) * 3] = encryption_ptr[i];
     }
-    if (rsa != NULL)
-    {
-        std::vector<unsigned char> crypt = rsa->encrypt(this->_data);
-        build->insert(build->end(), crypt.begin(), crypt.end());
-        //rewrite size
-        length = crypt.size();
-        for (unsigned int i = 0; i < sizeof(unsigned int); i++)
-            (*build)[i + sizeof(unsigned int) * 2] = size_ptr[i];
-    }
-    else
-        build->insert(build->end(), this->_data.begin(), this->_data.end());
+    build->insert(build->end(), this->_data.begin(), this->_data.end());
     return (build);
 }
 
@@ -281,25 +251,6 @@ Packet::getIntVector()
         }
     }
     return (tmp);
-}
-
-Rsa *
-Packet::getRsa()
-{
-    Rsa *result = NULL;
-
-    if (this->_type == Packet::SSLPublicKey)
-    {
-        try
-        {
-            result = new Rsa(this->_data);
-        }
-        catch (std::exception &e)
-        {
-            std::cerr << e.what() << std::endl;
-        }
-    }
-    return (result);
 }
 
 Instruction *

@@ -6,6 +6,7 @@
 
 GameRoom::GameRoom(const std::string &name, User *owner) : name(name), state(Waiting), owner(owner)
 {
+    this->th = NULL;
     std::cout << "New Room : " << name << "; Creator : " << owner->getName() << std::endl;
     this->users.push_back(owner);
     owner->attachRoom(this);
@@ -134,6 +135,93 @@ GameRoom::getUsersInstruction() const {
 }
 
 bool
-GameRoom::startGame(User *user) const {
-    return false;
+GameRoom::startGame(User *user) {
+
+    RTypeServer *server = RTypeServer::getInstance();
+    ISocket *sock;
+    bool res = false;
+    IMutex *mutex = (*MutexVault::getMutexVault())["room" + this->name];
+
+    std::cout << "starting" << std::endl;
+    mutex->lock(true);
+    if (this->getState() != GameRoom::Running && user == this->owner)
+    {
+        res = true;
+        this->th = new LinuxThread<void, GameRoom *>(GameRoom::gameLoop);
+        this->state = GameRoom::Running;
+        (*this->th)(this);
+        for (std::vector<User *>::iterator it = this->users.begin(); it != this->users.end(); it++)
+        {
+            if ((sock = server->getUserSocket(*it)) != NULL)
+                sock->attachOnReceive(RTypeServer::tcpHold);
+        }
+    }
+    mutex->unlock();
+    return (res);
+}
+
+unsigned int
+GameRoom::getUserNo(User *user) const {
+
+    unsigned int userNo = 0;
+    for (std::vector<User *>::const_iterator it = this->users.begin(); it != this->users.end(); it++) {
+        if (*it == user)
+            return (userNo);
+        userNo++;
+    }
+
+    return (userNo);
+}
+
+void
+GameRoom::gameLoop(unsigned int threadId, GameRoom *room) {
+
+    IMutex *mutex = (*MutexVault::getMutexVault())["instantiation"];
+    mutex->lock(true);
+
+    Window					window("R-Type");
+    OnLevel					gameplay;
+    Level					level("../Data/level1.xml");
+
+    try
+    {
+        srand(time(NULL));
+        gameplay.loadLevel(&level);
+        window.attachGameplay(dynamic_cast<IGameplay *>(&gameplay));
+
+        window.launchWindow();
+        mutex->unlock();
+        while (window.isOpen() && room->getState() == GameRoom::Running)
+        {
+            window.callGameplay();
+            window.draw(gameplay);
+        }
+    }
+    catch (const RTypeException &err)
+    {
+        std::cerr << "RType Exception: " << err.what() << std::endl;
+        system("pause");
+        mutex->unlock();
+    }
+    catch (const std::exception &err)
+    {
+        std::cerr << "std::exception: " << err.what() << std::endl;
+        system("pause");
+        mutex->unlock();
+    }
+}
+
+void
+GameRoom::sendToEveryUser(Packet *p) {
+
+    ISocket *sock;
+    IMutex *mutex = (*MutexVault::getMutexVault())["room" + this->name];
+
+    mutex->lock(true);
+    for (std::vector<User *>::iterator it = this->users.begin(); it != this->users.end(); it++) {
+        if ((sock = RTypeServer::getInstance()->getUserSocket(*it)) != NULL)
+            sock->writePacket(p, 0, false);
+    }
+    delete p;
+    mutex->unlock();
 }

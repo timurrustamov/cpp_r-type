@@ -75,7 +75,7 @@ void					Explosion::interact(Object *object)
 	Geometry *geo1 = this->geometry;
 	Geometry *geo2 = object->geometry;
 
-	if (this->timer.eventDone("impulseEnd") || object->getType() == Object::Radiation || object->getType() == Object::Type::Other)
+	if (this->timer.eventDone("impulseEnd") || object->getType() == Object::Radiation || object->getType() == Object::Other)
 		return;
 	geo2->applyImpulse((geo2->getPosition() - geo1->getPosition()).normalize() * static_cast<float>(this->impulseFactor) / 10, 0.1);
 }

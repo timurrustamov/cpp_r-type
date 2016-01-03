@@ -12,7 +12,6 @@ ISocket::ISocket(Type type) : _type(type)
     this->_onConnect = NULL;
     this->_onReceive = NULL;
     this->_onDisconnect = NULL;
-    this->_recvRsa = new Rsa();
     this->_mustEncrypt = false;
 };
 
@@ -21,7 +20,6 @@ ISocket::ISocket(Type type, const std::string &ip, int port) : _type(type), _ip(
     this->_onConnect = NULL;
     this->_onReceive = NULL;
     this->_onDisconnect = NULL;
-    this->_recvRsa = new Rsa();
     this->_mustEncrypt = false;
 };
 
@@ -88,9 +86,6 @@ ISocket::addNewClient(ISocket *newClient)
     if ((handler[2] = this->getOnDisconnect()) != NULL)
         newClient->attachOnDisconnect(handler[2]);
 
-    //inherit rsa
-    newClient->_recvRsa = this->getRecvRsa();
-
     IMutex *_targetList = (*MutexVault::getMutexVault())["serverTargets"];
     _targetList->lock(true);
     this->_targets.push_back(newClient);
@@ -138,7 +133,7 @@ ISocket::readPacket()
             data.push_back(this->_read_buffer[i]);
         this->_read_buffer.erase(this->_read_buffer.begin(), this->_read_buffer.begin() + totalSize);
         mutex->unlock();
-        return (Packet::fromStream(data, (this->_mustEncrypt ? this->getRecvRsa() : NULL)));
+        return (Packet::fromStream(data));
     }
     mutex->unlock();
     return (NULL);
@@ -175,7 +170,7 @@ ISocket::writePacket(Packet *packet, unsigned int id, bool del)
 {
     std::vector<unsigned char> *write;
 
-    write = packet->build((this->_mustEncrypt ? this->getSendRsa() : NULL));
+    write = packet->build();
     this->write(*write, id);
     if (del)
         delete write;
@@ -325,44 +320,6 @@ ISocket::getOnDisconnect() const
     ret = this->_onDisconnect;
     mutex->unlock();
     return (ret);
-}
-
-void
-ISocket::attachRsa(Rsa *rsa)
-{
-    IMutex *mutex;
-
-    mutex = (*MutexVault::getMutexVault())["sendRsa" + MutexVault::toString(this->_id)];
-    mutex->lock(true);
-    this->_sendRsa = rsa;
-    this->_mustEncrypt = true;
-    mutex->unlock();
-}
-
-Rsa *
-ISocket::getSendRsa() const
-{
-    IMutex  *mutex;
-    Rsa     *ptr;
-
-    mutex = (*MutexVault::getMutexVault())["sendRsa" + MutexVault::toString(this->_id)];
-    mutex->lock(true);
-    ptr = this->_sendRsa;
-    mutex->unlock();
-    return (ptr);
-}
-
-Rsa *
-ISocket::getRecvRsa() const
-{
-    IMutex  *mutex;
-    Rsa     *ptr;
-
-    mutex = (*MutexVault::getMutexVault())["recvRsa" + MutexVault::toString(this->_id)];
-    mutex->lock(true);
-    ptr = this->_recvRsa;
-    mutex->unlock();
-    return (ptr);
 }
 
 void

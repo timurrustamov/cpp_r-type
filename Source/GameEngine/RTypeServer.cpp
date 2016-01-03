@@ -18,11 +18,19 @@ RTypeServer::RTypeServer(int tcpPort, int udpPort)
 
 RTypeServer::~RTypeServer()
 {
+    for (std::map<ISocket *, User *>::iterator it = this->userLinks.begin(); it != this->userLinks.end(); it++) {
+
+        if (it->second->getRoom() != NULL)
+            it->second->getRoom()->removeAllUsers();
+        delete it->second;
+    }
+    for (std::vector<GameRoom *>::iterator it = this->rooms.begin(); it != this->rooms.end(); it++)
+        delete *it;
+    this->rooms.clear();
+    this->userLinks.clear();
     this->tcpServer->cancel();
     this->udpServer->cancel();
     sleep(1);
-    for (std::map<ISocket *, User *>::iterator it = this->userLinks.begin(); it != this->userLinks.end(); it++)
-        delete it->second;
     delete this->tcpServer;
     delete this->udpServer;
 }
@@ -270,8 +278,9 @@ RTypeServer::tcpWaitingRoom(ISocket *client) {
     Packet *packet;
     Instruction ko(Instruction::KO);
     Instruction *instruct;
+    RTypeServer *server = RTypeServer::getInstance();
 
-    if (RTypeServer::getInstance()->userLinks[client]->getRoom() == NULL)
+    if (server->userLinks[client]->getRoom() == NULL)
     {
         client->attachOnReceive(RTypeServer::tcpMemberRoom);
         return (client->getOnReceive()(client));
@@ -279,22 +288,62 @@ RTypeServer::tcpWaitingRoom(ISocket *client) {
     //get packet
     while ((packet = client->readPacket()) != NULL) {
 
+        std::cout << "got packet" << std::endl;
         if (packet->getType() == Packet::Instruct &&
             (instruct = packet->unpack<Instruction>()) != NULL)
         {
             if (instruct->getInstruct() == Instruction::LEAVE_ROOM &&
-                    RTypeServer::getInstance()->leaveRoom(RTypeServer::getInstance()->userLinks[client]))
+                    server->leaveRoom(server->userLinks[client]))
             {
                 Instruction i(Instruction::OK);
                 client->writePacket(Packet::pack(i));
             }
             else if (instruct->getInstruct() == Instruction::GETALLUSERSINROOM)
             {
-                Instruction i = RTypeServer::getInstance()->userLinks[client]->getRoom()->getUsersInstruction();
+                Instruction i = server->userLinks[client]->getRoom()->getUsersInstruction();
                 client->writePacket(Packet::pack(i));
+            }
+            else if (instruct->getInstruct() == Instruction::START_GAME)
+            {
+                std::cout << "START" << std::endl;
+                if (!server->userLinks[client]->getRoom()->startGame(server->userLinks[client]))
+                    client->writePacket(Packet::pack(ko));
+                else {
+                    Instruction i(Instruction::START_GAME);
+                    server->userLinks[client]->getRoom()->sendToEveryUser(Packet::pack(i));
+                }
             }
             else
                 client->writePacket(Packet::pack(ko));
+
+            delete instruct;
+        }
+        delete packet;
+    }
+}
+
+void
+RTypeServer::tcpGamePlay(ISocket *client) {
+
+    Packet *packet;
+    Instruction ko(Instruction::KO);
+    unsigned int playerId;
+    std::vector<int> *instruct;
+    GameRoom *room;
+
+    if ((room = RTypeServer::getInstance()->userLinks[client]->getRoom()) == NULL)
+    {
+        client->attachOnReceive(RTypeServer::tcpMemberRoom);
+        return (client->getOnReceive()(client));
+    }
+    playerId = room->getUserNo(RTypeServer::getInstance()->userLinks[client]);
+
+    //get packet
+    while ((packet = client->readPacket()) != NULL) {
+
+        if (packet->getType() == Packet::IntVector &&
+            (instruct = packet->unpack<std::vector<int> >()) != NULL)
+        {
 
             delete instruct;
         }
@@ -397,4 +446,12 @@ ISocket *RTypeServer::getUserSocket(User *user) {
         }
     mutex->unlock();
     return (client);
+}
+
+void RTypeServer::tcpHold(ISocket *client) {
+
+    IMutex *mutex = (*MutexVault::getMutexVault())["instantiation"];
+    mutex->lock(true);
+    client->attachOnReceive(RTypeServer::tcpGamePlay);
+    mutex->unlock();
 }

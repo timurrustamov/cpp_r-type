@@ -33,15 +33,22 @@ public:
     GameRoom(const std::string &name, User *);
     ~GameRoom()
     {
+        this->setState(GameRoom::Error, this->owner);
+        usleep(1000);
         this->removeAllUsers();
+        if (this->th != NULL)
+            delete this->th;
     };
 
+    void sendToEveryUser(Packet *p);
+    static void gameLoop(unsigned int threadId, GameRoom *);
     const std::string &getName() const;
     bool addUser(User *);
     bool removeUser(User *);
     bool removeAllUsers();
     bool hasUser(User *) const;
-    bool startGame(User *) const;
+    bool startGame(User *);
+    unsigned int getUserNo(User *) const;
     const std::vector<User *> &getUsers() const;
     Instruction getUsersInstruction() const;
     bool setState(State state, User *owner);
@@ -50,14 +57,11 @@ public:
     User *owner;
 protected:
 
+    IThread<void, GameRoom *> *th;
     std::string name;
     State state;
     //not own those ptrs
     std::vector<User *> users;
-
-    Window	*window;
-    OnLevel	*gameplay;
-    Level *level;
 };
 
 

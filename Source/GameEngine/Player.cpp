@@ -89,6 +89,27 @@ void					Player::interact(Object *object)
     }
 }
 
+void					Player::move(std::vector<sf::Keyboard::Key> keys)
+{
+	if (std::find(keys.begin(), keys.end(), sf::Keyboard::Left) != keys.end())
+		this->geometry->addImpulse(t2Vector<float>(-5, 0));
+	if (std::find(keys.begin(), keys.end(), sf::Keyboard::Right) != keys.end())
+		this->geometry->addImpulse(t2Vector<float>(5, 0));
+	if (std::find(keys.begin(), keys.end(), sf::Keyboard::Up) != keys.end())
+		this->geometry->addImpulse(t2Vector<float>(0, -5));
+	if (std::find(keys.begin(), keys.end(), sf::Keyboard::Down) != keys.end())
+		this->geometry->addImpulse(t2Vector<float>(0, 5));
+
+	if (std::find(keys.begin(), keys.end(), sf::Keyboard::C) != keys.end())
+		this->chargeShot();
+	else
+	{
+		this->unleashShot();
+		if (std::find(keys.begin(), keys.end(), sf::Keyboard::Space) != keys.end())
+			this->laser(Laser::Shot);
+	}
+}
+
 void					Player::lateUpdate()
 {
 	this->entity->setPosition(this->geometry->getPosition() - this->geometry->getSize() / 2);
@@ -99,7 +120,6 @@ void					Player::lateUpdate()
 		this->timer.reset("loadingChargeShot");
 	}
 
-	
 	if (this->geometry->getVelocity().getY() > this->geometry->getMaxVelocity() - 10)
 		this->entity->setState(0);
 	else if (this->geometry->getVelocity().getY() > this->geometry->getMaxVelocity() / 2)
