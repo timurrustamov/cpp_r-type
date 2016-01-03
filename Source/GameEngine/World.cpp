@@ -2,6 +2,7 @@
 // Created by rustam_t on 12/8/15.
 //
 
+#include <SFML/Window/Keyboard.hpp>
 #include "GameData.h"
 #include "World.hpp"
 #include "IMutex.hpp"
@@ -44,18 +45,18 @@ World::~World()
 unsigned int						World::createNewObject(Object *newobj) {
     Player *playerptr = dynamic_cast<Player *>(newobj);
 
-    //IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
+    IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
 
-    //mutex->lock(true);
+    mutex->lock(true);
     if (playerptr != NULL) {
 
-       // mutex->unlock();
+        mutex->unlock();
         return (BAD_ID);
     }
     this->_objects[newobj->getId()] = newobj;
     this->_qt.insert(newobj->geometry);
 	newobj->start();
-    //mutex->unlock();
+    mutex->unlock();
     return (newobj->getId());
 }
 
@@ -158,15 +159,33 @@ World::createNewObject(unsigned int identifier, SerializedObject *serializedObje
 
     unsigned int id = BAD_ID;
 
-    //IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
+    IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
 
-    //mutex->lock(true);
+    mutex->lock(true);
 	if (this->_samples.find(identifier) != this->_samples.end())
 	{
 		id = this->createNewObject(this->_samples[identifier]->clone(serializedObject));
 		if (this->_samples[identifier]->getType() == Object::Character)
 			this->_playersId[this->_samples[identifier]->getIdentifier()] = id;
 	}
-    //mutex->unlock();
+    mutex->unlock();
 	return (id);
+}
+
+World &World::loadPlayerActions(unsigned int playerNo, std::vector<int> *actions) {
+
+    IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
+    std::vector<sf::Keyboard::Key> keys;
+
+    mutex->lock(true);
+    Object *player;
+    Player *truePlayer;
+    if ((player = this->getPlayerObject(playerNo)) != NULL && (truePlayer = dynamic_cast<Player *>(player)) != NULL)
+    {
+        for (std::vector<int>::iterator it = actions->begin(); it != actions->end(); it++)
+            keys.push_back(static_cast<sf::Keyboard::Key>(*it));
+        truePlayer->move(keys);
+    }
+    mutex->unlock();
+    return (*this);
 }

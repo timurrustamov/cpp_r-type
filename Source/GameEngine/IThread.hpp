@@ -81,7 +81,7 @@ public:
 		return (this->_param);
 	}
 
-	virtual bool operator()(U param) = 0;
+	virtual bool operator()(U param) {};
 
 	bool lock(bool wait)
 	{
@@ -103,7 +103,7 @@ public:
 		return (mutex->unlock());
 	}
 
-	virtual bool stop() = 0;
+	virtual bool stop() {};
 	
 };
 

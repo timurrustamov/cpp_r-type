@@ -92,6 +92,7 @@ public:
     Snapshot							*getSnapshot();
     World								&loadSnapshot(Snapshot *);
     World								&tick(float seconds);
+    World                               &loadPlayerActions(unsigned int playerNo, std::vector<int> *actions);
 
     Object								*getPlayerObject(unsigned int playerNo)
     {

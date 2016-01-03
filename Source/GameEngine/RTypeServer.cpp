@@ -270,8 +270,9 @@ RTypeServer::tcpWaitingRoom(ISocket *client) {
     Packet *packet;
     Instruction ko(Instruction::KO);
     Instruction *instruct;
+    RTypeServer *server = RTypeServer::getInstance();
 
-    if (RTypeServer::getInstance()->userLinks[client]->getRoom() == NULL)
+    if (server->userLinks[client]->getRoom() == NULL)
     {
         client->attachOnReceive(RTypeServer::tcpMemberRoom);
         return (client->getOnReceive()(client));
@@ -283,19 +284,56 @@ RTypeServer::tcpWaitingRoom(ISocket *client) {
             (instruct = packet->unpack<Instruction>()) != NULL)
         {
             if (instruct->getInstruct() == Instruction::LEAVE_ROOM &&
-                    RTypeServer::getInstance()->leaveRoom(RTypeServer::getInstance()->userLinks[client]))
+                    server->leaveRoom(server->userLinks[client]))
             {
                 Instruction i(Instruction::OK);
                 client->writePacket(Packet::pack(i));
             }
             else if (instruct->getInstruct() == Instruction::GETALLUSERSINROOM)
             {
-                Instruction i = RTypeServer::getInstance()->userLinks[client]->getRoom()->getUsersInstruction();
+                Instruction i = server->userLinks[client]->getRoom()->getUsersInstruction();
                 client->writePacket(Packet::pack(i));
+            }
+            else if (instruct->getInstruct() == Instruction::START_GAME)
+            {
+                if (server->userLinks[client]->getRoom()->startGame(server->userLinks[client]))
+                    client->writePacket(Packet::pack(ko));
+                else {
+                    Instruction i(Instruction::START_GAME);
+                    server->userLinks[client]->getRoom()->sendToEveryUser(Packet::pack(i));
+                }
             }
             else
                 client->writePacket(Packet::pack(ko));
 
+            delete instruct;
+        }
+        delete packet;
+    }
+}
+
+void
+RTypeServer::tcpGamePlay(ISocket *client) {
+
+    Packet *packet;
+    Instruction ko(Instruction::KO);
+    unsigned int playerId;
+    std::vector<int> *instruct;
+    GameRoom *room;
+
+    if ((room = RTypeServer::getInstance()->userLinks[client]->getRoom()) == NULL)
+    {
+        client->attachOnReceive(RTypeServer::tcpMemberRoom);
+        return (client->getOnReceive()(client));
+    }
+    playerId = room->getUserNo(RTypeServer::getInstance()->userLinks[client]);
+
+    //get packet
+    while ((packet = client->readPacket()) != NULL) {
+
+        if (packet->getType() == Packet::IntVector &&
+            (instruct = packet->unpack<std::vector<int> >()) != NULL)
+        {
             delete instruct;
         }
         delete packet;
@@ -397,4 +435,12 @@ ISocket *RTypeServer::getUserSocket(User *user) {
         }
     mutex->unlock();
     return (client);
+}
+
+void RTypeServer::tcpHold(ISocket *client) {
+
+    IMutex *mutex = (*MutexVault::getMutexVault())["instantiation"];
+    mutex->lock(true);
+    client->attachOnReceive(RTypeServer::tcpGamePlay);
+    mutex->unlock();
 }

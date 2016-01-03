@@ -38,6 +38,8 @@ public:
     static void tcpGuestRoom(ISocket *client);
     static void tcpMemberRoom(ISocket *client);
     static void tcpWaitingRoom(ISocket *client);
+    static void tcpHold(ISocket *client);
+    static void tcpGamePlay(ISocket *client);
 
 protected:
 

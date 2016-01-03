@@ -6,6 +6,7 @@
 # define CPP_R_TYPECPY2_PLAYER_HPP
 
 # include				<cstddef>
+# include				<SFML/Window/Event.hpp>
 # include				"Rocket.hpp"
 # include				"Laser.h"
 # include				"../System/Animation.h"
@@ -25,6 +26,7 @@ public:
 	virtual void		lateUpdate();
 	virtual void		start();
 
+	void 				move(std::vector<sf::Keyboard::Key> key);
 	void				launchRocket(Rocket::Type type);
 	void				laser(Laser::Type type);
 	void				chargeShot();

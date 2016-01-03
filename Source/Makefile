@@ -34,7 +34,8 @@ SRC_GAME	=		main.cpp			\
 				GameEngine/Explosion.cpp	\
 				GameEngine/Instruction.cpp	\
 				Monsters/Meteora.cpp      \
-				GameEngine/RTypeServer.cpp	
+				GameEngine/RTypeServer.cpp	   \
+				Monsters/Nautilus.cpp
 
 OBJ_GAME	=		$(SRC_GAME:.cpp=.o)
 
@@ -71,7 +72,8 @@ SRC_GAME_CL	=	main_client.cpp			\
 				GameEngine/Explosion.cpp	\
 				GameEngine/Instruction.cpp	\
 				GameEngine/RTypeServer.cpp  \
-				Monsters/Meteora.cpp
+				Monsters/Meteora.cpp        \
+				Monsters/Nautilus.cpp
 
 OBJ_GAME_CL	=		$(SRC_GAME_CL:.cpp=.o)
 
@@ -108,7 +110,8 @@ SRC_SERV	=		serv_test.cpp			\
 				GameEngine/Explosion.cpp	\
 				GameEngine/Instruction.cpp	\
 				GameEngine/RTypeServer.cpp	\
-				Monsters/Meteora.cpp
+				Monsters/Meteora.cpp        \
+                Monsters/Nautilus.cpp
 
 OBJ_SERV	=	$(SRC_SERV:.cpp=.o)
 
@@ -145,7 +148,8 @@ SRC_CLIENT	=		System/Animation.cpp		\
 				GameEngine/Instruction.cpp	\
 				GameEngine/RTypeServer.cpp	\
 				clie_test.cpp               \
-				Monsters/Meteora.cpp
+				Monsters/Meteora.cpp        \
+                Monsters/Nautilus.cpp
 
 OBJ_CLIENT	=	$(SRC_CLIENT:.cpp=.o)
 

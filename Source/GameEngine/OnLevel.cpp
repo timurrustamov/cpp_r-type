@@ -42,7 +42,7 @@ void					OnLevel::loadLevel(Level *newLevel)
 	this->timer.addNewEvent("meteoraSpawn", 3);
 	this->world->addSample(new Monster("BasicShip")); // A MODIFIER
 	this->world->addSample(new Monster("Meteora")); // A MODIFIER
-	this->world->addSample(new Monster("Nautilus")); // A MODIFIER
+	//this->world->addSample(new Monster("Nautilus")); // A MODIFIER
 	this->level->loadIdentifiers();
 	
 	this->world->createNewPlayer(t2Vector<unsigned int>(this->gameData->getWidth() / 10, this->gameData->getHeight() / 2), 0);
