@@ -1,7 +1,7 @@
 #include "ISocket.h"
 #include "Packet.h"
 #ifdef WIN32
-#include "Windows\WinSocket.hpp"
+#include "../System/WinSocket.h"
 #else
 #include "LinuxSocket.h"
 #endif

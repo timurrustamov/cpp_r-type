@@ -117,6 +117,36 @@
     <ClCompile Include="..\Source\Monsters\Robot.cpp">
       <Filter>Fichiers sources\Monsters</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\BBException.cpp">
+      <Filter>Fichiers sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\GameRoom.cpp">
+      <Filter>Fichiers sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Instruction.cpp">
+      <Filter>Fichiers sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\ISocket.cpp">
+      <Filter>Fichiers sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\MutexVault.cpp">
+      <Filter>Fichiers sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Packet.cpp">
+      <Filter>Fichiers sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\RTypeClient.cpp">
+      <Filter>Fichiers sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\RTypeServer.cpp">
+      <Filter>Fichiers sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\User.cpp">
+      <Filter>Fichiers sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\System\WinSocket.cpp">
+      <Filter>Fichiers sources\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\GameEngine\QuadTree.hpp">
@@ -208,6 +238,51 @@
     </ClInclude>
     <ClInclude Include="..\Source\Monsters\Robot.h">
       <Filter>Fichiers d%27en-tête\Monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\BBException.hpp">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\GameRoom.hpp">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\IMutex.hpp">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Instruction.h">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\ISocket.h">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\IThread.hpp">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\MutexVault.hpp">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Packet.h">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\RTypeClient.hpp">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\RTypeServer.hpp">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\User.hpp">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\System\WinCriticalSession.hpp">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\System\WinMutex.hpp">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\System\WinSocket.h">
+      <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\System\WinThread.hpp">
+      <Filter>Fichiers d%27en-tête\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

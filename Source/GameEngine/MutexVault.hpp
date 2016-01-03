@@ -4,6 +4,7 @@
 
 #if defined(_WIN32) && !defined(WIN32)
 # define _WINSOCKAPI_
+# define NOGDI
 # include <windows.h>
 # define WIN32
 #endif

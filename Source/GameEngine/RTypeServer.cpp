@@ -30,7 +30,11 @@ RTypeServer::~RTypeServer()
     this->userLinks.clear();
     this->tcpServer->cancel();
     this->udpServer->cancel();
-    sleep(1);
+	#ifdef _WIN_32
+		Sleep(1000);
+	#else
+		sleep(1);
+	#endif
     delete this->tcpServer;
     delete this->udpServer;
 }

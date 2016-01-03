@@ -34,7 +34,11 @@ public:
     ~GameRoom()
     {
         this->setState(GameRoom::Error, this->owner);
-        usleep(1000);
+		#ifdef _WIN_32
+				Sleep(10);
+		#else
+				usleep(1000);
+		#endif
         this->removeAllUsers();
         if (this->th != NULL)
             delete this->th;

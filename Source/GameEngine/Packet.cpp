@@ -154,7 +154,7 @@ Packet::fromStream(std::vector<unsigned char> &data)
 
     if (*r_magic != _MAGIC_ || *r_size + headerSize > data.size())
     {
-        std::cout << (int)(*r_size) << std::cout;
+        std::cout << (int)(*r_size) << std::endl;
         if (*r_magic != _MAGIC_)
             std::cout << "magic" << std::endl;
         if (*r_size + headerSize < data.size())
