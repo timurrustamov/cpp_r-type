@@ -16,7 +16,7 @@ class Nautilus :				public IMonsterBehaviour
 
 public:
 	Nautilus() {};
-	~Nautilus() {};
+	~Nautilus() { delete this->entity; };
 
 	virtual void				lateUpdate();
 	virtual void				interact(Object *);

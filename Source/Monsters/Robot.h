@@ -1,20 +1,21 @@
-#ifndef METEORA_H_
-# define METEORA_H_
+#ifndef ROBOT_H_
+# define ROBOT_H_
 
 # include						"../GameEngine/Object.h"
 # include						"../GameEngine/IMonsterBehaviour.h"
 
-class Meteora :					public IMonsterBehaviour
+class Robot :					public IMonsterBehaviour
 {
 	int							life;
+	bool						freeFall;
 	Object						*object;
 	Animation					*animation;
 	Animation					*animationHit;
 	AnimationEntity				*entity;
 
 public:
-	Meteora() {};
-	~Meteora() { delete this->entity; };
+	Robot() {};
+	~Robot() { delete this->entity; };
 
 	virtual void				lateUpdate();
 	virtual void				interact(Object *);
@@ -23,4 +24,4 @@ public:
 	virtual void				onDestroy();
 };
 
-#endif /* !METEORA_H_ */
+#endif /* !ROBOT_H_ */

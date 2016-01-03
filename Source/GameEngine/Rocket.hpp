@@ -22,7 +22,7 @@ public:
 	};
 
     Rocket(Rocket::Type type, t2Vector<int> position);
-    virtual ~Rocket() {};
+    virtual ~Rocket() { delete this->entity; };
 
 	virtual Object			*clone(SerializedObject *serializedObject);
     virtual void			interact(Object *);

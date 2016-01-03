@@ -14,7 +14,7 @@ class BasicShip :				public IMonsterBehaviour
 
 public:
 	BasicShip() {};
-	~BasicShip() {};
+	~BasicShip() { delete this->entity; };
 
 	virtual void				lateUpdate();
 	virtual void				interact(Object *);

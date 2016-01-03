@@ -17,7 +17,7 @@ public:
 	};
 
 	Laser(Laser::Type type, t2Vector<int> position);
-	virtual ~Laser() {};
+	virtual ~Laser() { delete this->entity; };
 
 	virtual Object			*clone(SerializedObject *serializedObject);
 	virtual void			interact(Object *);
