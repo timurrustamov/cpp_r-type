@@ -55,6 +55,7 @@
     <ClCompile Include="..\Source\Monsters\BasicShip.cpp" />
     <ClCompile Include="..\Source\Monsters\Meteora.cpp" />
     <ClCompile Include="..\Source\Monsters\Nautilus.cpp" />
+    <ClCompile Include="..\Source\Monsters\Robot.cpp" />
     <ClCompile Include="..\Source\System\Animation.cpp" />
     <ClCompile Include="..\Source\System\ResourcesBank.cpp" />
     <ClCompile Include="..\Source\System\RTypeException.cpp" />
@@ -102,6 +103,7 @@
     <ClInclude Include="..\Source\Monsters\BasicShip.h" />
     <ClInclude Include="..\Source\Monsters\Meteora.h" />
     <ClInclude Include="..\Source\Monsters\Nautilus.h" />
+    <ClInclude Include="..\Source\Monsters\Robot.h" />
     <ClInclude Include="..\Source\System\Animation.h" />
     <ClInclude Include="..\Source\System\ResourcesBank.h" />
     <ClInclude Include="..\Source\System\RTypeException.h" />

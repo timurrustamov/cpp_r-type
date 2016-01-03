@@ -1,11 +1,13 @@
 #include					<iostream>
 #include					"System/window.h"
+#include					"GameEngine/GameData.h"
 #include					"GameEngine/OnLevel.h"
-#include 					"GameEngine/ISocket.h"
+//#include 					"GameEngine/ISocket.h"
 
 #include					"System/Animation.h"
 #include					"System/ResourcesBank.h"
 
+/*
 void                        sendUdp(World *world)
 {
 	std::cout << "send udp" << std::endl;
@@ -37,16 +39,17 @@ void                        updGameHandler(ISocket *server)
 //		delete packet;
 //	}
 }
-
+*/
 int							main()
 {
 	Window					window("R-Type");
 	OnLevel					gameplay;
 	Level					level("../Data/level1.xml");
-	ISocket					*tcpServer = ISocket::getServer(4242, "TCP");
+	/*ISocket					*tcpServer = ISocket::getServer(4242, "TCP");
 
 	if (tcpServer->start() == -1)
 		std::cout << "Failed to start servers!" << std::endl;
+		*/
 	try
 	{
 		srand(time(NULL));

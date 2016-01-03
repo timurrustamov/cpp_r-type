@@ -15,7 +15,7 @@ public:
 	};
 
 	Artifices(Artifices::Type type, t2Vector<int> position = t2Vector<int>(0, 0));
-	virtual ~Artifices() {};
+	virtual ~Artifices() { delete this->entity; };
 
 	virtual Object			*clone(SerializedObject *serializedObject);
 	virtual void			interact(Object *);
