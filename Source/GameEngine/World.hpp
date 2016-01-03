@@ -23,87 +23,88 @@ class									World
 	std::map<unsigned int, Object *>	_objects;
 	std::vector<unsigned int>			_playersId;
 	QuadTree _qt;
-    std::map<unsigned int, Object *>    _samples;
+	std::map<unsigned int, Object *>    _samples;
 
 public:
 	World(t2Vector<int> size, bool verticalWalls = true, bool horizontalWalls = false);
-    ~World();
+	~World();
 
-    //transfer the ownership to world
-    World &                             addSample(Object *);
+	//transfer the ownership to world
+	World &                             addSample(Object *);
 
-    template <typename T>
-    unsigned int						createNewObject(const t2Vector<int> &position)
-    {
-        Object							*newobj;
+	template <typename T>
+	unsigned int						createNewObject(const t2Vector<int> &position)
+	{
+		Object							*newobj;
 
-        if (typeid(T) == typeid(Player))
-            return (BAD_ID);
-        newobj = new T(position);
-        this->_objects[newobj->getId()] = newobj;
-        this->_qt.insert(newobj->geometry);
+		if (typeid(T) == typeid(Player))
+			return (BAD_ID);
+		newobj = new T(position);
+		this->_objects[newobj->getId()] = newobj;
+		this->_qt.insert(newobj->geometry);
 
-        std::cout << newobj->getId() << std::endl;
-        return (newobj->getId());
-    };
+		std::cout << newobj->getId() << std::endl;
+		return (newobj->getId());
+	};
 
-    template							<typename T>
-    unsigned int						createNewObject(int x, int y)
-    {
-        return (this->createNewObject<T>(t2Vector<int>(x, y)));
-    };
+	template							<typename T>
+	unsigned int						createNewObject(int x, int y)
+	{
+		return (this->createNewObject<T>(t2Vector<int>(x, y)));
+	};
 
 	unsigned int						createNewObject(Object *object);
 
-    unsigned int                        createNewObject(Object::Type type);
+	unsigned int                        createNewObject(Object::Type type);
 
-    unsigned int                        createNewObject(unsigned int identifier, SerializedObject *serializedObject = NULL);
+	unsigned int                        createNewObject(unsigned int identifier, SerializedObject *serializedObject = NULL);
 
-    unsigned int						createNewPlayer(const t2Vector<int> &position, unsigned int playerNo)
-    {
-        Object *newobj;
-        unsigned int id;
-        IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
-        mutex->lock(true);
+	unsigned int						createNewPlayer(const t2Vector<int> &position, unsigned int playerNo)
+	{
+		Object *newobj;
+		unsigned int id;
+		IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
+		mutex->lock(true);
 
-        if (playerNo > MAX_PLAYERS) {
-            mutex->unlock();
-            return (BAD_ID);
-        }
-        if (this->_playersId[playerNo] != BAD_ID) {
+		if (playerNo > MAX_PLAYERS) {
+			mutex->unlock();
+			return (BAD_ID);
+		}
+		if (this->_playersId[playerNo] != BAD_ID) {
 
-            mutex->unlock();
-            return (this->_playersId[playerNo]);
-        }
-        newobj = new Player(position, playerNo);
+			mutex->unlock();
+			return (this->_playersId[playerNo]);
+		}
+		newobj = new Player(position, playerNo);
 		newobj->start();
-        id = newobj->getId();
-        this->_objects[id] = newobj;
-        this->_playersId[playerNo] = id;
-        mutex->unlock();
-        return (id);
-    }
+		id = newobj->getId();
+		this->_objects[id] = newobj;
+		this->_playersId[playerNo] = id;
+		mutex->unlock();
+		return (id);
+	}
 
-    unsigned int						createNewPlayer(int x, int y, unsigned int playerNo)
-    {
-        return (this->createNewPlayer(t2Vector<int>(x, y), playerNo));
-    }
+	unsigned int						createNewPlayer(int x, int y, unsigned int playerNo)
+	{
+		return (this->createNewPlayer(t2Vector<int>(x, y), playerNo));
+	}
 
-    Snapshot							*getSnapshot();
-    World								&loadSnapshot(Snapshot *);
-    World								&tick(float seconds);
+	Snapshot							*getSnapshot();
+	World								&loadSnapshot(Snapshot *);
+	World								&tick(float seconds);
+	World                               &loadPlayerActions(unsigned int playerNo, std::vector<int> *actions);
 
-    Object								*getPlayerObject(unsigned int playerNo)
-    {
-        if (playerNo > MAX_PLAYERS || this->_playersId[playerNo] == BAD_ID)
-            return (NULL);
-        return (this->_objects[this->_playersId[playerNo]]);
-    }
+	Object								*getPlayerObject(unsigned int playerNo)
+	{
+		if (playerNo > MAX_PLAYERS || this->_playersId[playerNo] == BAD_ID)
+			return (NULL);
+		return (this->_objects[this->_playersId[playerNo]]);
+	}
 
-    Object								*getObject(unsigned int objectId)
-    {
-        return (this->_objects[objectId]);
-    }
+	Object								*getObject(unsigned int objectId)
+	{
+		return (this->_objects[objectId]);
+	}
 };
 
 #endif /* !CPP_R_TYPE_WORLD_HPP */
