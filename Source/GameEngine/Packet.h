@@ -9,7 +9,6 @@
 #include <vector>
 #include <typeinfo>
 #include "Instruction.h"
-#include "Rsa.h"
 #include "SerializedObject.hpp"
 #include "Snapshot.hpp"
 #include "Level.h"
@@ -41,7 +40,6 @@ public:
     //object specific constructors
     Packet(const std::string &str);
     Packet(std::vector<int> &vec);
-    Packet(Rsa &);
     Packet(Instruction &);
     Packet(SerializedObject &);
     Packet(Snapshot &);
@@ -89,25 +87,19 @@ public:
     }
 
     //build a bytestream from the packet
-    std::vector<unsigned char>              *build(Rsa *rsa = NULL);
+    std::vector<unsigned char>              *build();
 
     //reconstruct the packet from vector stream which will be consumed if succeeded
-    static Packet                           *fromStream(std::vector<unsigned char> &data, Rsa *rsa = NULL);
+    static Packet                           *fromStream(std::vector<unsigned char> &data);
 
     //unpack the packet to get your object back
     template <typename T>
-    T *unpack(Rsa *rsa = NULL)
+    T *unpack()
     {
-        if (rsa != NULL && this->_encrypted) {
-            this->_data = rsa->decrypt(this->_data);
-            this->_encrypted = false;
-        }
         if (typeid(T) == typeid(std::string))
             return (reinterpret_cast<T *>(this->getString()));
         else if (typeid(T) == typeid(std::vector<int>))
             return (reinterpret_cast<T *>(this->getIntVector()));
-        else if (typeid(T) == typeid(Rsa))
-            return (reinterpret_cast<T *>(this->getRsa()));
         else if (typeid(T) == typeid(Instruction))
             return (reinterpret_cast<T *>(this->getInstruction()));
         else if (typeid(T) == typeid(SerializedObject))
@@ -140,7 +132,6 @@ protected:
 
     std::string                             *getString();
     std::vector<int>                        *getIntVector();
-    Rsa                                     *getRsa();
     Instruction                             *getInstruction();
     SerializedObject                        *getSerializedObject();
     Snapshot                                *getSnapshot();

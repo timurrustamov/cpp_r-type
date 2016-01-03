@@ -119,6 +119,11 @@ int             main(int ac, char **av)
             instruct.setInstruct(Instruction::LEAVE_ROOM);
             servTcp->writePacket(Packet::pack(instruct));
         }
+        else if (s == "start")
+        {
+            instruct.setInstruct(Instruction::START_GAME);
+            servTcp->writePacket(Packet::pack(instruct));
+        }
         //servUdp->writePacket(Packet::pack<std::string>(s));
     }
     servTcp->cancel();

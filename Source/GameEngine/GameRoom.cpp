@@ -6,6 +6,7 @@
 
 GameRoom::GameRoom(const std::string &name, User *owner) : name(name), state(Waiting), owner(owner)
 {
+    this->th = NULL;
     std::cout << "New Room : " << name << "; Creator : " << owner->getName() << std::endl;
     this->users.push_back(owner);
     owner->attachRoom(this);
@@ -141,11 +142,13 @@ GameRoom::startGame(User *user) {
     bool res = false;
     IMutex *mutex = (*MutexVault::getMutexVault())["room" + this->name];
 
+    std::cout << "starting" << std::endl;
     mutex->lock(true);
     if (this->getState() != GameRoom::Running && user == this->owner)
     {
         res = true;
-        this->th = new IThread<void, GameRoom *>(GameRoom::gameLoop);
+        this->th = new LinuxThread<void, GameRoom *>(GameRoom::gameLoop);
+        this->state = GameRoom::Running;
         (*this->th)(this);
         for (std::vector<User *>::iterator it = this->users.begin(); it != this->users.end(); it++)
         {
@@ -188,7 +191,7 @@ GameRoom::gameLoop(unsigned int threadId, GameRoom *room) {
 
         window.launchWindow();
         mutex->unlock();
-        while (window.isOpen())
+        while (window.isOpen() && room->getState() == GameRoom::Running)
         {
             window.callGameplay();
             window.draw(gameplay);

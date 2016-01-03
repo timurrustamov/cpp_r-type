@@ -33,7 +33,11 @@ public:
     GameRoom(const std::string &name, User *);
     ~GameRoom()
     {
+        this->setState(GameRoom::Error, this->owner);
+        usleep(1000);
         this->removeAllUsers();
+        if (this->th != NULL)
+            delete this->th;
     };
 
     void sendToEveryUser(Packet *p);

@@ -18,11 +18,19 @@ RTypeServer::RTypeServer(int tcpPort, int udpPort)
 
 RTypeServer::~RTypeServer()
 {
+    for (std::map<ISocket *, User *>::iterator it = this->userLinks.begin(); it != this->userLinks.end(); it++) {
+
+        if (it->second->getRoom() != NULL)
+            it->second->getRoom()->removeAllUsers();
+        delete it->second;
+    }
+    for (std::vector<GameRoom *>::iterator it = this->rooms.begin(); it != this->rooms.end(); it++)
+        delete *it;
+    this->rooms.clear();
+    this->userLinks.clear();
     this->tcpServer->cancel();
     this->udpServer->cancel();
     sleep(1);
-    for (std::map<ISocket *, User *>::iterator it = this->userLinks.begin(); it != this->userLinks.end(); it++)
-        delete it->second;
     delete this->tcpServer;
     delete this->udpServer;
 }
@@ -280,6 +288,7 @@ RTypeServer::tcpWaitingRoom(ISocket *client) {
     //get packet
     while ((packet = client->readPacket()) != NULL) {
 
+        std::cout << "got packet" << std::endl;
         if (packet->getType() == Packet::Instruct &&
             (instruct = packet->unpack<Instruction>()) != NULL)
         {
@@ -296,7 +305,8 @@ RTypeServer::tcpWaitingRoom(ISocket *client) {
             }
             else if (instruct->getInstruct() == Instruction::START_GAME)
             {
-                if (server->userLinks[client]->getRoom()->startGame(server->userLinks[client]))
+                std::cout << "START" << std::endl;
+                if (!server->userLinks[client]->getRoom()->startGame(server->userLinks[client]))
                     client->writePacket(Packet::pack(ko));
                 else {
                     Instruction i(Instruction::START_GAME);
@@ -334,6 +344,7 @@ RTypeServer::tcpGamePlay(ISocket *client) {
         if (packet->getType() == Packet::IntVector &&
             (instruct = packet->unpack<std::vector<int> >()) != NULL)
         {
+
             delete instruct;
         }
         delete packet;
