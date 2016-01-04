@@ -19,7 +19,6 @@
 
 #pragma comment(lib, "Ws2_32.lib")
 
-
 void            recvHandler(ISocket *client)
 {
     Packet *packet;
