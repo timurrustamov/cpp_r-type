@@ -12,7 +12,6 @@
 class LinuxMutex : public IMutex
 {
 public:
-
     LinuxMutex()
     {
         locknb = 0;
