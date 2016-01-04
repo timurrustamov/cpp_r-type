@@ -77,6 +77,6 @@ GameData::parseConfig(std::string &str) {
 unsigned int		GameData::getNewEntityId()
 {
 	if (++this->currentEntityId > MAX_ENTITIES)
-		throw (RTypeException(std::string("Too many entities maximum: ") + std::to_string(MAX_ENTITIES) + ")"));
+		throw (RTypeException("Too many entities maximum: "));
 	return (this->currentEntityId);
 }
