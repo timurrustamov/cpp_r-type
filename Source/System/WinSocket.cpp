@@ -161,17 +161,19 @@ WinSocket::WinSocket(int port, const std::string &proto) : ISocket(ISocket::Serv
 // CLIENT
 WinSocket::WinSocket(const std::string &ip, int port, const std::string &proto) : ISocket(ISocket::Client, ip, port)
 {
-	struct protoent				*pe;
+	//struct protoent				*pe;
 	struct addrinfo				hints;
 
+	/*
 	if ((pe = getprotobyname(proto.c_str())) == NULL)
 		throw BBException("getprotobyname failed");
+		*/
 
 	this->launchWSA();
 	ZeroMemory(&hints, sizeof(hints));
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_protocol = pe->p_proto;
+	hints.ai_protocol = IPPROTO_TCP;
 
 	if (getaddrinfo(ip.c_str(), std::to_string(port).c_str(), &hints, &this->_addrinfo) != 0)
 	{

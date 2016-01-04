@@ -127,7 +127,6 @@ World &
 World::loadSnapshot(Snapshot *snap)
 {
     IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
-    Player *p;
 
     mutex->lock();
     //look for integrity of objects

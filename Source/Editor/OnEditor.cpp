@@ -1,10 +1,10 @@
 #include				<iostream>
+#include				<dirent.h>
 #include				"../System/RTypeException.h"
 #include				"../System/Animation.h"
 #include				"../System/RTypeException.h"
 #include				"../GameEngine/Monster.h"
 #include				"OnEditor.h"
-#include				<dirent.h>
 
 static bool				hasEnding(std::string const &fullString, std::string const &ending)
 {

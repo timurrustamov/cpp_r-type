@@ -8,7 +8,6 @@
 #include <algorithm>
 #include <string>
 #include <vector>
-#include <unistd.h>
 #include "ISocket.h"
 #include "User.hpp"
 #include "RTypeServer.hpp"
@@ -18,7 +17,10 @@
 #include					"../System/Animation.h"
 #include					"../System/ResourcesBank.h"
 #include                    "IThread.hpp"
-#include "OnLevel.h"
+#include					"OnLevel.h"
+#ifndef _WIN_32
+ # include <unistd.h>
+#endif
 
 class User;
 
@@ -37,7 +39,11 @@ public:
     ~GameRoom()
     {
         this->setState(GameRoom::Error, this->owner);
-        usleep(1000);
+		#ifdef _WIN_32
+			Sleep(10);
+		#else
+			usleep(1000); 
+		#endif
         this->removeAllUsers();
     };
 

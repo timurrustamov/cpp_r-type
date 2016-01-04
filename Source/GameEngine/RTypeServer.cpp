@@ -315,7 +315,11 @@ RTypeServer::tcpWaitingRoom(ISocket *client) {
                     client->attachOnReceive(RTypeServer::tcpGamePlay);
                     server->userLinks[client]->getRoom()->sendToEveryUser(Packet::pack(i));
                 }
-                sleep(1);
+				#ifdef _WIN_32
+					Sleep(1000);
+				#else
+					sleep(1);
+				#endif
             }
             else
                 client->writePacket(Packet::pack(ko));
