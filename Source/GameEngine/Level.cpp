@@ -49,16 +49,6 @@ void								Level::load()
 
 	try
 	{
-		/*
-		gameData->resourceBank->setTexture("Player", "../Assets/Graphics/Sprites/r-typesheet1.png");
-		gameData->resourceBank->setTexture("Bullets", "../Assets/Graphics/Sprites/Bullets.png");
-
-		gameData->resourceBank->setTexture("Explode4", "../Assets/Graphics/Sprites/Explode4.png");
-		gameData->resourceBank->setTexture("Explode3", "../Assets/Graphics/Sprites/Explode3.png");
-		gameData->resourceBank->setTexture("Explode2", "../Assets/Graphics/Sprites/Explode2.png");
-		gameData->resourceBank->setTexture("Explode1", "../Assets/Graphics/Sprites/Explode1.png");
-		*/
-
 		gameData->resourceBank->setSoundBuffer("Explosion3", "../Assets/Sounds/SE/Bomb.ogg");
 		gameData->resourceBank->setSoundBuffer("Explosion2", "../Assets/Sounds/SE/Explosion2.ogg");
 		gameData->resourceBank->setSoundBuffer("Explosion1", "../Assets/Sounds/SE/Explosion1.ogg");

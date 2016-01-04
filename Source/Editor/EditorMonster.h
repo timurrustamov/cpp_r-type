@@ -10,6 +10,7 @@ class							EditorMonster : public EditorEntity
 
 public:
 	EditorMonster(std::string const &dll);
+	EditorMonster(EditorMonster &editorMonster);
 	~EditorMonster() {};
 };
 

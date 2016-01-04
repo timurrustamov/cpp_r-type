@@ -4,6 +4,8 @@
 # include									<map>
 # include									<vector>
 # include									<cstddef>
+# include									<SFML/Graphics.hpp>
+# include									<SFML/Graphics/Drawable.hpp>
 # include									"../GameEngine/IGameplay.h"
 # include									"../GameEngine/GameData.h"
 # include									"../System/Animation.h"
@@ -15,22 +17,29 @@
 
 class										OnEditor : public IGameplay
 {
+	unsigned int							id;
+
 	GameData								*gameData;
+	sf::Window								*window;
 	std::map<std::string, Animation *>		animations;
 
+	std::vector<EditorEntity>				backgroundBank;
 	std::vector<EditorMonster>				monsterBank;
 	std::vector<EditorEntity>				entityBank;
 
 	std::vector<EditorEntity>				storyLine;
 
+	EditorEntity							background;
 	AnimationEntity							layoutEntity;
 	AnimationEntity							backgroundEntity;
+	AnimationEntity							warningEntity;
 	Timer									timer;
 
 public:
-	OnEditor();
+	OnEditor(sf::Window *);
 	~OnEditor();
 
+	void									loadFromDirectory(std::string const &directory, std::vector<std::string> *storage = NULL);
 	void									keyPressed(sf::Keyboard::Key);
 	bool									mustCloseGame();
 	bool									mustSwitchFullscreen();

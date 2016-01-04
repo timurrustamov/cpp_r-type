@@ -2,6 +2,7 @@
 
 GameData::GameData() : fullscreen(false), mustQuit(false)
 {
+	this->currentEntityId = 0;
 	this->resourceBank = ResourcesBank::getInstance();
 	this->width = 1138;
 	this->height = 640;
@@ -71,4 +72,11 @@ GameData::parseConfig(std::string &str) {
 		_map[tmp.substr(0, a)] = tmp.substr(a + 1);
 	}
 	return _map;
+}
+
+unsigned int		GameData::getNewEntityId()
+{
+	if (++this->currentEntityId > MAX_ENTITIES)
+		throw (RTypeException(std::string("Too many entities maximum: ") + std::to_string(MAX_ENTITIES) + ")"));
+	return (this->currentEntityId);
 }

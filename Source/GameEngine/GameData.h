@@ -21,6 +21,7 @@
 # define S_LOCATION		"Graphics/Sprites/"
 
 # define MAX_IDENTIFIER	17
+# define MAX_ENTITIES	30
 
 class					GameData
 {
@@ -47,7 +48,7 @@ public:
 		ArtificeMeteoraExplosion
 	}; // MODIFY MAX_IDENTIFIER IF MODIFY
 private:
-
+	unsigned int		currentEntityId;
 	bool				fullscreen;
 	bool				mustQuit;
 	unsigned int		width;
@@ -71,6 +72,7 @@ public:
 	void				setWorld(t2Vector<int> size, bool verticalWalls = true, bool horizontalWalls = false);
 	unsigned int		getWidth() const;
 	unsigned int		getHeight() const;
+	unsigned int		getNewEntityId();
 };
 
 #endif /* !GAMEDATA_H_ */

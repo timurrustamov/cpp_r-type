@@ -12,3 +12,6 @@ EditorMonster::EditorMonster(std::string const &dllName) : EditorEntity(), dll(d
 	this->position = t2Vector<unsigned int>(0, 0);
 	this->range = static_cast<int>(sample.geometry->getSize().distanceTo(t2Vector<int>(0, 0)));
 }
+
+EditorMonster::EditorMonster(EditorMonster &other) : EditorEntity(other), dll(other.dll)
+{}

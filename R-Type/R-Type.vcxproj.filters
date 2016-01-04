@@ -165,6 +165,9 @@
     <ClCompile Include="..\Source\clie_test.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\editor.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\GameEngine\QuadTree.hpp">
