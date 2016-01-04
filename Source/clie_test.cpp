@@ -1,12 +1,24 @@
-#include "GameEngine/LinuxSocket.h"
+#if defined(_WIN32) && !defined(WIN32)
+# define _WINSOCKAPI_
+# define NOGDI
+# include <windows.h>
+# include "System/WinSocket.h"
+# define WIN32
+#else
+# include "GameEngine/LinuxSocket.h"
+#endif
 #include					"System/window.h"
 #include					"GameEngine/OnLevel.h"
 #include                    "GameEngine/ISocket.h"
+#include					"GameEngine/BBException.hpp"
 
 #include					"System/Animation.h"
 #include					"System/ResourcesBank.h"
 
-#include <algorithm>
+#include					<algorithm>
+
+#pragma comment(lib, "Ws2_32.lib")
+
 
 void            recvHandler(ISocket *client)
 {
@@ -61,7 +73,7 @@ ISocket *                        getClient()
     static ISocket *servTcp = NULL;
 
     if (servTcp == NULL) {
-        servTcp = ISocket::getClient("10.45.20.250", 4444, "TCP");
+        servTcp = ISocket::getClient("10.45.20.250", 4444, "tcp");
         servTcp->attachOnReceive(recvHandler);
         if ((servTcp->start()) == -1)
             std::cout << "TCP failed" << std::endl;
@@ -129,12 +141,50 @@ int            game()
 
 int             main(int ac, char **av)
 {
-    ISocket *servTcp = getClient();
+	std::string s;
+	std::string token;
+	size_t pos;
+	Instruction instruct(Instruction::KO);
+	ISocket *servTcp = getClient();
 
-    std::string s;
-    std::string token;
-    size_t pos;
-    Instruction instruct(Instruction::KO);
+	/*
+	try
+	{
+		servTcp->attachOnReceive(&recvHandler);
+		instruct.setInstruct(Instruction::CONNEXION);
+		instruct.addName("fabY");
+		servTcp->writePacket(Packet::pack(instruct));
+		#ifdef _WIN_32
+			Sleep(100);
+		#else
+			usleep(10000);
+		#endif
+
+		instruct.setInstruct(Instruction::CREATE_ROOM);
+		servTcp->writePacket(Packet::pack(instruct));
+		#ifdef _WIN_32
+			Sleep(100);
+		#else
+			usleep(10000);
+		#endif
+
+		instruct.setInstruct(Instruction::START_GAME);
+		servTcp->writePacket(Packet::pack(instruct));
+		#ifdef _WIN_32
+			Sleep(100);
+		#else
+			usleep(10000);
+		#endif
+
+		game();
+	}
+	catch (BBException &err)
+	{
+		std::cerr << err.what() << std::endl;
+		system("pause");
+	}
+	*/
+
     while (s != "quit") {
 
         instruct.eraseNames();
@@ -190,7 +240,12 @@ int             main(int ac, char **av)
         //servUdp->writePacket(Packet::pack<std::string>(s));
     }
     servTcp->cancel();
-    sleep(1);
+	#ifdef _WIN_32
+		Sleep(1000);
+	#else
+		sleep(1);
+	#endif
+    
     delete servTcp;
     return (0);
 }

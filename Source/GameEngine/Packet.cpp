@@ -338,8 +338,8 @@ Packet::getLevel() {
     std::string *bgtPath = NULL;
     std::string *bgmPath = NULL;
     std::string *scenario = NULL;
-    Packet *p;
-    Level *level;
+    Packet *p = NULL;
+    Level *level = NULL;
 
     if (this->_type == Packet::L3v3l) {
         size = *reinterpret_cast<unsigned int *>(&(this->_data[0]));

@@ -1,6 +1,8 @@
 #include				<iostream>
+#include				<dirent.h>
 #include				"../System/RTypeException.h"
 #include				"../System/Animation.h"
+#include				"Monster.h"
 #include				"OnLevel.h"
 
 OnLevel::OnLevel(OnLevel::MemFn ptr) : level(static_cast<Level *>(0)), backgroundEntity(0, 0, t2Vector<int>(0, 0))
@@ -13,9 +15,20 @@ OnLevel::OnLevel(OnLevel::MemFn ptr) : level(static_cast<Level *>(0)), backgroun
 OnLevel::~OnLevel()
 {}
 
-#include "Monster.h"
+static bool				hasEnding(std::string const &fullString, std::string const &ending)
+{
+	if (fullString.length() >= ending.length())
+		return (0 == fullString.compare(fullString.length() - ending.length(), ending.length(), ending));
+	return (false);
+}
+
 void					OnLevel::loadLevel(Level *newLevel)
 {
+	DIR					*dir;
+	struct dirent		*ent;
+	std::string			repertory(ASSET_FOLDER S_LOCATION);
+	std::string			wantedType(".png");
+
 	this->level = newLevel;
 	this->level->load();
 	if (!this->level->isLoaded())
@@ -28,28 +41,24 @@ void					OnLevel::loadLevel(Level *newLevel)
 	this->world = new World(t2Vector<int>(this->gameData->getWidth(), this->gameData->getHeight()), true, true);
 	this->gameData->world = this->world;
 
-	// a automatiser
-	this->gameData->resourceBank->setTexture("BasicShip", "../Assets/Graphics/Sprites/r-typesheet5.png");
-	this->gameData->resourceBank->setTexture("BasicShip-Hit", "../Assets/Graphics/Sprites/r-typesheet5-hit.png");
+	if ((dir = opendir("../Assets/Graphics/Sprites/")) == NULL)
+		throw RTypeException("Could not open sprite directory");
 
-	this->gameData->resourceBank->setTexture("Meteora", "../Assets/Graphics/Sprites/Meteora.png");
-	this->gameData->resourceBank->setTexture("Meteora-Hit", "../Assets/Graphics/Sprites/Meteora-Hit.png");
-	this->gameData->resourceBank->setTexture("MeteoraExplode", "../Assets/Graphics/Sprites/MeteoraExplode.png");
+	while ((ent = readdir(dir)) != NULL)
+	{
+		std::string		image(ent->d_name);
+		if (hasEnding(image, wantedType))
+			this->gameData->resourceBank->setTexture(image.substr(0, image.size() - wantedType.size()), repertory + ent->d_name);
+	}
+	closedir(dir);
 
-	this->gameData->resourceBank->setTexture("Nautilus", "../Assets/Graphics/Sprites/Nautilus.png");
-	this->gameData->resourceBank->setTexture("Nautilus-Hit", "../Assets/Graphics/Sprites/Nautilus-Hit.png");
-
-	this->gameData->resourceBank->setTexture("Robot", "../Assets/Graphics/Sprites/Robot.png");
-	this->gameData->resourceBank->setTexture("Robot-Hit", "../Assets/Graphics/Sprites/Robot.png");
-
-//	this->timer.addNewEvent("mobSpawn", 1.3f);
-//	this->timer.addNewEvent("meteoraSpawn", 3);
+	//	this->timer.addNewEvent("mobSpawn", 1.3f);
+	//	this->timer.addNewEvent("meteoraSpawn", 3);
 	this->world->addSample(new Monster("BasicShip")); // A MODIFIER
 	this->world->addSample(new Monster("Meteora")); // A MODIFIER
 	this->world->addSample(new Monster("Nautilus")); // A MODIFIER
-	this->world->addSample(new Monster("Robot"));
 	this->level->loadIdentifiers();
-	
+
 	this->player = dynamic_cast<Player *>(this->world->getPlayerObject(0));
 
 	this->snap = NULL;
@@ -94,13 +103,6 @@ void					OnLevel::updateLogic(sf::Time *time)
 		Monster *monster = new Monster("Meteora", t2Vector<unsigned int>(this->gameData->getWidth() - 25, rand() % this->gameData->getHeight()));
 		GameData::getInstance()->world->createNewObject(monster);
 		this->timer.reset("meteoraSpawn");
-	}
-
-	if (this->timer.eventDone("robotSpawn"))
-	{
-		Monster *monster = new Monster("Robot", t2Vector<unsigned int>(this->gameData->getWidth() - 100, rand() % this->gameData->getHeight()));
-		GameData::getInstance()->world->createNewObject(monster);
-		this->timer.reset("robotSpawn");
 	}
 
 	this->world->tick(time->asSeconds());
