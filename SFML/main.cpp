@@ -10,6 +10,7 @@ void getInfos()
     std::cout << "IP : " << menu->getIP() << std::endl;
     std::cout << "PORT : " << menu->getPort() << std::endl;
     menu->getNext();
+    while (!MainMenu::getInstance()->exit());
 }
 
 int main()
