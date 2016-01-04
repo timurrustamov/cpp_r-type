@@ -88,6 +88,9 @@ World::tick(float seconds)
     for (unsigned int i = 0; i < MAX_PLAYERS; i++)
         if (this->_playersId[i] != BAD_ID && this->_objects[this->_playersId[i]]->mustBeDeleted())
         {
+            this->timer.addNewEvent(
+                    "player" + MutexVault::toString(i), 3);
+            std::cout << "player" + MutexVault::toString(i) << std::endl;
             this->_objects[this->_playersId[i]]->geometry->detach();
             delete this->_objects[this->_playersId[i]];
             this->_objects.erase(this->_playersId[i]);
@@ -134,8 +137,6 @@ World::loadSnapshot(Snapshot *snap)
         if (it->second != NULL && !it->second->mustBeDeleted() &&
             snap->objects.find(it->second->getId()) == snap->objects.end() && it->second->getType() != Object::Other) {
             it->second->setToDelete();
-            if (it->second->getType() == Object::Character)
-                this->timer.addNewEvent("player" + MutexVault::toString(static_cast<unsigned int>(it->second->getIdentifier())), 3);
         }
     }
     //replace and load new objects

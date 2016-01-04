@@ -110,6 +110,7 @@ void								Level::loadIdentifiers() const
 	world->addSample(new Explosion(Explosion::SmallPhysic, t2Vector<int>(0, 0)));
 
 	world->addSample(new Artifices(Artifices::Explosion, t2Vector<int>(0, 0)));
+	world->addSample(new Artifices(Artifices::MeteoraExplosion, t2Vector<int>(0, 0)));
 
 	world->addSample(new Laser(Laser::MiddleChargeShot, t2Vector<int>(0, 0)));
 	world->addSample(new Laser(Laser::ChargeShot, t2Vector<int>(0, 0)));

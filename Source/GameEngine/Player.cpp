@@ -13,6 +13,9 @@ Player::Player(t2Vector<int> position, unsigned int playerNo) : Object()
 	this->id = Object::getId();
 	this->playerNo = playerNo;
 	this->identifier = playerNo;
+	this->chargeShotEntity = NULL;
+	this->entity = NULL;
+	this->chargeShotLoading = NULL;
 }
 
 Player::Player(int x, int y, unsigned int playerNo)
@@ -22,6 +25,9 @@ Player::Player(int x, int y, unsigned int playerNo)
 	this->type = Object::Character;
 	this->id = Object::getId();
 	this->playerNo = playerNo;
+	this->chargeShotEntity = NULL;
+	this->entity = NULL;
+	this->chargeShotLoading = NULL;
 }
 
 void					Player::start()
