@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Source\Editor\EditorEntity.cpp" />
+    <ClCompile Include="..\Source\Editor\EditorMonster.cpp" />
+    <ClCompile Include="..\Source\Editor\OnEditor.cpp" />
     <ClCompile Include="..\Source\GameEngine\Artifices.cpp" />
     <ClCompile Include="..\Source\GameEngine\BBException.cpp" />
     <ClCompile Include="..\Source\GameEngine\Explosion.cpp" />
@@ -78,6 +81,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Source\Editor\EditorEntity.h" />
+    <ClInclude Include="..\Source\Editor\EditorMonster.h" />
+    <ClInclude Include="..\Source\Editor\OnEditor.h" />
     <ClInclude Include="..\Source\GameEngine\AnimationEntity.hpp" />
     <ClInclude Include="..\Source\GameEngine\Artifices.h" />
     <ClInclude Include="..\Source\GameEngine\BBException.hpp" />

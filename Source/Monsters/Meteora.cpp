@@ -62,8 +62,14 @@ void        					Meteora::parseConfig(std::string)
 void        					Meteora::onDestroy()
 {
 	Artifices					*artifice = new Artifices(Artifices::MeteoraExplosion, this->object->geometry->getPosition());
-	GameData::getInstance()->world->createNewObject(artifice);
 
+	if (GameData::getInstance()->world != NULL)
+		GameData::getInstance()->world->createNewObject(artifice);
 	this->animation->removeEntity(this->entity->getId());
 	this->animationHit->removeEntity(this->entity->getId());
+}
+
+Animation						*Meteora::getAnimationSheet() const
+{
+	return (this->animation);
 }

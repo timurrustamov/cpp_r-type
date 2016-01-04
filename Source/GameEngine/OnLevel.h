@@ -40,4 +40,4 @@ public:
 	void									updateLogic(sf::Time *time);
 };
 
-#endif /* !GAMEPLAY_H_ */
+#endif /* !ONLEVEL_H_ */

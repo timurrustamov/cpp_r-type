@@ -62,3 +62,8 @@ void							Monster::lateUpdate()
 {
 	this->behaviour->lateUpdate();
 }
+
+IMonsterBehaviour				*Monster::getBehaviour() const
+{
+	return (this->behaviour);
+}

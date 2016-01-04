@@ -8,12 +8,17 @@
 # include				"World.hpp"
 
 # ifdef _GNUC
-#  define ATTR_UNUSED __attribute__((unused))
+#  define ATTR_UNUSED	__attribute__((unused))
 # else
 #  define ATTR_UNUSED
 # endif
 
-# define MAX_IDENTIFIER	42
+# define ASSET_FOLDER	"../Assets/"
+# define BGM_LOCATION	"Sounds/BGM/"
+# define BGT_LOCATION	"Graphics/Backgrounds/"
+# define S_LOCATION		"Graphics/Sprites/"
+
+# define MAX_IDENTIFIER	17
 
 class					GameData
 {
@@ -38,7 +43,7 @@ public:
 		ExplosionStrongPhysic,
 		ArtificeExplosion,
 		ArtificeMeteoraExplosion
-	};
+	}; // MODIFY MAX_IDENTIFIER IF MODIFY
 private:
 
 	bool				fullscreen;

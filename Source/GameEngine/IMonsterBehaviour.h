@@ -13,6 +13,7 @@ public:
 	virtual void				start(Object * const that) = 0;
 	virtual void				parseConfig(std::string) = 0;
 	virtual void				onDestroy() = 0;
+	virtual Animation			*getAnimationSheet() const = 0;
 };
 
 #endif /* !IMONSTERBEHAVIOUR_H_ */

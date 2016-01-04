@@ -34,6 +34,12 @@
     <Filter Include="Fichiers d%27en-tête\Monsters">
       <UniqueIdentifier>{64836c8d-8d01-4398-bf99-feea1147fb2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Editor">
+      <UniqueIdentifier>{d83a2a8e-06e4-4e42-afba-df3f1e37c608}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Editor">
+      <UniqueIdentifier>{cc8f74c5-24ab-47ef-b3f8-f457d0b123df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\GameEngine\Level.cpp">
@@ -146,6 +152,15 @@
     </ClCompile>
     <ClCompile Include="..\Source\System\WinSocket.cpp">
       <Filter>Fichiers sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\OnEditor.cpp">
+      <Filter>Fichiers sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\EditorMonster.cpp">
+      <Filter>Fichiers sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\EditorEntity.cpp">
+      <Filter>Fichiers sources\Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -283,6 +298,15 @@
     </ClInclude>
     <ClInclude Include="..\Source\System\WinThread.hpp">
       <Filter>Fichiers d%27en-tête\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\OnEditor.h">
+      <Filter>Fichiers d%27en-tête\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\EditorMonster.h">
+      <Filter>Fichiers d%27en-tête\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\EditorEntity.h">
+      <Filter>Fichiers d%27en-tête\Editor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

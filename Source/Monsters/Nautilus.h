@@ -23,6 +23,7 @@ public:
 	virtual void				start(Object * const that);
 	virtual void				parseConfig(std::string);
 	virtual void				onDestroy();
+	virtual Animation			*getAnimationSheet() const;
 };
 
 #endif /* !NAUTILUS_H_ */

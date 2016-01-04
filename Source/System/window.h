@@ -36,6 +36,7 @@ public:
 
 	unsigned int			getWidth() const;
 	unsigned int			getHeight() const;
+	void					resizeWindow(unsigned int width, unsigned int height);
 
 	void					draw(const sf::Drawable &drawable, const sf::RenderStates &states = sf::RenderStates::Default);
 };

@@ -182,7 +182,7 @@ Level::Level(const std::string &title, const std::string &bgtPath, const std::st
 	this->loaded = false;
 }
 
-const std::string &Level::getScenario() const {
-
+const std::string					&Level::getScenario() const
+{
 	return (this->scenario);
 }

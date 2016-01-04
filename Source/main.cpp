@@ -2,7 +2,8 @@
 #include					"System/window.h"
 #include					"GameEngine/GameData.h"
 #include					"GameEngine/OnLevel.h"
-//#include 					"GameEngine/ISocket.h"
+#include					"Editor/OnEditor.h"
+#include 					"GameEngine/ISocket.h"
 
 #include					"System/Animation.h"
 #include					"System/ResourcesBank.h"
@@ -10,12 +11,12 @@
 /*
 void                        sendUdp(World *world)
 {
-	std::cout << "send udp" << std::endl;
-	ISocket *udpServer 		= ISocket::getServer(4242, "TCP");
+std::cout << "send udp" << std::endl;
+ISocket *udpServer 		= ISocket::getServer(4242, "TCP");
 
-	Snapshot *s = world->getSnapshot();
+Snapshot *s = world->getSnapshot();
 
-	udpServer->writePacket(Packet::pack(*s));
+udpServer->writePacket(Packet::pack(*s));
 }
 
 void                        updGameHandler(ISocket *server)
@@ -44,17 +45,19 @@ int							main()
 {
 	Window					window("R-Type");
 	OnLevel					gameplay;
+	OnEditor				editor;
 	Level					level("../Data/level1.xml");
 	/*ISocket					*tcpServer = ISocket::getServer(4242, "TCP");
 
 	if (tcpServer->start() == -1)
-		std::cout << "Failed to start servers!" << std::endl;
-		*/
+	std::cout << "Failed to start servers!" << std::endl;
+	*/
 	try
 	{
 		srand(time(NULL));
 		gameplay.loadLevel(&level);
 		window.attachGameplay(dynamic_cast<IGameplay *>(&gameplay));
+		//window.resizeWindow(EDITOR_WIDTH, EDITOR_HEIGHT);
 
 		window.launchWindow();
 		while (window.isOpen())

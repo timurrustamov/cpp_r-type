@@ -16,6 +16,8 @@ public:
 	virtual void			interact(Object *);
 	virtual void			lateUpdate();
 	virtual void			start();
+	
+	IMonsterBehaviour		*getBehaviour() const;
 
 protected:
 	std::string				dll;

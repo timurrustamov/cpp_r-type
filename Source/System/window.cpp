@@ -14,6 +14,13 @@ Window::Window(const char *_title, unsigned int _width, unsigned int _height, bo
 
 Window::~Window() {}
 
+void				Window::resizeWindow(unsigned int width, unsigned int height)
+{
+	this->width = width;
+	this->height = height;
+	this->window.create(sf::VideoMode(this->width, this->height), this->title, (this->fullscreen) ? sf::Style::Fullscreen : sf::Style::Close);
+}
+
 void				Window::launchWindow()
 {
 	try

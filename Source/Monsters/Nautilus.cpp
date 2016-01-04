@@ -81,8 +81,14 @@ void        					Nautilus::parseConfig(std::string)
 void        					Nautilus::onDestroy()
 {
 	Artifices					*artifice = new Artifices(Artifices::Explosion, this->object->geometry->getPosition());
-	GameData::getInstance()->world->createNewObject(artifice);
 
+	if (GameData::getInstance()->world != NULL)
+		GameData::getInstance()->world->createNewObject(artifice);
 	this->animation->removeEntity(this->entity->getId());
 	this->animationHit->removeEntity(this->entity->getId());
+}
+
+Animation						*Nautilus::getAnimationSheet() const
+{
+	return (this->animation);
 }
