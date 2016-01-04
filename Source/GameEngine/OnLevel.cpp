@@ -39,11 +39,15 @@ void					OnLevel::loadLevel(Level *newLevel)
 	this->gameData->resourceBank->setTexture("Nautilus", "../Assets/Graphics/Sprites/Nautilus.png");
 	this->gameData->resourceBank->setTexture("Nautilus-Hit", "../Assets/Graphics/Sprites/Nautilus-Hit.png");
 
+	this->gameData->resourceBank->setTexture("Robot", "../Assets/Graphics/Sprites/Robot.png");
+	this->gameData->resourceBank->setTexture("Robot-Hit", "../Assets/Graphics/Sprites/Robot.png");
+
 //	this->timer.addNewEvent("mobSpawn", 1.3f);
 //	this->timer.addNewEvent("meteoraSpawn", 3);
 	this->world->addSample(new Monster("BasicShip")); // A MODIFIER
 	this->world->addSample(new Monster("Meteora")); // A MODIFIER
 	this->world->addSample(new Monster("Nautilus")); // A MODIFIER
+	this->world->addSample(new Monster("Robot"));
 	this->level->loadIdentifiers();
 	
 	this->player = dynamic_cast<Player *>(this->world->getPlayerObject(0));
@@ -90,6 +94,13 @@ void					OnLevel::updateLogic(sf::Time *time)
 		Monster *monster = new Monster("Meteora", t2Vector<unsigned int>(this->gameData->getWidth() - 25, rand() % this->gameData->getHeight()));
 		GameData::getInstance()->world->createNewObject(monster);
 		this->timer.reset("meteoraSpawn");
+	}
+
+	if (this->timer.eventDone("robotSpawn"))
+	{
+		Monster *monster = new Monster("Robot", t2Vector<unsigned int>(this->gameData->getWidth() - 100, rand() % this->gameData->getHeight()));
+		GameData::getInstance()->world->createNewObject(monster);
+		this->timer.reset("robotSpawn");
 	}
 
 	this->world->tick(time->asSeconds());

@@ -180,6 +180,7 @@ GameRoom::getUserNo(User *user) const {
 void
 GameRoom::gameLoop(unsigned int threadId, GameRoom *room) {
 
+    GameData::getInstance(true);
     Window					window("R-Type");
     OnLevel					gameplay;
     Level					level("../Data/level1.xml");
@@ -187,6 +188,7 @@ GameRoom::gameLoop(unsigned int threadId, GameRoom *room) {
 
     gameplay.timer.addNewEvent("mobSpawn", 1.3f);
 	gameplay.timer.addNewEvent("meteoraSpawn", 3);
+    gameplay.timer.addNewEvent("robotSpawn", 4);
     try
     {
         srand(time(NULL));
@@ -212,7 +214,6 @@ GameRoom::gameLoop(unsigned int threadId, GameRoom *room) {
         std::cerr << "std::exception: " << err.what() << std::endl;
         system("pause");
     }
-    GameData::getInstance(true);
 }
 
 void

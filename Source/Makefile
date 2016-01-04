@@ -13,6 +13,9 @@ SRC_GAME	=		main.cpp			\
 				GameEngine/Level.cpp		\
 				GameEngine/OnLevel.cpp		\
 				GameEngine/MutexVault.cpp	\
+				Editor/OnEditor.cpp		\
+				Editor/EditorMonster.cpp	\
+				Editor/EditorEntity.cpp		\
 				Monsters/BasicShip.cpp		\
 				GameEngine/ISocket.cpp		\
 				GameEngine/Packet.cpp		\
@@ -44,6 +47,9 @@ SRC_GAME_CL	=	main_client.cpp			\
 				System/RTypeException.cpp	\
 				System/ResourcesBank.cpp	\
 				System/window.cpp		\
+				Editor/OnEditor.cpp		\
+				Editor/EditorMonster.cpp	\
+				Editor/EditorEntity.cpp		\
 				GameEngine/Laser.cpp		\
 				GameEngine/LinuxSocket.cpp	\
 				GameEngine/GameData.cpp		\
@@ -82,6 +88,9 @@ SRC_SERV	=		serv_test.cpp			\
 				System/RTypeException.cpp	\
 				System/ResourcesBank.cpp	\
 				System/window.cpp		\
+				Editor/OnEditor.cpp		\
+				Editor/EditorMonster.cpp	\
+				Editor/EditorEntity.cpp		\
 				GameEngine/LinuxSocket.cpp	\
 				GameEngine/GameData.cpp		\
 				GameEngine/Level.cpp		\
@@ -119,6 +128,9 @@ SRC_CLIENT	=		System/Animation.cpp		\
 				System/RTypeException.cpp	\
 				System/ResourcesBank.cpp	\
 				System/window.cpp		\
+				Editor/OnEditor.cpp		\
+				Editor/EditorMonster.cpp	\
+				Editor/EditorEntity.cpp		\
 				GameEngine/LinuxSocket.cpp	\
 				GameEngine/GameData.cpp		\
 				GameEngine/Level.cpp		\
