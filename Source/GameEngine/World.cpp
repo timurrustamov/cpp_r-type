@@ -137,7 +137,9 @@ World::loadSnapshot(Snapshot *snap)
     }
     //replace and load new objects
     for (std::map<unsigned int, SerializedObject *>::iterator it = snap->objects.begin(); it != snap->objects.end(); it++) {
-        if (this->_objects.find(it->second->attr.id) != this->_objects.end()) {
+        if (it->second->attr.playerId != BAD_ID && this->getPlayerObject(it->second->attr.playerId) != NULL)
+            this->getPlayerObject(it->second->attr.playerId)->geometry->setPosition(t2Vector<float>(it->second->attr.positionx, it->second->attr.positiony));
+        else if (this->_objects.find(it->second->attr.id) != this->_objects.end()) {
             this->_objects[it->second->attr.id]->setValues(it->second);
         }
 		else if (this->_samples[it->second->attr.identifier] != NULL && this->_samples[it->second->attr.identifier]->getType() != Object::Other) {

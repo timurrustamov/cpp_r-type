@@ -57,6 +57,7 @@ void					OnLevel::loadLevel(Level *newLevel)
 	this->world->addSample(new Monster("BasicShip")); // A MODIFIER
 	this->world->addSample(new Monster("Meteora")); // A MODIFIER
 	this->world->addSample(new Monster("Nautilus")); // A MODIFIER
+	this->world->addSample(new Monster("Robot"));
 	this->level->loadIdentifiers();
 
 	this->player = dynamic_cast<Player *>(this->world->getPlayerObject(0));
@@ -103,6 +104,13 @@ void					OnLevel::updateLogic(sf::Time *time)
 		Monster *monster = new Monster("Meteora", t2Vector<unsigned int>(this->gameData->getWidth() - 25, rand() % this->gameData->getHeight()));
 		GameData::getInstance()->world->createNewObject(monster);
 		this->timer.reset("meteoraSpawn");
+	}
+
+	if (this->timer.eventDone("robotSpawn"))
+	{
+		Monster *monster = new Monster("Robot", t2Vector<unsigned int>(this->gameData->getWidth() - 50, rand() % this->gameData->getHeight()));
+		GameData::getInstance()->world->createNewObject(monster);
+		this->timer.reset("robotSpawn");
 	}
 
 	this->world->tick(time->asSeconds());

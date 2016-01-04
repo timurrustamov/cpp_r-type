@@ -180,15 +180,17 @@ GameRoom::getUserNo(User *user) const {
 void
 GameRoom::gameLoop(unsigned int threadId, GameRoom *room) {
 
-    GameData::getInstance(true);
+    IMutex *mutex = (*MutexVault::getMutexVault())["instantiation"];
+    mutex->lock(true);
+   // GameData::getInstance(true);
     Window					window("R-Type");
     OnLevel					gameplay;
     Level					level("../Data/level1.xml");
 
-
     gameplay.timer.addNewEvent("mobSpawn", 1.3f);
 	gameplay.timer.addNewEvent("meteoraSpawn", 3);
     gameplay.timer.addNewEvent("robotSpawn", 4);
+    mutex->unlock();
     try
     {
         srand(time(NULL));

@@ -312,14 +312,13 @@ RTypeServer::tcpWaitingRoom(ISocket *client) {
                     client->writePacket(Packet::pack(ko));
                 else {
                     Instruction i(Instruction::START_GAME);
-                    client->attachOnReceive(RTypeServer::tcpGamePlay);
                     server->userLinks[client]->getRoom()->sendToEveryUser(Packet::pack(i));
                 }
-				#ifdef _WIN_32
-					Sleep(1000);
-				#else
-					sleep(1);
-				#endif
+//				#ifdef _WIN_32
+//					Sleep(1000);
+//				#else
+//					sleep(1);
+//				#endif
             }
             else
                 client->writePacket(Packet::pack(ko));
@@ -465,6 +464,11 @@ void RTypeServer::tcpHold(ISocket *client) {
 
     IMutex *mutex = (*MutexVault::getMutexVault())["instantiation"];
     mutex->lock(true);
+    #ifdef _WIN_32
+        Sleep(1000);
+    #else
+        sleep(1);
+    #endif
     client->attachOnReceive(RTypeServer::tcpGamePlay);
     mutex->unlock();
 }

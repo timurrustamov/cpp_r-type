@@ -180,7 +180,8 @@ void					Player::unleashShot()
 	Laser				*laser = NULL;
 	Rocket				*rocket = NULL;
 
-	this->chargeShotLoading->removeEntity(this->chargeShotEntity->getId());
+	if (this->chargeShotLoading != NULL)
+		this->chargeShotLoading->removeEntity(this->chargeShotEntity->getId());
 	if (this->timer.eventDone("chargeShot2"))
 	{
 		laser = new Laser(Laser::ChargeShot, this->geometry->getPosition() + t2Vector<unsigned int>(30, 0));
