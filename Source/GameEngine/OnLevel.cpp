@@ -113,6 +113,27 @@ void					OnLevel::updateLogic(sf::Time *time)
 		this->timer.reset("robotSpawn");
 	}
 
+	if (this->world->timer.eventDone("player0"))
+	{
+		GameData::getInstance()->world->createNewPlayer(t2Vector<unsigned int>(50, 50), 0);
+		this->world->timer.removeEvent("player0");
+	}
+	if (this->world->timer.eventDone("player1"))
+	{
+		GameData::getInstance()->world->createNewPlayer(t2Vector<unsigned int>(50, 90), 1);
+		this->world->timer.removeEvent("player1");
+	}
+	if (this->world->timer.eventDone("player2"))
+	{
+		GameData::getInstance()->world->createNewPlayer(t2Vector<unsigned int>(50, 130), 2);
+		this->world->timer.removeEvent("player2");
+	}
+	if (this->world->timer.eventDone("player3"))
+	{
+		GameData::getInstance()->world->createNewPlayer(t2Vector<unsigned int>(50, 180), 3);
+		this->world->timer.removeEvent("player3");
+	}
+
 	this->world->tick(time->asSeconds());
 }
 

@@ -132,8 +132,11 @@ World::loadSnapshot(Snapshot *snap)
     //look for integrity of objects
     for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++) {
         if (it->second != NULL && !it->second->mustBeDeleted() &&
-            snap->objects.find(it->second->getId()) == snap->objects.end() && it->second->getType() != Object::Other)
+            snap->objects.find(it->second->getId()) == snap->objects.end() && it->second->getType() != Object::Other) {
             it->second->setToDelete();
+            if (it->second->getType() == Object::Character)
+                this->timer.addNewEvent("player" + MutexVault::toString(static_cast<unsigned int>(it->second->getIdentifier())), 3);
+        }
     }
     //replace and load new objects
     for (std::map<unsigned int, SerializedObject *>::iterator it = snap->objects.begin(); it != snap->objects.end(); it++) {

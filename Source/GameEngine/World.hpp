@@ -123,6 +123,8 @@ public:
         mutex->unlock();
         return (obj);
     }
+
+    Timer                               timer;
 };
 
 #endif /* !CPP_R_TYPE_WORLD_HPP */

@@ -7,21 +7,21 @@
 
 Player::Player(t2Vector<int> position, unsigned int playerNo) : Object()
 {
-    this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(33, 18), position), 320, 10);
-    this->geometry->attachToObject(this);
-    this->type = Object::Character;
-    this->id = Object::getId();
-    this->playerNo = playerNo;
+	this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(33, 18), position), 320, 10);
+	this->geometry->attachToObject(this);
+	this->type = Object::Character;
+	this->id = Object::getId();
+	this->playerNo = playerNo;
 	this->identifier = playerNo;
 }
 
 Player::Player(int x, int y, unsigned int playerNo)
 {
-    this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(33, 18), t2Vector<int>(x, y)), 320, 10);
-    this->geometry->attachToObject(this);
-    this->type = Object::Character;
-    this->id = Object::getId();
-    this->playerNo = playerNo;
+	this->geometry = new Geometry(Rectangle<float>(t2Vector<int>(33, 18), t2Vector<int>(x, y)), 320, 10);
+	this->geometry->attachToObject(this);
+	this->type = Object::Character;
+	this->id = Object::getId();
+	this->playerNo = playerNo;
 }
 
 void					Player::start()
@@ -61,36 +61,40 @@ Object					*Player::clone(SerializedObject *serializedObject)
 
 unsigned int			Player::getPlayerNo() const
 {
-    return (this->playerNo);
+	return (this->playerNo);
 }
 
 void					Player::interact(Object *object)
 {
-    Geometry			*geo1 = this->geometry;
-    Geometry			*geo2 = object->geometry;
+	Geometry			*geo1 = this->geometry;
+	Geometry			*geo2 = object->geometry;
 
-    switch (object->getType())
-    {
-	case (Object::Projectile) :
-	case (Object::Force) :
-	case (Object::Radiation) :
-	case (Object::Other) :
-		break;
-	default:
-		geo1->removeImpulse();
-		geo2->applyImpulse((geo2->getPosition() - geo1->getPosition()) * 500, 0.1);
+	switch (object->getType())
+	{
+		case (Object::Ennemy) :
+			this->setToDelete();
+		case (Object::Projectile) :
+		case (Object::Force) :
+		case (Object::Radiation) :
+		case (Object::Other) :
+			break;
+		default:
+			geo1->removeImpulse();
+			geo2->applyImpulse((geo2->getPosition() - geo1->getPosition()) * 500, 0.1);
 
-		if (geo1->getRect().touchUpper(geo2->getRect()) || geo1->getRect().touchLower(geo2->getRect()))
-			geo1->velocity().y() *= -1;
-		if (geo1->getRect().touchLeft(geo2->getRect()) || geo1->getRect().touchRight(geo2->getRect()))
-			geo1->velocity().x() *= -1;
-		geo1->setPosition(geo1->getPreviousPosition(0));
-		break;
-    }
+			if (geo1->getRect().touchUpper(geo2->getRect()) || geo1->getRect().touchLower(geo2->getRect()))
+				geo1->velocity().y() *= -1;
+			if (geo1->getRect().touchLeft(geo2->getRect()) || geo1->getRect().touchRight(geo2->getRect()))
+				geo1->velocity().x() *= -1;
+			geo1->setPosition(geo1->getPreviousPosition(0));
+			break;
+	}
 }
 
 void					Player::move(std::vector<sf::Keyboard::Key> keys)
 {
+	if (keys.size() == 0)
+		this->unleashShot();
 	if (std::find(keys.begin(), keys.end(), sf::Keyboard::Left) != keys.end())
 		this->geometry->addImpulse(t2Vector<float>(-5, 0));
 	if (std::find(keys.begin(), keys.end(), sf::Keyboard::Right) != keys.end())
@@ -115,23 +119,28 @@ void					Player::move(std::vector<sf::Keyboard::Key> keys)
 void					Player::lateUpdate()
 {
 	this->entity->setPosition(this->geometry->getPosition() - this->geometry->getSize() / 2);
-	this->chargeShotEntity->setPosition(this->geometry->getPosition() - this->geometry->getSize() / 2 + t2Vector<int>(20, 0));
+	if (this->chargeShotEntity != NULL)
+		this->chargeShotEntity->setPosition(this->geometry->getPosition() - this->geometry->getSize() / 2 + t2Vector<int>(20, 0));
 	if (this->timer.eventDone("loadingChargeShot"))
 	{
-		this->chargeShotEntity->setState((this->chargeShotEntity->getState() + 1) % 7);
+		if (this->chargeShotEntity != NULL)
+			this->chargeShotEntity->setState((this->chargeShotEntity->getState() + 1) % 7);
 		this->timer.reset("loadingChargeShot");
 	}
 
-	if (this->geometry->getVelocity().getY() > this->geometry->getMaxVelocity() - 10)
-		this->entity->setState(0);
-	else if (this->geometry->getVelocity().getY() > this->geometry->getMaxVelocity() / 2)
-		this->entity->setState(1);
-	else if (this->geometry->getVelocity().getY() < -this->geometry->getMaxVelocity() + 10)
-		this->entity->setState(4);
-	else if (this->geometry->getVelocity().getY() < -this->geometry->getMaxVelocity() / 2)
-		this->entity->setState(3);
-	else
-		this->entity->setState(2);
+	if (this->entity != NULL) {
+
+		if (this->geometry->getVelocity().getY() > this->geometry->getMaxVelocity() - 10)
+			this->entity->setState(0);
+		else if (this->geometry->getVelocity().getY() > this->geometry->getMaxVelocity() / 2)
+			this->entity->setState(1);
+		else if (this->geometry->getVelocity().getY() < -this->geometry->getMaxVelocity() + 10)
+			this->entity->setState(4);
+		else if (this->geometry->getVelocity().getY() < -this->geometry->getMaxVelocity() / 2)
+			this->entity->setState(3);
+		else
+			this->entity->setState(2);
+	}
 }
 
 void					Player::launchRocket(Rocket::Type rocketType)
@@ -161,9 +170,9 @@ void					Player::chargeShot()
 {
 	if (this->timer.eventExists("chargeShot1"))
 	{
-		this->chargeShotLoading->changeEntity(this->chargeShotEntity);
-		if (this->timer.eventDone("chargeShot1") && !this->timer.eventExists("chargeShot2"))
-		{
+		if (this->chargeShotLoading != NULL)
+			this->chargeShotLoading->changeEntity(this->chargeShotEntity);
+		if (this->timer.eventDone("chargeShot1") && !this->timer.eventExists("chargeShot2")) {
 			this->timer.addNewEvent("chargeShot2", 2);
 			this->chargeShot2.play();
 		}
@@ -208,11 +217,11 @@ void					Player::unleashShot()
 		rocket->geometry->applyImpulse(t2Vector<float>(30, -7.5f), 0.2f);
 		GameData::getInstance()->world->createNewObject(rocket);
 	}
-	
+
 	this->chargeShot1.stop();
 	this->chargeShot2.stop();
 	this->timer.removeEvent("chargeShot1").removeEvent("chargeShot2");
-	
+
 	if (laser != NULL)
 	{
 		laser->geometry->applyImpulse(t2Vector<float>(30, 0), 0.1f);
