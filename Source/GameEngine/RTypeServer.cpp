@@ -292,7 +292,6 @@ RTypeServer::tcpWaitingRoom(ISocket *client) {
     //get packet
     while ((packet = client->readPacket()) != NULL) {
 
-        std::cout << "got packet" << std::endl;
         if (packet->getType() == Packet::Instruct &&
             (instruct = packet->unpack<Instruction>()) != NULL)
         {
@@ -309,7 +308,6 @@ RTypeServer::tcpWaitingRoom(ISocket *client) {
             }
             else if (instruct->getInstruct() == Instruction::START_GAME)
             {
-                std::cout << "START" << std::endl;
                 if (!server->userLinks[client]->getRoom()->startGame(server->userLinks[client]))
                     client->writePacket(Packet::pack(ko));
                 else {
@@ -340,7 +338,6 @@ RTypeServer::tcpGamePlay(ISocket *client) {
     //std::cout << "gameplay" << std::endl;
     if ((room = RTypeServer::getInstance()->userLinks[client]->getRoom()) == NULL)
     {
-        std::cout << "return" << std::endl;
         client->attachOnReceive(RTypeServer::tcpMemberRoom);
         return (client->getOnReceive()(client));
     }
@@ -352,7 +349,6 @@ RTypeServer::tcpGamePlay(ISocket *client) {
         if (packet->getType() == Packet::IntVector &&
             (instruct = packet->unpack<std::vector<int> >()) != NULL)
         {
-            std::cout << "player actions" << std::endl;
             GameData::getInstance()->world->loadPlayerActions(playerId, instruct);
             delete instruct;
         }

@@ -140,8 +140,6 @@ World::loadSnapshot(Snapshot *snap)
     for (std::map<unsigned int, SerializedObject *>::iterator it = snap->objects.begin(); it != snap->objects.end(); it++) {
         if (this->_objects.find(it->second->attr.id) != this->_objects.end()) {
             this->_objects[it->second->attr.id]->setValues(it->second);
-//            this->_objects[it->second->attr.id]->geometry->setVelocity(t2Vector<float>(it->second->attr.velocityx, it->second->attr.velocityy));
-//            this->_objects[it->second->attr.id]->geometry->setPosition(t2Vector<float>(it->second->attr.positionx, it->second->attr.positiony));
         }
 		else if (this->_samples[it->second->attr.identifier] != NULL && this->_samples[it->second->attr.identifier]->getType() != Object::Other) {
             if (this->_samples[it->second->attr.identifier]->getType() == Object::Character) {
@@ -189,7 +187,6 @@ World &World::loadPlayerActions(unsigned int playerNo, std::vector<int> *actions
     std::vector<sf::Keyboard::Key> keys;
 
     mutex->lock();
-    std::cout << "in lock for " << playerNo << std::endl;
     Object *player;
     Player *truePlayer;
     if ((player = this->getPlayerObject(playerNo)) != NULL && (truePlayer = dynamic_cast<Player *>(player)) != NULL)

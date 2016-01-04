@@ -77,17 +77,7 @@ void					OnLevel::updateLogic(sf::Time *time)
 {
 	if (this->updatePtr != NULL)
 		this->updatePtr(*this);
-//	if (this->timer.eventDone("snap"))
-//	{
-//		this->snap = this->world->getSnapshot();
-//		if (this->snap != NULL)
-//			this->world->loadSnapshot(this->snap);
-//		this->timer.reset("snap");
-//	}
-//
 
-	if (this->timer.eventExists("player0"))
-		this->world->createNewPlayer(t2Vector<unsigned int>(this->gameData->getWidth() / 10, this->gameData->getHeight() / 2), 0);
 	if (this->timer.eventDone("mobSpawn"))
 	{
 		Monster *monster = new Monster("Nautilus", t2Vector<unsigned int>(this->gameData->getWidth() - 100, rand() % this->gameData->getHeight()));
@@ -102,23 +92,6 @@ void					OnLevel::updateLogic(sf::Time *time)
 		this->timer.reset("meteoraSpawn");
 	}
 
-//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-//		this->player->geometry->addImpulse(t2Vector<float>(-3, 0));
-//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-//		this->player->geometry->addImpulse(t2Vector<float>(3, 0));
-//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-//		this->player->geometry->addImpulse(t2Vector<float>(0, -3));
-//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-//		this->player->geometry->addImpulse(t2Vector<float>(0, 3));
-//
-//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
-//		this->player->chargeShot();
-//	else
-//	{
-//		this->player->unleashShot();
-//		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-//			this->player->laser(Laser::Shot);
-//	}
 	this->world->tick(time->asSeconds());
 }
 
