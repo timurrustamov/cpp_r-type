@@ -166,6 +166,7 @@ void WaitingRoom::handlerStart(ISocket *client)
             else if (instruct->getInstruct() == Instruction::START_GAME)
             {
                 std::cout << "STAAAAAAAAAAAAAART" << std::endl;
+                MainMenu::getInstance()->song->stop();
                 InfoMenu::getInstance()->close = true;
 //                MainMenu::getInstance()->song->stop();
                 client->attachOnReceive(WaitingRoom::recvHandler);
