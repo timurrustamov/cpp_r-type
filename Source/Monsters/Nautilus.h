@@ -16,8 +16,13 @@ class Nautilus :				public IMonsterBehaviour
 
 public:
 	Nautilus() {};
-	~Nautilus() { delete this->entity; };
+	~Nautilus() {
 
+		if (this->entity != NULL) {
+			this->animation->removeEntity(this->entity->getId());
+			delete this->entity;
+		}
+	};
 	virtual void				lateUpdate();
 	virtual void				interact(Object *);
 	virtual void				start(Object * const that);

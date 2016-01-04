@@ -24,10 +24,13 @@ public:
     Timer &reset(const std::string &name);
 
     bool eventExists(const std::string &name);
+    float leftTime(const std::string &name);
     float elapsedTime(const std::string &name);
     float advancement(const std::string &name);
     bool eventDone(const std::string &name);
     bool operator[](const std::string &name);
+    std::pair<std::string, float> operator[](unsigned int);
+    unsigned int size() const;
 
 protected:
 

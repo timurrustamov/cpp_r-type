@@ -7,9 +7,10 @@ void                        sendUdp(World *world)
 
 int             main(int ac, char **av)
 {
-    RTypeServer *server = RTypeServer::getInstance();
+    RTypeServer *server = RTypeServer::getInstance(4444);
 
     std::cout << ISocket::getServer()->getIp() << " " << ISocket::getServer()->getPort() << std::endl;
+    ISocket::getServer()->read(0);
     std::string s = "";
     while (s != "quit") {
 

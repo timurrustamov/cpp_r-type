@@ -1,7 +1,7 @@
 #include				"GameData.h"
 #include				"Explosion.h"
 
-Explosion::Explosion(Explosion::Type type, t2Vector<int> position) : Object(), explosionType(type)
+Explosion::Explosion(Explosion::Type type, t2Vector<int> position) : Object(), explosionType(type), entity(NULL)
 {
 	switch (this->explosionType)
 	{
@@ -82,6 +82,8 @@ void					Explosion::interact(Object *object)
 
 void					Explosion::lateUpdate()
 {
+	if (this->mustBeDeleted())
+		return;
 	this->entity->setPosition(this->geometry->getPosition() - this->geometry->getSize() / 2);
 	if (this->timer.eventDone("impulseEnd"))
 		this->type = Object::Other;
@@ -92,7 +94,13 @@ void					Explosion::lateUpdate()
 		if (this->entity->getState() > this->grid.getX() * this->grid.getY())
 		{
 			this->setToDelete();
-			this->animation->removeEntity(this->entity->getId());
+			if (this->entity != NULL)
+			{
+				this->animation->removeEntity(this->entity->getId());
+				delete this->entity;
+				this->entity = NULL;
+			}
+			return;
 		}
 	}
 }

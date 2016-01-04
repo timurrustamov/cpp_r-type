@@ -17,7 +17,13 @@ public:
 	};
 
 	Explosion(Explosion::Type type, t2Vector<int> position = t2Vector<int>(0, 0));
-	virtual ~Explosion() { delete this->entity; };
+	virtual ~Explosion()
+	{
+		if (this->entity != NULL) {
+			this->animation->removeEntity(this->entity->getId());
+			delete this->entity;
+		}
+	};
 
 	virtual Object			*clone(SerializedObject *serializedObject);
 	virtual void			interact(Object *);

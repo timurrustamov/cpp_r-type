@@ -16,6 +16,10 @@
 
 class										OnLevel : public IGameplay
 {
+public:
+	typedef  void (*MemFn)(OnLevel &);
+
+private:
 	Level									*level;
 	GameData								*gameData;
 	std::map<std::string, Animation *>		animations;
@@ -26,10 +30,13 @@ class										OnLevel : public IGameplay
 	Snapshot								*snap;
 
 public:
-	OnLevel();
+	OnLevel(MemFn ptr = NULL);
 	~OnLevel();
 
 	Timer									timer;
+	MemFn 									updatePtr;
+
+	void 									createPlayer(unsigned int playerNo);
 
 	void									loadLevel(Level *newLevel);
 	void									keyPressed(sf::Keyboard::Key);

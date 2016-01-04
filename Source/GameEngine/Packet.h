@@ -21,7 +21,7 @@ class Packet
 {
 public:
 
-    virtual ~Packet() {};
+    ~Packet() {};
 
     enum Type {
 
@@ -79,9 +79,8 @@ public:
         unsigned int *r_magic = reinterpret_cast<unsigned int *>(&data[0]);
         Packet::Type *r_type = reinterpret_cast<Packet::Type *>(&data[sizeof(unsigned int)]);
         unsigned int *r_size = reinterpret_cast<unsigned int *>(&data[sizeof(unsigned int) * 2]);
-        unsigned int *r_encrypted = reinterpret_cast<unsigned int *>(&data[sizeof(unsigned int) * 3]);
 
-        if (*r_magic != _MAGIC_ || *r_size + headerSize > data.size() || !(*r_encrypted == 0 || *r_encrypted == 1))
+        if (*r_magic != _MAGIC_ || *r_size + headerSize > data.size())
             return (-1);
         return (*r_size);
     }
@@ -116,15 +115,12 @@ public:
 
     Type                                    getType() const;
 
-    bool                                    isEncrypted() const;
-
     std::vector<unsigned char>              &getData();
 
 protected:
 
     //properties
     Type _type;
-    bool _encrypted;
     std::vector<unsigned char> _data;
 
     //constructor

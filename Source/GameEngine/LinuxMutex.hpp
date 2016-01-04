@@ -15,13 +15,13 @@ public:
 
     LinuxMutex()
     {
-        _tid = 0;
+        _tid = -1;
         pthread_mutex_init(&this->_mutex, NULL);
     }
 
     virtual bool lock(bool wait = true)
     {
-        if (!(pthread_equal(static_cast<pid_t>(syscall(SYS_gettid)), this->_tid)))
+        if (this->_tid == -1 || !(pthread_equal(static_cast<pid_t>(syscall(SYS_gettid)), this->_tid)))
         {
             pthread_mutex_lock(&this->_mutex);
             this->_status = IMutex::Locked;
@@ -33,9 +33,11 @@ public:
 
     virtual bool unlock()
     {
-        pthread_mutex_unlock(&this->_mutex);
+        if (this->_tid == -1 || !(pthread_equal(static_cast<pid_t>(syscall(SYS_gettid)), this->_tid)))
+            return false;
         this->_status = IMutex::Unlocked;
-        this->_tid = 0;
+        this->_tid = -1;
+        pthread_mutex_unlock(&this->_mutex);
         return (true);
     }
 

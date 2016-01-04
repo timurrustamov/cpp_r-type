@@ -30,11 +30,11 @@ RTypeServer::~RTypeServer()
     this->userLinks.clear();
     this->tcpServer->cancel();
     this->udpServer->cancel();
-	#ifdef _WIN_32
-		Sleep(1000);
-	#else
-		sleep(1);
-	#endif
+    #ifdef _WIN_32
+        Sleep(1000);
+    #else
+        sleep(1);
+    #endif
     delete this->tcpServer;
     delete this->udpServer;
 }
@@ -292,7 +292,6 @@ RTypeServer::tcpWaitingRoom(ISocket *client) {
     //get packet
     while ((packet = client->readPacket()) != NULL) {
 
-        std::cout << "got packet" << std::endl;
         if (packet->getType() == Packet::Instruct &&
             (instruct = packet->unpack<Instruction>()) != NULL)
         {
@@ -309,13 +308,14 @@ RTypeServer::tcpWaitingRoom(ISocket *client) {
             }
             else if (instruct->getInstruct() == Instruction::START_GAME)
             {
-                std::cout << "START" << std::endl;
                 if (!server->userLinks[client]->getRoom()->startGame(server->userLinks[client]))
                     client->writePacket(Packet::pack(ko));
                 else {
                     Instruction i(Instruction::START_GAME);
+                    client->attachOnReceive(RTypeServer::tcpGamePlay);
                     server->userLinks[client]->getRoom()->sendToEveryUser(Packet::pack(i));
                 }
+                sleep(1);
             }
             else
                 client->writePacket(Packet::pack(ko));
@@ -335,6 +335,7 @@ RTypeServer::tcpGamePlay(ISocket *client) {
     std::vector<int> *instruct;
     GameRoom *room;
 
+    //std::cout << "gameplay" << std::endl;
     if ((room = RTypeServer::getInstance()->userLinks[client]->getRoom()) == NULL)
     {
         client->attachOnReceive(RTypeServer::tcpMemberRoom);
@@ -348,11 +349,15 @@ RTypeServer::tcpGamePlay(ISocket *client) {
         if (packet->getType() == Packet::IntVector &&
             (instruct = packet->unpack<std::vector<int> >()) != NULL)
         {
-
+            GameData::getInstance()->world->loadPlayerActions(playerId, instruct);
             delete instruct;
         }
         delete packet;
     }
+
+    Snapshot *snap = GameData::getInstance()->world->getSnapshot();
+    client->writePacket(Packet::pack(*snap));
+    delete snap;
 }
 
 RTypeServer *RTypeServer::getInstance(int tcpPort, int udpPort) {

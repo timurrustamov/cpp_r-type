@@ -21,6 +21,7 @@ SerializedObject::SerializedObject(Object &obj)
     this->attr.velocityy = obj.geometry->getVelocity().getY();
     this->attr.identifier = obj.getIdentifier();
     this->inited = true;
+    this->setConfig(obj.getConfig());
 }
 
 SerializedObject::SerializedObject(std::vector<unsigned char> &binaryString)
@@ -35,7 +36,6 @@ SerializedObject::SerializedObject(std::vector<unsigned char> &binaryString)
 std::vector<unsigned char> &
 SerializedObject::toBinaryString() {
 
-    std::cout << this->attr.identifier << std::endl;
     this->binaryString.resize(sizeof(ObjectAttributes));
     this->binaryString.reserve(sizeof(ObjectAttributes));
     std::memcpy(&this->binaryString[0], &this->attr, sizeof(ObjectAttributes));
@@ -55,8 +55,8 @@ SerializedObject::SerializedObject(unsigned char *tmp, unsigned long int length)
     this->inited = true;
 }
 
-const std::string &
-SerializedObject::getConfig() const
+std::string &
+SerializedObject::getConfig()
 {
     return (this->config);
 }
