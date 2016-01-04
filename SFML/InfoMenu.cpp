@@ -16,6 +16,7 @@ InfoMenu::InfoMenu()
     this->texts.resize(3);
     this->isDone = false;
     this->_error = false;
+    this->close = false;
 }
 
 InfoMenu::~InfoMenu()
@@ -62,7 +63,7 @@ void InfoMenu::showUserForm()
     this->sprites[1]->setPosition(8, 140);
     this->sprites[1]->setScale(1.5, 0.5);
     this->texts[2]->setColor(color);
-    while (this->window->isOpen())
+    while (this->window->isOpen() && !this->close)
     {
         sf::Event  event;
         while (this->window->pollEvent(event))
@@ -104,7 +105,7 @@ void InfoMenu::showIpForm()
     this->sprites[1]->setPosition(8, 140);
     this->sprites[1]->setScale(1.5, 0.5);
     this->texts[2]->setColor(color);
-    while (this->window->isOpen())
+    while (this->window->isOpen() && !this->close)
     {
         if (this->isDone)
         {

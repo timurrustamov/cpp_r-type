@@ -49,9 +49,9 @@ void WaitingRoom::RenderFrame()
     ISocket     *client = InfoMenu::getClient(tmp->getIP(), tmp->getPort(), "TCP");
     Instruction i(Instruction::GETALLUSERSINROOM);
 
-    client->attachOnReceive(this->handlerUsers);
+    client->attachOnReceive(this->handlerStart);
     client->writePacket(Packet::pack(i));
-    while (this->window->isOpen())
+    while (this->window->isOpen() && !(InfoMenu::getInstance()->close))
     {
         time = this->clock->getElapsedTime().asMilliseconds();
         if (time >= 0.5 && this->transp > 0)
@@ -107,12 +107,14 @@ int WaitingRoom::getKeys()
         this->leave();
         return -1;
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && this->isHost)
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
     {
+        MainMenu::getInstance()->song->stop();
         InfoMenu    *tmp = InfoMenu::getInstance();
         ISocket     *client = InfoMenu::getClient(tmp->getIP(), tmp->getPort(), "TCP");
         Instruction i(Instruction::START_GAME);
 
+        std::cout << "RETURN" << std::endl;
         client->attachOnReceive(this->handlerStart);
         client->writePacket(Packet::pack(i));
     }
@@ -138,32 +140,7 @@ void WaitingRoom::handlerLeave(ISocket *client)
         }
         delete packet;
     }
-    client->attachOnReceive(tmp->handlerUsers);
-}
-
-void WaitingRoom::handlerUsers(ISocket *client)
-{
-    Packet          *packet;
-    Instruction     *instruct;
-    WaitingRoom     *tmp = WaitingRoom::getInstance();
-
-    while ((packet = client->readPacket()) != NULL)
-    {
-        if (packet->getType() == Packet::Instruct &&
-            (instruct = packet->unpack<Instruction>()) != NULL)
-        {
-            if (instruct->getInstruct() == Instruction::GETALLUSERSINROOM)
-            {
-                std::cout << "GETTTT USERSSSSS" << std::endl;
-                for (unsigned int i = 0; i < instruct->getNb(); i++)
-                    tmp->players[i]->setString((*instruct)[i]);
-            }
-            else
-                std::cout << "ERROR" << std::endl;
-            delete instruct;
-        }
-        delete packet;
-    }
+    client->attachOnReceive(tmp->handlerStart);
 }
 
 void WaitingRoom::handlerStart(ISocket *client)
@@ -179,6 +156,23 @@ void WaitingRoom::handlerStart(ISocket *client)
         {
             if (instruct->getInstruct() == Instruction::OK)
                 std::cout << "GAME START" << std::endl;
+            else if (instruct->getInstruct() == Instruction::GETALLUSERSINROOM)
+            {
+                for (unsigned int i = 0; i < 4; i++)
+                    tmp->players[i]->setString("");
+                for (unsigned int i = 0; i < instruct->getNb(); i++)
+                    tmp->players[i]->setString((*instruct)[i]);
+            }
+            else if (instruct->getInstruct() == Instruction::START_GAME)
+            {
+                std::cout << "STAAAAAAAAAAAAAART" << std::endl;
+                InfoMenu::getInstance()->close = true;
+//                MainMenu::getInstance()->song->stop();
+                client->attachOnReceive(WaitingRoom::recvHandler);
+                LinuxThread<void, sf::RenderWindow *> *thread = new LinuxThread<void, sf::RenderWindow *>(WaitingRoom::gameLoop);
+                (*thread)(WaitingRoom::getInstance()->window);
+                return;
+            }
             else
                 std::cout << "ERROR" << std::endl;
             delete instruct;
@@ -195,4 +189,110 @@ void WaitingRoom::leave()
 
     client->attachOnReceive(this->handlerLeave);
     client->writePacket(Packet::pack(i));
+}
+
+void WaitingRoom::gameLoop(unsigned int i, sf::RenderWindow *wind)
+{
+    wind->close();
+    Window					window("R-Type CLIENT");
+    OnLevel					gameplay(gameUpdateHandler);
+    Level					level("../Data/level1.xml");
+
+
+    try
+    {
+        srand(time(NULL));
+        gameplay.loadLevel(&level);
+        gameplay.timer.removeEvent("mobSpawn");
+        gameplay.timer.removeEvent("meteoraSpawn");
+        window.attachGameplay(dynamic_cast<IGameplay *>(&gameplay));
+
+        window.launchWindow();
+        while (window.isOpen())
+        {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            {
+                std::cout << "ESCAPE BITCH" << std::endl;
+                exit(0);
+            }
+            window.callGameplay();
+            window.draw(gameplay);
+        }
+    }
+    catch (const RTypeException &err)
+    {
+        std::cerr << "RType Exception: " << err.what() << std::endl;
+        system("pause");
+        return;
+    }
+    catch (const std::exception &err)
+    {
+        std::cerr << "std::exception: " << err.what() << std::endl;
+        system("pause");
+        return;
+    }
+    return;
+}
+
+void WaitingRoom::recvHandler(ISocket *client)
+{
+    Packet *packet;
+    Instruction *instruct;
+    Snapshot *snap;
+
+    while ((packet = client->readPacket()) != NULL) {
+
+        if (packet->getType() == Packet::Instruct &&
+            (instruct = packet->unpack<Instruction>()) != NULL)
+        {
+            if (instruct->getInstruct() == Instruction::GETALLUSERNAMES)
+            {
+                for (unsigned int i = 0; i < instruct->getNb(); i++)
+                    std::cout << (*instruct)[i] << std::endl;
+            }
+            else if (instruct->getInstruct() == Instruction::GETALLROOMNAMES)
+            {
+                for (unsigned int i = 0; i < instruct->getNb(); i++)
+                    std::cout << (*instruct)[i] << std::endl;
+            }
+            else if (instruct->getInstruct() == Instruction::LEAVE_ROOM)
+            {
+                std::cout << "ok pas de souci gros" << std::endl;
+            }
+            else if (instruct->getInstruct() == Instruction::GETALLUSERSINROOM)
+            {
+                for (unsigned int i = 0; i < instruct->getNb(); i++)
+                    std::cout << (*instruct)[i] << std::endl;
+            }
+            delete instruct;
+        }
+        else if (packet->getType() == Packet::Snap && (snap = packet->unpack<Snapshot>()) != NULL)
+        {
+            GameData::getInstance()->world->loadSnapshot(snap);
+            delete snap;
+        }
+        delete packet;
+    }
+}
+
+void WaitingRoom::gameUpdateHandler(OnLevel &level)
+{
+    std::vector<int> vec;
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        vec.push_back(static_cast<int>(sf::Keyboard::Left));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        vec.push_back(static_cast<int>(sf::Keyboard::Right));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        vec.push_back(static_cast<int>(sf::Keyboard::Up));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        vec.push_back(static_cast<int>(sf::Keyboard::Down));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))
+        vec.push_back(static_cast<int>(sf::Keyboard::B));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+        vec.push_back(static_cast<int>(sf::Keyboard::C));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        vec.push_back(static_cast<int>(sf::Keyboard::Space));
+
+    InfoMenu::getClient(InfoMenu::getInstance()->getIP(), InfoMenu::getInstance()->getPort(), "TCP")->writePacket(Packet::pack(vec));
 }

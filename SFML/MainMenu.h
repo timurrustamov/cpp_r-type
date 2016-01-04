@@ -25,16 +25,18 @@ public:
     int getKeys();
 
     static MainMenu *getInstance(sf::RenderWindow *wind = NULL);
+    sf::Music                       *song;
+    bool exit() const;
 
 private:
     int                             currentImg;
     float                           transp;
+    bool                            exit1;
     sf::RenderWindow                *window;
     std::vector<sf::Texture *>      texture;
     std::vector<sf::Sprite *>       sprite;
     CreateRoomMenu                  *create_menu;
     JoinRoomMenu                    *join_menu;
-    sf::Music                       *song;
     sf::Clock                       *clock;
     sf::Sprite                      *fondu;
 };

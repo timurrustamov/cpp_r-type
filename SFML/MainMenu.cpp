@@ -37,6 +37,7 @@ MainMenu::MainMenu(sf::RenderWindow *win)
     this->currentImg = 0;
     this->window->setSize(size);
     this->window->setPosition(pos);
+    this->exit1 = false;
 }
 
 MainMenu::~MainMenu()
@@ -53,8 +54,8 @@ void MainMenu::RenderFrame()
 {
     float   time = 0;
 
-//    this->song->play();
-    while (this->window->isOpen())
+    this->song->play();
+    while (this->window->isOpen() && !(InfoMenu::getInstance()->close))
     {
         time = this->clock->getElapsedTime().asMilliseconds();
         if (time >= 0.5 && this->transp > 0)
@@ -101,7 +102,10 @@ int MainMenu::getKeys()
             this->transp = 255;
         }
         else if (this->currentImg == 2)
+        {
+            this->exit1 = true;
             return -1;
+        }
     }
     if ((this->currentImg = this->currentImg % 3) < 0)
         this->currentImg = 2;
@@ -115,4 +119,9 @@ MainMenu *MainMenu::getInstance(sf::RenderWindow *wind)
     if (main == NULL)
         main = new MainMenu(wind);
     return main;
+}
+
+bool MainMenu::exit() const
+{
+    return this->exit1;
 }

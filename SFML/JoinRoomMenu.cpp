@@ -50,14 +50,18 @@ void JoinRoomMenu::RenderFrame()
 {
     float   time = 0;
 
-    usleep(100000);
+    #ifdef _WIN_32
+        Sleep(100000 / 100);
+    #else
+        usleep(100000);
+    #endif
     InfoMenu    *tmp = InfoMenu::getInstance();
     ISocket     *client = InfoMenu::getClient(tmp->getIP(), tmp->getPort(), "TCP");
     Instruction i(Instruction::GETALLROOMNAMES);
 
     client->attachOnReceive(this->handlerRooms);
     client->writePacket(Packet::pack(i));
-    while (this->window->isOpen())
+    while (this->window->isOpen() && !(InfoMenu::getInstance()->close))
     {
         time = this->clock->getElapsedTime().asMilliseconds();
         if (time >= 0.5 && this->transp > 0)
