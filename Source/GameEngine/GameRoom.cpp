@@ -147,7 +147,11 @@ GameRoom::startGame(User *user) {
     if (this->getState() != GameRoom::Running && user == this->owner)
     {
         res = true;
-        this->th = new LinuxThread<void, GameRoom *>(GameRoom::gameLoop);
+		#ifdef _WIN_32
+			this->th = new WinThread<void, GameRoom *>(GameRoom::gameLoop);
+		#else
+			this->th = new LinuxThread<void, GameRoom *>(GameRoom::gameLoop);
+		#endif
         this->state = GameRoom::Running;
         (*this->th)(this);
         for (std::vector<User *>::iterator it = this->users.begin(); it != this->users.end(); it++)

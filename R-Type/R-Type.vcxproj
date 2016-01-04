@@ -20,8 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\GameEngine\Artifices.cpp" />
+    <ClCompile Include="..\Source\GameEngine\BBException.cpp" />
     <ClCompile Include="..\Source\GameEngine\Explosion.cpp" />
     <ClCompile Include="..\Source\GameEngine\GameData.cpp" />
+    <ClCompile Include="..\Source\GameEngine\GameRoom.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Instruction.cpp" />
+    <ClCompile Include="..\Source\GameEngine\ISocket.cpp" />
     <ClCompile Include="..\Source\GameEngine\Laser.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
@@ -29,16 +33,21 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Source\GameEngine\Monster.cpp" />
+    <ClCompile Include="..\Source\GameEngine\MutexVault.cpp" />
     <ClCompile Include="..\Source\GameEngine\Object.cpp" />
     <ClCompile Include="..\Source\GameEngine\OnLevel.cpp" />
     <ClCompile Include="..\Source\GameEngine\Geometry.cpp" />
     <ClCompile Include="..\Source\GameEngine\Level.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Packet.cpp" />
     <ClCompile Include="..\Source\GameEngine\Player.cpp" />
     <ClCompile Include="..\Source\GameEngine\QuadTree.cpp" />
     <ClCompile Include="..\Source\GameEngine\Rocket.cpp" />
+    <ClCompile Include="..\Source\GameEngine\RTypeClient.cpp" />
+    <ClCompile Include="..\Source\GameEngine\RTypeServer.cpp" />
     <ClCompile Include="..\Source\GameEngine\SerializedObject.cpp" />
     <ClCompile Include="..\Source\GameEngine\Snapshot.cpp" />
     <ClCompile Include="..\Source\GameEngine\Timer.cpp" />
+    <ClCompile Include="..\Source\GameEngine\User.cpp" />
     <ClCompile Include="..\Source\GameEngine\WallOfPain.cpp" />
     <ClCompile Include="..\Source\GameEngine\World.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -60,6 +69,7 @@
     <ClCompile Include="..\Source\System\ResourcesBank.cpp" />
     <ClCompile Include="..\Source\System\RTypeException.cpp" />
     <ClCompile Include="..\Source\System\window.cpp" />
+    <ClCompile Include="..\Source\System\WinSocket.cpp" />
     <ClCompile Include="..\Source\test.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -70,11 +80,17 @@
   <ItemGroup>
     <ClInclude Include="..\Source\GameEngine\AnimationEntity.hpp" />
     <ClInclude Include="..\Source\GameEngine\Artifices.h" />
+    <ClInclude Include="..\Source\GameEngine\BBException.hpp" />
     <ClInclude Include="..\Source\GameEngine\Explosion.h" />
     <ClInclude Include="..\Source\GameEngine\GameData.h" />
+    <ClInclude Include="..\Source\GameEngine\GameRoom.hpp" />
     <ClInclude Include="..\Source\GameEngine\IGameplay.h" />
     <ClInclude Include="..\Source\GameEngine\Geometry.hpp" />
     <ClInclude Include="..\Source\GameEngine\IMonsterBehaviour.h" />
+    <ClInclude Include="..\Source\GameEngine\IMutex.hpp" />
+    <ClInclude Include="..\Source\GameEngine\Instruction.h" />
+    <ClInclude Include="..\Source\GameEngine\ISocket.h" />
+    <ClInclude Include="..\Source\GameEngine\IThread.hpp" />
     <ClInclude Include="..\Source\GameEngine\Laser.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
@@ -83,16 +99,21 @@
     </ClInclude>
     <ClInclude Include="..\Source\GameEngine\Level.h" />
     <ClInclude Include="..\Source\GameEngine\Monster.h" />
+    <ClInclude Include="..\Source\GameEngine\MutexVault.hpp" />
     <ClInclude Include="..\Source\GameEngine\Object.h" />
     <ClInclude Include="..\Source\GameEngine\OnLevel.h" />
+    <ClInclude Include="..\Source\GameEngine\Packet.h" />
     <ClInclude Include="..\Source\GameEngine\Player.hpp" />
     <ClInclude Include="..\Source\GameEngine\QuadTree.hpp" />
     <ClInclude Include="..\Source\GameEngine\Rectangle.hpp" />
     <ClInclude Include="..\Source\GameEngine\Rocket.hpp" />
+    <ClInclude Include="..\Source\GameEngine\RTypeClient.hpp" />
+    <ClInclude Include="..\Source\GameEngine\RTypeServer.hpp" />
     <ClInclude Include="..\Source\GameEngine\SerializedObject.hpp" />
     <ClInclude Include="..\Source\GameEngine\Snapshot.hpp" />
     <ClInclude Include="..\Source\GameEngine\t2Vector.hpp" />
     <ClInclude Include="..\Source\GameEngine\Timer.hpp" />
+    <ClInclude Include="..\Source\GameEngine\User.hpp" />
     <ClInclude Include="..\Source\GameEngine\WallOfPain.hpp" />
     <ClInclude Include="..\Source\GameEngine\World.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -107,7 +128,11 @@
     <ClInclude Include="..\Source\System\Animation.h" />
     <ClInclude Include="..\Source\System\ResourcesBank.h" />
     <ClInclude Include="..\Source\System\RTypeException.h" />
+    <ClInclude Include="..\Source\System\WinCriticalSession.hpp" />
     <ClInclude Include="..\Source\System\window.h" />
+    <ClInclude Include="..\Source\System\WinMutex.hpp" />
+    <ClInclude Include="..\Source\System\WinSocket.h" />
+    <ClInclude Include="..\Source\System\WinThread.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
@@ -175,7 +200,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;ws2_32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Windows\SFML-2.3.2\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -189,7 +214,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Windows\SFML-2.3.2\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;ws2_32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -205,7 +230,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;ws2_32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Windows\SFML-2.3.2\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -223,7 +248,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>C:\Windows\SFML-2.3.2\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;ws2_32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

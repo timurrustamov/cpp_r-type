@@ -3,7 +3,7 @@
 #include "IMutex.hpp"
 
 #ifdef WIN32
-# include "Windows/WinCriticalSession.hpp"
+# include "../System/WinCriticalSession.hpp"
 #else
 # include "LinuxMutex.hpp"
 #endif

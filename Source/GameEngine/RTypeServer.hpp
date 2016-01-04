@@ -8,7 +8,18 @@
 #include <vector>
 #include <map>
 
-#include "LinuxSocket.h"
+#if defined(_WIN32) && !defined(WIN32)
+# define _WINSOCKAPI_
+# define NOGDI
+# include <windows.h>
+# define WIN32
+#endif
+
+#ifdef WIN32
+# include "../System/WinSocket.h"
+#else
+# include "LinuxSocket.h"
+#endif
 
 class User;
 class GameRoom;

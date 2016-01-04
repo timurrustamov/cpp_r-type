@@ -1,3 +1,10 @@
+#if defined(_WIN32) && !defined(WIN32)
+# define _WINSOCKAPI_
+# define NOGDI
+# include <windows.h>
+# define WIN32
+#endif
+
 #ifndef ISOCKET_H_
 # define ISOCKET_H_
 
@@ -5,7 +12,6 @@
 #include <string>
 #include <vector>
 #include "MutexVault.hpp"
-#include "Rsa.h"
 #include "Packet.h"
 
 class ISocket

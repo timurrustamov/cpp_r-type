@@ -1,3 +1,10 @@
+#if defined(_WIN32) && !defined(WIN32)
+# define _WINSOCKAPI_
+# define NOGDI
+# include <windows.h>
+# define WIN32
+#endif
+
 #ifndef PROJECT2_ITHREAD_HPP
 # define PROJECT2_ITHREAD_HPP
 
@@ -81,7 +88,7 @@ public:
 		return (this->_param);
 	}
 
-	virtual bool operator()(U param) {};
+	virtual bool operator()(U param) { return (true);  };
 
 	bool lock(bool wait)
 	{
@@ -103,7 +110,7 @@ public:
 		return (mutex->unlock());
 	}
 
-	virtual bool stop() {};
+	virtual bool stop() { return (true); };
 	
 };
 
