@@ -36,6 +36,8 @@ public:
 	Timer									timer;
 	MemFn 									updatePtr;
 
+	void 									createPlayer(unsigned int playerNo);
+
 	void									loadLevel(Level *newLevel);
 	void									keyPressed(sf::Keyboard::Key);
 	bool									mustCloseGame();

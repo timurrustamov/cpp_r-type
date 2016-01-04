@@ -46,7 +46,6 @@ void					OnLevel::loadLevel(Level *newLevel)
 	this->world->addSample(new Monster("Nautilus")); // A MODIFIER
 	this->level->loadIdentifiers();
 	
-	this->world->createNewPlayer(t2Vector<unsigned int>(this->gameData->getWidth() / 10, this->gameData->getHeight() / 2), 0);
 	this->player = dynamic_cast<Player *>(this->world->getPlayerObject(0));
 
 	this->snap = NULL;
@@ -86,6 +85,9 @@ void					OnLevel::updateLogic(sf::Time *time)
 //		this->timer.reset("snap");
 //	}
 //
+
+	if (this->timer.eventExists("player0"))
+		this->world->createNewPlayer(t2Vector<unsigned int>(this->gameData->getWidth() / 10, this->gameData->getHeight() / 2), 0);
 	if (this->timer.eventDone("mobSpawn"))
 	{
 		Monster *monster = new Monster("Nautilus", t2Vector<unsigned int>(this->gameData->getWidth() - 100, rand() % this->gameData->getHeight()));
@@ -134,3 +136,7 @@ void					OnLevel::updateGraphics()
 		animation->second->prepareVertices();
 }
 
+void OnLevel::createPlayer(unsigned int playerNo) {
+
+	this->world->createNewPlayer(t2Vector<unsigned int>(this->gameData->getWidth() / 10, this->gameData->getHeight() / 2), playerNo);
+}

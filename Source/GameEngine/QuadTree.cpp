@@ -65,9 +65,9 @@ QuadTree::split()
     t2Vector<int> plusX(psize.getX(), 0);
     t2Vector<int> plusY(0, psize.getY());
 
-    this->nodes[0] = new QuadTree(level + 1, this, Rectangle<int>(psize, this->obj.getPosition() - psize));
-    this->nodes[1] = new QuadTree(level + 1, this, Rectangle<int>(psize, this->obj.getPosition() - plusY));
-    this->nodes[2] = new QuadTree(level + 1, this, Rectangle<int>(psize, this->obj.getPosition() - plusX));
+    this->nodes[0] = new QuadTree(level + 1, this, Rectangle<int>(psize, this->obj.getPosition() + psize));
+    this->nodes[1] = new QuadTree(level + 1, this, Rectangle<int>(psize, this->obj.getPosition() + plusY));
+    this->nodes[2] = new QuadTree(level + 1, this, Rectangle<int>(psize, this->obj.getPosition() + plusX));
     this->nodes[3] = new QuadTree(level + 1, this, Rectangle<int>(psize, this->obj.getPosition()));
     for (std::list<Geometry *>::iterator it = this->objects.begin(); it != this->objects.end(); it++)
         this->insert(*it);

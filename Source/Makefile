@@ -16,7 +16,6 @@ SRC_GAME	=		main.cpp			\
 				Monsters/BasicShip.cpp		\
 				GameEngine/ISocket.cpp		\
 				GameEngine/Packet.cpp		\
-				GameEngine/Rsa.cpp		\
 				GameEngine/BBException.cpp	\
 				GameEngine/Geometry.cpp         \
 				GameEngine/Object.cpp           \
@@ -55,7 +54,6 @@ SRC_GAME_CL	=	main_client.cpp			\
 				Monsters/BasicShip.cpp		\
 				GameEngine/ISocket.cpp		\
 				GameEngine/Packet.cpp		\
-				GameEngine/Rsa.cpp		\
 				GameEngine/BBException.cpp	\
 				GameEngine/Geometry.cpp         \
 				GameEngine/Object.cpp           \
@@ -93,7 +91,6 @@ SRC_SERV	=		serv_test.cpp			\
 				GameEngine/MutexVault.cpp	\
 				GameEngine/ISocket.cpp		\
 				GameEngine/Packet.cpp		\
-				GameEngine/Rsa.cpp		\
 				GameEngine/BBException.cpp	\
 				GameEngine/Geometry.cpp         \
 				GameEngine/Object.cpp           \
@@ -131,7 +128,6 @@ SRC_CLIENT	=		System/Animation.cpp		\
 				GameEngine/MutexVault.cpp	\
 				GameEngine/ISocket.cpp		\
 				GameEngine/Packet.cpp		\
-				GameEngine/Rsa.cpp		\
 				GameEngine/BBException.cpp	\
 				GameEngine/Geometry.cpp         \
 				GameEngine/Object.cpp           \

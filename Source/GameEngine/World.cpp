@@ -143,8 +143,16 @@ World::loadSnapshot(Snapshot *snap)
 //            this->_objects[it->second->attr.id]->geometry->setVelocity(t2Vector<float>(it->second->attr.velocityx, it->second->attr.velocityy));
 //            this->_objects[it->second->attr.id]->geometry->setPosition(t2Vector<float>(it->second->attr.positionx, it->second->attr.positiony));
         }
-		else if (this->_samples[it->second->attr.identifier] != NULL && this->_samples[it->second->attr.identifier]->getType() != Object::Other)
-			this->createNewObject(it->second->attr.identifier, it->second);
+		else if (this->_samples[it->second->attr.identifier] != NULL && this->_samples[it->second->attr.identifier]->getType() != Object::Other) {
+            if (this->_samples[it->second->attr.identifier]->getType() == Object::Character) {
+                unsigned int plId = this->createNewPlayer(static_cast<int>(it->second->attr.positionx),
+                                      static_cast<int>(it->second->attr.positiony), it->second->attr.playerId);
+                if (plId != BAD_ID)
+                    this->_objects[plId]->setValues(it->second);
+            }
+            else
+                this->createNewObject(it->second->attr.identifier, it->second);
+        }
     }
     mutex->unlock();
     return (*this);
