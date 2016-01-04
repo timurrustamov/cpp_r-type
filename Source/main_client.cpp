@@ -61,7 +61,7 @@ int							main()
     OnLevel					gameplay;
     Level					level("../Data/level1.xml");
 
-    ISocket *tcpClient = getClient(4242, "127.0.0.1", "TCP");
+    ISocket *tcpClient = getClient(4444, "127.0.0.1", "TCP");
 
     tcpClient->attachOnReceive(udpGameHandler);
 

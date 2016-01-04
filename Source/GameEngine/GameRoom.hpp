@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <unistd.h>
 #include "ISocket.h"
 #include "User.hpp"
 #include "RTypeServer.hpp"
@@ -16,6 +17,8 @@
 #include					"../GameEngine/OnLevel.h"
 #include					"../System/Animation.h"
 #include					"../System/ResourcesBank.h"
+#include                    "IThread.hpp"
+#include "OnLevel.h"
 
 class User;
 
@@ -36,12 +39,11 @@ public:
         this->setState(GameRoom::Error, this->owner);
         usleep(1000);
         this->removeAllUsers();
-        if (this->th != NULL)
-            delete this->th;
     };
 
     void sendToEveryUser(Packet *p);
     static void gameLoop(unsigned int threadId, GameRoom *);
+    static void levelUpdate(OnLevel &level);
     const std::string &getName() const;
     bool addUser(User *);
     bool removeUser(User *);

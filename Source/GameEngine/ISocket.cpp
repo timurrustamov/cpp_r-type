@@ -120,23 +120,13 @@ ISocket::read(unsigned int bytes)
 Packet *
 ISocket::readPacket()
 {
-    std::vector<unsigned char> data;
-    int packetSize;
-    unsigned totalSize;
+    Packet *p = NULL;
 
     IMutex *mutex = (*MutexVault::getMutexVault())["read" + MutexVault::toString(this->_id)];
     mutex->lock(true);
-    if ((packetSize = Packet::extractSizeFromHeader(this->_read_buffer)) > 0 &&
-        (totalSize = (packetSize + static_cast<int>(Packet::getHeaderSize()))) <= this->_read_buffer.size()) {
-
-        for (unsigned int i = 0; i < totalSize; i++)
-            data.push_back(this->_read_buffer[i]);
-        this->_read_buffer.erase(this->_read_buffer.begin(), this->_read_buffer.begin() + totalSize);
-        mutex->unlock();
-        return (Packet::fromStream(data));
-    }
+    p = Packet::fromStream(this->_read_buffer);
     mutex->unlock();
-    return (NULL);
+    return (p);
 }
 
 void

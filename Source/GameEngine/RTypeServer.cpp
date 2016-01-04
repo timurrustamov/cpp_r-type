@@ -6,6 +6,7 @@
 
 RTypeServer::RTypeServer(int tcpPort, int udpPort)
 {
+    GameData::getInstance();
     this->tcpServer = ISocket::getServer(tcpPort, "TCP");
     this->udpServer = ISocket::getServer(udpPort, "UDP");
 
@@ -310,8 +311,10 @@ RTypeServer::tcpWaitingRoom(ISocket *client) {
                     client->writePacket(Packet::pack(ko));
                 else {
                     Instruction i(Instruction::START_GAME);
+                    client->attachOnReceive(RTypeServer::tcpGamePlay);
                     server->userLinks[client]->getRoom()->sendToEveryUser(Packet::pack(i));
                 }
+                sleep(1);
             }
             else
                 client->writePacket(Packet::pack(ko));
@@ -331,8 +334,10 @@ RTypeServer::tcpGamePlay(ISocket *client) {
     std::vector<int> *instruct;
     GameRoom *room;
 
+    //std::cout << "gameplay" << std::endl;
     if ((room = RTypeServer::getInstance()->userLinks[client]->getRoom()) == NULL)
     {
+        std::cout << "return" << std::endl;
         client->attachOnReceive(RTypeServer::tcpMemberRoom);
         return (client->getOnReceive()(client));
     }
@@ -344,11 +349,16 @@ RTypeServer::tcpGamePlay(ISocket *client) {
         if (packet->getType() == Packet::IntVector &&
             (instruct = packet->unpack<std::vector<int> >()) != NULL)
         {
-
+            std::cout << "player actions" << std::endl;
+            GameData::getInstance()->world->loadPlayerActions(playerId, instruct);
             delete instruct;
         }
         delete packet;
     }
+
+    Snapshot *snap = GameData::getInstance()->world->getSnapshot();
+    client->writePacket(Packet::pack(*snap));
+    delete snap;
 }
 
 RTypeServer *RTypeServer::getInstance(int tcpPort, int udpPort) {

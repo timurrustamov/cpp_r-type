@@ -10,7 +10,7 @@
 #include <map>
 #include "Geometry.hpp"
 
-#define MAX_OBJECTS 3
+#define MAX_OBJECTS 50
 #define MAX_LEVELS 5
 
 class Geometry;

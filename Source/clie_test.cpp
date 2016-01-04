@@ -1,24 +1,18 @@
 #include "GameEngine/LinuxSocket.h"
+#include					"System/window.h"
+#include					"GameEngine/OnLevel.h"
+#include                    "GameEngine/ISocket.h"
+
+#include					"System/Animation.h"
+#include					"System/ResourcesBank.h"
+
 #include <algorithm>
-
-void                        sendUdp(World *world)
-{
-    return;
-}
-
-void            recvHandler2(ISocket *client)
-{
-    Packet *p = client->readPacket();
-
-    if (p != NULL)
-        std::cout << *(p->unpack<std::string>()) << std::endl;
-    //std::cout << "Received 2" << std::endl;
-}
 
 void            recvHandler(ISocket *client)
 {
     Packet *packet;
     Instruction *instruct;
+    Snapshot *snap;
 
     while ((packet = client->readPacket()) != NULL) {
 
@@ -53,22 +47,89 @@ void            recvHandler(ISocket *client)
             }
             delete instruct;
         }
+        else if (packet->getType() == Packet::Snap && (snap = packet->unpack<Snapshot>()) != NULL)
+        {
+            GameData::getInstance()->world->loadSnapshot(snap);
+            delete snap;
+        }
         delete packet;
     }
 }
 
+ISocket *                        getClient()
+{
+    static ISocket *servTcp = NULL;
+
+    if (servTcp == NULL) {
+        servTcp = ISocket::getClient("10.45.20.250", 4444, "TCP");
+        servTcp->attachOnReceive(recvHandler);
+        if ((servTcp->start()) == -1)
+            std::cout << "TCP failed" << std::endl;
+    }
+    return (servTcp);
+}
+
+void                            gameUpdateHandler(OnLevel &level)
+{
+    std::vector<int> vec;
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        vec.push_back(static_cast<int>(sf::Keyboard::Left));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        vec.push_back(static_cast<int>(sf::Keyboard::Right));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        vec.push_back(static_cast<int>(sf::Keyboard::Up));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        vec.push_back(static_cast<int>(sf::Keyboard::Down));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))
+        vec.push_back(static_cast<int>(sf::Keyboard::B));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+        vec.push_back(static_cast<int>(sf::Keyboard::C));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        vec.push_back(static_cast<int>(sf::Keyboard::Space));
+
+    getClient()->writePacket(Packet::pack(vec));
+}
+
+int            game()
+{
+    Window					window("R-Type CLIENT");
+    OnLevel					gameplay(gameUpdateHandler);
+    Level					level("../Data/level1.xml");
+
+    try
+    {
+        srand(time(NULL));
+        gameplay.loadLevel(&level);
+        gameplay.timer.removeEvent("mobSpawn");
+        gameplay.timer.removeEvent("meteoraSpawn");
+        window.attachGameplay(dynamic_cast<IGameplay *>(&gameplay));
+
+        window.launchWindow();
+        while (window.isOpen())
+        {
+            window.callGameplay();
+            window.draw(gameplay);
+        }
+    }
+    catch (const RTypeException &err)
+    {
+        std::cerr << "RType Exception: " << err.what() << std::endl;
+        system("pause");
+        return (1);
+    }
+    catch (const std::exception &err)
+    {
+        std::cerr << "std::exception: " << err.what() << std::endl;
+        system("pause");
+        return (1);
+    }
+    return (0);
+}
+
 int             main(int ac, char **av)
 {
-    ISocket *servTcp = ISocket::getClient("127.0.0.1", 4242, "TCP");
-    ISocket *servUdp = ISocket::getClient("127.0.0.1", 4343, "UDP");
-
-    servTcp->attachOnReceive(recvHandler);
-    servUdp->attachOnReceive(recvHandler2);
-
-    if ((servTcp->start()) == -1)
-        std::cout << "TCP failed" << std::endl;
-    if ((servUdp->start()) == -1)
-        std::cout << "UDP failed" << std::endl;
+    ISocket *servTcp = getClient();
 
     std::string s;
     std::string token;
@@ -123,14 +184,13 @@ int             main(int ac, char **av)
         {
             instruct.setInstruct(Instruction::START_GAME);
             servTcp->writePacket(Packet::pack(instruct));
+            game();
+            break;
         }
         //servUdp->writePacket(Packet::pack<std::string>(s));
     }
     servTcp->cancel();
     sleep(1);
-    servUdp->cancel();
-    sleep(1);
     delete servTcp;
-    delete servUdp;
     return (0);
 }

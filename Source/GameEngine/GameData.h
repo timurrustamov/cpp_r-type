@@ -2,6 +2,8 @@
 # define GAMEDATA_H_
 
 # include				<cstddef>
+# include   			<map>
+# include 				<algorithm>
 # include				"../System/RTypeException.h"
 # include				"../System/ResourcesBank.h"
 # include				"t2Vector.hpp"
@@ -54,6 +56,7 @@ public:
 	ResourcesBank		*resourceBank;
 	World				*world;
 
+	static std::map<std::string, std::string> parseConfig(std::string &reference);
 	void				setFullscreen(bool);
 	void				setMustQuit(bool);
 

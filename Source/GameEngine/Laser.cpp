@@ -2,7 +2,7 @@
 #include					"Laser.h"
 #include					"Artifices.h"
 
-Laser::Laser(Laser::Type _type, t2Vector<int> _position) : Object(), laserType(_type)
+Laser::Laser(Laser::Type _type, t2Vector<int> _position) : Object(), laserType(_type), entity(NULL)
 {
 	switch (this->laserType)
 	{
@@ -79,13 +79,13 @@ void						Laser::interact(Object *object)
 
 void						Laser::lateUpdate()
 {
-	if (this->mustBeDeleted())
-		this->animation->removeEntity(this->entity->getId());
+	if (this->mustBeDeleted()) {
+		return;
+	}
 	this->entity->setPosition(this->geometry->getPosition() - this->geometry->getSize() / 2);
 	if (this->timer.eventDone("Destruction"))
 	{
 		this->setToDelete();
-		this->animation->removeEntity(this->entity->getId());
 	}
 	else if (this->timer.eventDone("rotation"))
 	{

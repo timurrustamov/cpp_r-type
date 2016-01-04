@@ -4,7 +4,7 @@
 //real constructor
 Packet::Packet()
 {
-    this->_encrypted = false;
+
 }
 
 //pbject specific constructors
@@ -12,7 +12,6 @@ Packet::Packet(const std::string &str) : _type(Packet::String)
 {
     for (unsigned int i = 0; i < str.size(); i++)
         this->_data.push_back(static_cast<unsigned char>(str.at(i)));
-    this->_encrypted = false;
 }
 
 Packet::Packet(std::vector<int> &vec) : _type(Packet::IntVector)
@@ -21,21 +20,21 @@ Packet::Packet(std::vector<int> &vec) : _type(Packet::IntVector)
 
     for (unsigned int i = 0; i < vec.size(); i++)
     {
-        ptr = reinterpret_cast<unsigned char *>(vec[i]);
+        ptr = reinterpret_cast<unsigned char *>(&vec[i]);
         for (unsigned int j = 0; j < sizeof(int); j++)
-            this->_data.push_back(*ptr);
+            this->_data.push_back(ptr[j]);
     }
-    this->_encrypted = false;
 }
 
 Packet::Packet(SerializedObject &object) : _type(Packet::SerializedObj) {
 
     Packet *tmp;
+    std::vector<unsigned char> *_data;
 
     this->_data = object.toBinaryString();
     tmp = Packet::pack(object.getConfig());
-    this->_data.insert(this->_data.end(), tmp->_data.begin(), tmp->_data.end());
-    this->_encrypted = false;
+    _data = tmp->build();
+    this->_data.insert(this->_data.end(), _data->begin(), _data->end());
 }
 
 Packet::Packet(Snapshot &snapshot) : _type(Packet::Snap) {
@@ -43,7 +42,6 @@ Packet::Packet(Snapshot &snapshot) : _type(Packet::Snap) {
     int x = snapshot.size.getX();
     int y = snapshot.size.getY();
     size_t objnb = snapshot.objects.size();
-    std::cout << "objects no " << objnb << std::endl;
     Packet *p;
     std::vector<unsigned char> *tmpvec;
 
@@ -66,7 +64,6 @@ Packet::Packet(Snapshot &snapshot) : _type(Packet::Snap) {
         delete tmpvec;
         delete p;
     }
-    this->_encrypted = false;
 }
 
 Packet::Packet(Instruction &instr) : _type(Packet::Instruct)
@@ -90,7 +87,6 @@ Packet::Packet(Instruction &instr) : _type(Packet::Instruct)
         delete build;
         //std::cout << this->_data.size() << std::endl;
     }
-    this->_encrypted = false;
 }
 
 Packet::Packet(Level &level) : _type(Packet::L3v3l) {
@@ -127,7 +123,6 @@ Packet::Packet(Level &level) : _type(Packet::L3v3l) {
     this->_data.insert(this->_data.end(), builds->begin(), builds->end());
     delete p;
     delete builds;
-    this->_encrypted = false;
 }
 
 //static
@@ -137,7 +132,7 @@ Packet::getHeaderSize()
     static unsigned int size = 0;
 
     if (size == 0)
-        size = sizeof(unsigned int) * 4;
+        size = sizeof(unsigned int) * 3;
     return (size);
 }
 
@@ -146,8 +141,9 @@ Packet *
 Packet::fromStream(std::vector<unsigned char> &data)
 {
     unsigned int headerSize = Packet::getHeaderSize();
-    if (data.size() <= headerSize)
+    if (data.size() <= headerSize) {
         return (NULL);
+    }
     unsigned int *r_magic = reinterpret_cast<unsigned int *>(&data[0]);
     Packet::Type *r_type = reinterpret_cast<Packet::Type *>(&data[sizeof(unsigned int)]);
     unsigned int *r_size = reinterpret_cast<unsigned int *>(&data[sizeof(unsigned int) * 2]);
@@ -164,7 +160,7 @@ Packet::fromStream(std::vector<unsigned char> &data)
     Packet *newPacket = new Packet;
     std::vector<unsigned char> new_data;
     newPacket->_type = *r_type;
-    for (unsigned int i = 0; i < *r_size; i++)
+    for (unsigned int i = 0; i < *r_size && i < data.size(); i++)
         newPacket->_data.push_back(data[i + headerSize]);
     //consume flux
     data.erase(data.begin(), data.begin() + headerSize + *r_size);
@@ -194,9 +190,9 @@ Packet::build()
         //magic goes first
         (*build)[i] = magic_ptr[i];
         //type
-        (*build)[i + sizeof(unsigned int) * 1] = type_ptr[i];
+        (*build)[i + (sizeof(unsigned int))] = type_ptr[i];
         //size!
-        (*build)[i + sizeof(unsigned int) * 2] = size_ptr[i];
+        (*build)[i + (sizeof(unsigned int) * 2)] = size_ptr[i];
     }
     build->insert(build->end(), this->_data.begin(), this->_data.end());
     return (build);
@@ -212,12 +208,6 @@ Packet::Type
 Packet::getType() const
 {
     return (_type);
-}
-
-bool
-Packet::isEncrypted() const
-{
-    return (this->_encrypted);
 }
 
 std::string *

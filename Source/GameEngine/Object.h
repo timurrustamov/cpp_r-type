@@ -4,6 +4,7 @@
 # include								<cstddef>
 # include								<string>
 # include 								"Timer.hpp"
+# include                   			"MutexVault.hpp"
 # include								"AnimationEntity.hpp"
 
 # define BAD_ID							0xB16B00B5
@@ -35,7 +36,8 @@ public:
 	virtual void						lateUpdate() = 0;
 	virtual void						interact(Object *) = 0;
 	virtual void						start() = 0;
-
+	std::string 						getConfig();
+	void 								setConfig(std::string &);
 	Type								getType() const;
 	unsigned int 						getId() const;
 	void 								setId(unsigned int);

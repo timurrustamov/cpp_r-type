@@ -104,6 +104,8 @@ void					Player::move(std::vector<sf::Keyboard::Key> keys)
 		this->chargeShot();
 	else
 	{
+		if (std::find(keys.begin(), keys.end(), sf::Keyboard::B) != keys.end())
+			this->launchRocket(Rocket::Energy);
 		this->unleashShot();
 		if (std::find(keys.begin(), keys.end(), sf::Keyboard::Space) != keys.end())
 			this->laser(Laser::Shot);

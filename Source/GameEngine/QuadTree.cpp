@@ -133,11 +133,8 @@ QuadTree::insert(Geometry *geo, bool parentTest)
             if ((tmp = this->nodes[i]->insert(geo, false)) != NULL)
                 return (tmp);
 
-    if (this->nodes[0] == NULL && this->objects.size() > MAX_OBJECTS && this->level < MAX_LEVELS && this->obj.getSize() / 4 >= geo->getSize()) {
-
-        std::cout << "SPLIT level " << this->level << std::endl;
+    if (this->nodes[0] == NULL && this->objects.size() > MAX_OBJECTS && this->level < MAX_LEVELS && this->obj.getSize() / 4 >= geo->getSize())
         return (this->split().insert(geo));
-    }
 
     if (geo->getNode() != this) {
 

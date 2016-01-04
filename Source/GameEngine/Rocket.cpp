@@ -6,7 +6,7 @@
 #include					"Rocket.hpp"
 #include					"Explosion.h"
 
-Rocket::Rocket(Rocket::Type _type, t2Vector<int> _position) : Object(), rocketType(_type)
+Rocket::Rocket(Rocket::Type _type, t2Vector<int> _position) : Object(), rocketType(_type), entity(NULL)
 {
 	switch (this->rocketType)
 	{
@@ -77,8 +77,7 @@ void						Rocket::lateUpdate()
 {
 	Explosion				*explosion;
 
-	if (this->mustBeDeleted())
-		this->animation->removeEntity(this->entity->getId());
+	if (this->mustBeDeleted()) return;
 	this->entity->setPosition(this->geometry->getPosition() - this->geometry->getSize() / 2);
 	if (this->timer.eventDone("autoDestruction"))
 		this->geometry->removeImpulse();
@@ -87,7 +86,12 @@ void						Rocket::lateUpdate()
 		explosion = new Explosion(static_cast<Explosion::Type>(this->explosionEnum), this->geometry->getPosition());
 		GameData::getInstance()->world->createNewObject(explosion);
 		this->setToDelete();
-		this->animation->removeEntity(this->entity->getId());
+		if (this->entity != NULL) {
+			this->animation->removeEntity(this->entity->getId());
+			delete this->entity;
+			this->entity = NULL;
+		}
+		return;
 	}
 	if (this->timer.eventDone("rotation"))
 	{

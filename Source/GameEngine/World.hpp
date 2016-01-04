@@ -37,13 +37,17 @@ public:
     {
         Object							*newobj;
 
-        if (typeid(T) == typeid(Player))
+        IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
+
+        mutex->lock();
+        if (typeid(T) == typeid(Player)) {
+            mutex->unlock();
             return (BAD_ID);
+        }
         newobj = new T(position);
         this->_objects[newobj->getId()] = newobj;
         this->_qt.insert(newobj->geometry);
-
-        std::cout << newobj->getId() << std::endl;
+        mutex->unlock();
         return (newobj->getId());
     };
 
@@ -63,15 +67,15 @@ public:
     {
         Object *newobj;
         unsigned int id;
-        IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
-        mutex->lock(true);
 
+        IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
+
+        mutex->lock();
         if (playerNo > MAX_PLAYERS) {
             mutex->unlock();
             return (BAD_ID);
         }
         if (this->_playersId[playerNo] != BAD_ID) {
-
             mutex->unlock();
             return (this->_playersId[playerNo]);
         }
@@ -96,14 +100,27 @@ public:
 
     Object								*getPlayerObject(unsigned int playerNo)
     {
-        if (playerNo > MAX_PLAYERS || this->_playersId[playerNo] == BAD_ID)
-            return (NULL);
-        return (this->_objects[this->_playersId[playerNo]]);
+        IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
+
+        mutex->lock();
+        Object *obj = NULL;
+
+        if (!(playerNo > MAX_PLAYERS || this->_playersId[playerNo] == BAD_ID))
+            obj = this->_objects[this->_playersId[playerNo]];
+        mutex->unlock();
+        return (obj);
     }
 
     Object								*getObject(unsigned int objectId)
     {
-        return (this->_objects[objectId]);
+        IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
+
+        mutex->lock();
+        Object *obj = NULL;
+        if (this->_objects.find(objectId) != this->_objects.end())
+            obj = this->_objects[objectId];
+        mutex->unlock();
+        return (obj);
     }
 };
 

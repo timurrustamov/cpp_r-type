@@ -3,8 +3,9 @@
 #include				"../System/Animation.h"
 #include				"OnLevel.h"
 
-OnLevel::OnLevel() : level(static_cast<Level *>(0)), backgroundEntity(0, 0, t2Vector<int>(0, 0))
+OnLevel::OnLevel(OnLevel::MemFn ptr) : level(static_cast<Level *>(0)), backgroundEntity(0, 0, t2Vector<int>(0, 0))
 {
+	this->updatePtr = ptr;
 	this->gameData = GameData::getInstance();
 	this->gameData->resourceBank->setAnimations(&this->animations);
 }
@@ -38,11 +39,11 @@ void					OnLevel::loadLevel(Level *newLevel)
 	this->gameData->resourceBank->setTexture("Nautilus", "../Assets/Graphics/Sprites/Nautilus.png");
 	this->gameData->resourceBank->setTexture("Nautilus-Hit", "../Assets/Graphics/Sprites/Nautilus-Hit.png");
 
-	this->timer.addNewEvent("mobSpawn", 1.3f);
-	this->timer.addNewEvent("meteoraSpawn", 3);
+//	this->timer.addNewEvent("mobSpawn", 1.3f);
+//	this->timer.addNewEvent("meteoraSpawn", 3);
 	this->world->addSample(new Monster("BasicShip")); // A MODIFIER
 	this->world->addSample(new Monster("Meteora")); // A MODIFIER
-	//this->world->addSample(new Monster("Nautilus")); // A MODIFIER
+	this->world->addSample(new Monster("Nautilus")); // A MODIFIER
 	this->level->loadIdentifiers();
 	
 	this->world->createNewPlayer(t2Vector<unsigned int>(this->gameData->getWidth() / 10, this->gameData->getHeight() / 2), 0);
@@ -62,9 +63,6 @@ void					OnLevel::keyPressed(sf::Keyboard::Key key)
 	case sf::Keyboard::F:
 		this->gameData->setFullscreen(!this->gameData->getFullscreen());
 		break;
-	case sf::Keyboard::B:
-		this->player->launchRocket(Rocket::Energy);
-		break;
 	default:
 		break;
 	}
@@ -78,15 +76,16 @@ void					OnLevel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void					OnLevel::updateLogic(sf::Time *time)
 {
-	sendUdp(this->world);
-	if (this->timer.eventDone("snap"))
-	{
-		this->snap = this->world->getSnapshot();
-		if (this->snap != NULL)
-			this->world->loadSnapshot(this->snap);
-		this->timer.reset("snap");
-	}
-
+	if (this->updatePtr != NULL)
+		this->updatePtr(*this);
+//	if (this->timer.eventDone("snap"))
+//	{
+//		this->snap = this->world->getSnapshot();
+//		if (this->snap != NULL)
+//			this->world->loadSnapshot(this->snap);
+//		this->timer.reset("snap");
+//	}
+//
 	if (this->timer.eventDone("mobSpawn"))
 	{
 		Monster *monster = new Monster("Nautilus", t2Vector<unsigned int>(this->gameData->getWidth() - 100, rand() % this->gameData->getHeight()));
@@ -101,23 +100,23 @@ void					OnLevel::updateLogic(sf::Time *time)
 		this->timer.reset("meteoraSpawn");
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		this->player->geometry->addImpulse(t2Vector<float>(-5, 0));
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		this->player->geometry->addImpulse(t2Vector<float>(5, 0));
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		this->player->geometry->addImpulse(t2Vector<float>(0, -5));
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		this->player->geometry->addImpulse(t2Vector<float>(0, 5));
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
-		this->player->chargeShot();
-	else
-	{
-		this->player->unleashShot();
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-			this->player->laser(Laser::Shot);
-	}
+//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+//		this->player->geometry->addImpulse(t2Vector<float>(-3, 0));
+//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+//		this->player->geometry->addImpulse(t2Vector<float>(3, 0));
+//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+//		this->player->geometry->addImpulse(t2Vector<float>(0, -3));
+//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+//		this->player->geometry->addImpulse(t2Vector<float>(0, 3));
+//
+//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+//		this->player->chargeShot();
+//	else
+//	{
+//		this->player->unleashShot();
+//		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+//			this->player->laser(Laser::Shot);
+//	}
 	this->world->tick(time->asSeconds());
 }
 
@@ -134,3 +133,4 @@ void					OnLevel::updateGraphics()
 	for (std::map<std::string, Animation *>::const_iterator animation = this->animations.begin(); animation != this->animations.end(); ++animation)
 		animation->second->prepareVertices();
 }
+

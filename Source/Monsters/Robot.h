@@ -15,8 +15,13 @@ class Robot :					public IMonsterBehaviour
 
 public:
 	Robot() {};
-	~Robot() { delete this->entity; };
+	~Robot() {
 
+		if (this->entity != NULL) {
+			this->animation->removeEntity(this->entity->getId());
+			delete this->entity;
+		}
+	};
 	virtual void				lateUpdate();
 	virtual void				interact(Object *);
 	virtual void				start(Object * const that);

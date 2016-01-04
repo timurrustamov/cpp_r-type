@@ -35,7 +35,8 @@ SRC_GAME	=		main.cpp			\
 				GameEngine/Instruction.cpp	\
 				Monsters/Meteora.cpp      \
 				GameEngine/RTypeServer.cpp	   \
-				Monsters/Nautilus.cpp
+				Monsters/Nautilus.cpp       \
+                                                     Monsters/Robot.cpp
 
 OBJ_GAME	=		$(SRC_GAME:.cpp=.o)
 
@@ -73,7 +74,8 @@ SRC_GAME_CL	=	main_client.cpp			\
 				GameEngine/Instruction.cpp	\
 				GameEngine/RTypeServer.cpp  \
 				Monsters/Meteora.cpp        \
-				Monsters/Nautilus.cpp
+				Monsters/Nautilus.cpp       \
+                                                     Monsters/Robot.cpp
 
 OBJ_GAME_CL	=		$(SRC_GAME_CL:.cpp=.o)
 
@@ -111,7 +113,8 @@ SRC_SERV	=		serv_test.cpp			\
 				GameEngine/Instruction.cpp	\
 				GameEngine/RTypeServer.cpp	\
 				Monsters/Meteora.cpp        \
-                Monsters/Nautilus.cpp
+                Monsters/Nautilus.cpp       \
+                                                     Monsters/Robot.cpp
 
 OBJ_SERV	=	$(SRC_SERV:.cpp=.o)
 
@@ -149,7 +152,8 @@ SRC_CLIENT	=		System/Animation.cpp		\
 				GameEngine/RTypeServer.cpp	\
 				clie_test.cpp               \
 				Monsters/Meteora.cpp        \
-                Monsters/Nautilus.cpp
+                Monsters/Nautilus.cpp       \
+                Monsters/Robot.cpp
 
 OBJ_CLIENT	=	$(SRC_CLIENT:.cpp=.o)
 
@@ -180,7 +184,7 @@ $(NAME_G_C):	$(OBJ_GAME_CL)
 		$(CC) $(OBJ_GAME_CL) $(LIBS) -o $(NAME_G_C)
 
 clean	:
-		$(RM) $(OBJ_SERV) $(OBJ_CLIE) $(OBJ_GAME) $(OBJ_GAME_CL)
+		$(RM) $(OBJ_SERV) $(OBJ_CLIENT) $(OBJ_GAME) $(OBJ_GAME_CL)
 
 fclean	:	clean
 		$(RM) $(NAME_S) $(NAME_C) $(NAME_G) $(NAME_G_C)

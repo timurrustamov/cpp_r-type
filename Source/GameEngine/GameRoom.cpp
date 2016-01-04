@@ -176,13 +176,12 @@ GameRoom::getUserNo(User *user) const {
 void
 GameRoom::gameLoop(unsigned int threadId, GameRoom *room) {
 
-    IMutex *mutex = (*MutexVault::getMutexVault())["instantiation"];
-    mutex->lock(true);
-
     Window					window("R-Type");
     OnLevel					gameplay;
     Level					level("../Data/level1.xml");
 
+    gameplay.timer.addNewEvent("mobSpawn", 1.3f);
+	gameplay.timer.addNewEvent("meteoraSpawn", 3);
     try
     {
         srand(time(NULL));
@@ -190,7 +189,6 @@ GameRoom::gameLoop(unsigned int threadId, GameRoom *room) {
         window.attachGameplay(dynamic_cast<IGameplay *>(&gameplay));
 
         window.launchWindow();
-        mutex->unlock();
         while (window.isOpen() && room->getState() == GameRoom::Running)
         {
             window.callGameplay();
@@ -201,13 +199,11 @@ GameRoom::gameLoop(unsigned int threadId, GameRoom *room) {
     {
         std::cerr << "RType Exception: " << err.what() << std::endl;
         system("pause");
-        mutex->unlock();
     }
     catch (const std::exception &err)
     {
         std::cerr << "std::exception: " << err.what() << std::endl;
         system("pause");
-        mutex->unlock();
     }
 }
 

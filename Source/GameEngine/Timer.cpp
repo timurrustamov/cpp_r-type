@@ -51,25 +51,54 @@ Timer::operator[](const std::string &name) {
     return (this->eventDone(name));
 }
 
-Timer &Timer::reset(const std::string &name) {
+Timer &
+Timer::reset(const std::string &name) {
 
     if (this->eventExists(name))
         this->_events[name].second.restart();
     return (*this);
 }
 
-float Timer::elapsedTime(const std::string &name) {
+float
+Timer::elapsedTime(const std::string &name) {
 
     if (this->eventExists(name))
         return (this->_events[name].second.getElapsedTime().asSeconds());
     return (0.0);
 }
 
-float Timer::advancement(const std::string &name) {
+float
+Timer::advancement(const std::string &name) {
 
     if (this->eventExists(name) && this->_events[name].first > 0.0000001) {
         return (this->_events[name].second.getElapsedTime().asSeconds() >= this->_events[name].first ?
                 (1) : this->_events[name].second.getElapsedTime().asSeconds() / this->_events[name].first);
     }
     return (0);
+}
+
+float
+Timer::leftTime(const std::string &name) {
+
+    if (this->eventExists(name) && this->_events[name].first > 0.0000001)
+        return (this->_events[name].first - this->elapsedTime(name));
+    return (0);
+}
+
+std::pair<std::string, float>
+Timer::operator[](unsigned int pos) {
+
+    if (pos < this->size())
+    {
+        std::map<std::string, std::pair<float, sf::Clock> >::iterator it = this->_events.begin();
+        for (unsigned int i = 0; i < pos; i++)
+            it++;
+        return (std::make_pair(it->first, this->leftTime(it->first)));
+    }
+    return (std::make_pair("", 0));
+}
+
+unsigned int Timer::size() const {
+
+    return (static_cast<unsigned int>(this->_events.size()));
 }

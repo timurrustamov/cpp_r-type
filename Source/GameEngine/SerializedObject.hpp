@@ -41,7 +41,7 @@ public:
     bool                        isInited() const;
     std::vector<unsigned char>  &toBinaryString();
 	void 						setConfig(const std::string &config);
-	const std::string 			&getConfig() const;
+	std::string 				&getConfig();
     ObjectAttributes attr;
 
 private:

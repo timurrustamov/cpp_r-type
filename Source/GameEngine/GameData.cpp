@@ -53,3 +53,22 @@ unsigned int		GameData::getHeight() const
 {
 	return (this->height);
 }
+
+std::map<std::string, std::string>
+GameData::parseConfig(std::string &str) {
+
+	std::map<std::string, std::string>	_map;
+	std::string							tmp;
+	std::size_t 						i;
+	std::size_t 						a;
+
+	while ((i = str.find(";")) != std::string::npos)
+	{
+		tmp = str.substr(0, i);
+		str.erase(0, i);
+		if ((a = tmp.find(":")) == std::string::npos)
+			return _map;
+		_map[tmp.substr(0, a)] = tmp.substr(a + 1);
+	}
+	return _map;
+}

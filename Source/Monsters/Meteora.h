@@ -14,8 +14,13 @@ class Meteora :					public IMonsterBehaviour
 
 public:
 	Meteora() {};
-	~Meteora() { delete this->entity; };
+	~Meteora() {
 
+		if (this->entity != NULL) {
+			this->animation->removeEntity(this->entity->getId());
+			delete this->entity;
+		}
+	};
 	virtual void				lateUpdate();
 	virtual void				interact(Object *);
 	virtual void				start(Object * const that);
