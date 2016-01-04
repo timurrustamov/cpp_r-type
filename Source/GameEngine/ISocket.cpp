@@ -125,8 +125,8 @@ ISocket::readPacket()
     IMutex *mutex = (*MutexVault::getMutexVault())["read" + MutexVault::toString(this->_id)];
     mutex->lock(true);
     p = Packet::fromStream(this->_read_buffer);
-    mutex->unlock();
-    return (p);
+	mutex->unlock();
+	return (p);
 }
 
 void

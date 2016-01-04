@@ -46,7 +46,7 @@ unsigned int						World::createNewObject(Object *newobj) {
 
     IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
 
-    mutex->lock();
+    mutex->lock(true);
     if (playerptr != NULL) {
 
         mutex->unlock();
@@ -73,7 +73,7 @@ World::tick(float seconds)
 
     IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
 
-    mutex->lock();
+    mutex->lock(true);
     for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++) {
         if (it->second != NULL)
         {
@@ -84,7 +84,7 @@ World::tick(float seconds)
     mutex->unlock();
 
     //check players first
-    mutex->lock();
+    mutex->lock(true);
     for (unsigned int i = 0; i < MAX_PLAYERS; i++)
         if (this->_playersId[i] != BAD_ID && this->_objects[this->_playersId[i]]->mustBeDeleted())
         {
@@ -94,7 +94,7 @@ World::tick(float seconds)
             this->_playersId[i] = BAD_ID;
         }
     mutex->unlock();
-    mutex->lock();
+    mutex->lock(true);
     for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++)
         if (it->second != NULL && it->second->mustBeDeleted())
         {
@@ -113,7 +113,7 @@ World::getSnapshot() {
 
     IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
 
-    mutex->lock();
+    mutex->lock(true);
     for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++) {
 
         if (it->second != NULL && !it->second->mustBeDeleted() && it->second->getType() != Object::Other)
@@ -128,7 +128,7 @@ World::loadSnapshot(Snapshot *snap)
 {
     IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
 
-    mutex->lock();
+    mutex->lock(true);
     //look for integrity of objects
     for (std::map<unsigned int, Object *>::iterator it = this->_objects.begin(); it != this->_objects.end(); it++) {
         if (it->second != NULL && !it->second->mustBeDeleted() &&
@@ -169,7 +169,7 @@ World::createNewObject(unsigned int identifier, SerializedObject *serializedObje
 
     IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
 
-    mutex->lock();
+    mutex->lock(true);
 	if (this->_samples.find(identifier) != this->_samples.end())
 	{
 		id = this->createNewObject(this->_samples[identifier]->clone(serializedObject));
@@ -185,7 +185,7 @@ World &World::loadPlayerActions(unsigned int playerNo, std::vector<int> *actions
     IMutex *mutex = (*MutexVault::getMutexVault())["gameobjects"];
     std::vector<sf::Keyboard::Key> keys;
 
-    mutex->lock();
+    mutex->lock(true);
     Object *player;
     Player *truePlayer;
     if ((player = this->getPlayerObject(playerNo)) != NULL && (truePlayer = dynamic_cast<Player *>(player)) != NULL)
