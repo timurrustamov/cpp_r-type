@@ -16,6 +16,7 @@ InfoMenu::InfoMenu()
     this->texts.resize(3);
     this->isDone = false;
     this->_error = false;
+    this->close = false;
 }
 
 InfoMenu::~InfoMenu()
@@ -62,7 +63,7 @@ void InfoMenu::showUserForm()
     this->sprites[1]->setPosition(8, 140);
     this->sprites[1]->setScale(1.5, 0.5);
     this->texts[2]->setColor(color);
-    while (this->window->isOpen())
+    while (this->window->isOpen() && !this->close)
     {
         sf::Event  event;
         while (this->window->pollEvent(event))
@@ -104,11 +105,12 @@ void InfoMenu::showIpForm()
     this->sprites[1]->setPosition(8, 140);
     this->sprites[1]->setScale(1.5, 0.5);
     this->texts[2]->setColor(color);
-    while (this->window->isOpen())
+    while (this->window->isOpen() && !this->close)
     {
         if (this->isDone)
         {
             this->_error = false;
+            std::cout << "GO USER" << std::endl;
             this->showUserForm();
             return;
         }
@@ -122,10 +124,7 @@ void InfoMenu::showIpForm()
         if (!this->_error)
             this->texts[0]->setString("Enter the ip address and port:");
         else
-        {
-            this->ip = "";
             this->texts[0]->setString("Wrong ip address, try again:");
-        }
         this->texts[2]->setString(this->ip);
         this->window->draw(*this->sprites[0]);
         this->window->draw(*this->sprites[1]);
@@ -187,7 +186,10 @@ void InfoMenu::addNumbers(sf::Event *event)
             if (!this->checkIp())
                 this->_error = true;
             else
+            {
+                std::cout << "client->start OKKKKK" << std::endl;
                 this->isDone = true;
+            }
         }
     }
 }
@@ -219,6 +221,11 @@ ISocket *InfoMenu::getClient(const std::string& ip, int port, const std::string&
 
     if (clients[proto] == NULL)
         clients[proto] = ISocket::getClient(ip, port, proto);
+    else if (InfoMenu::getInstance()->_error)
+    {
+        delete clients[proto];
+        clients[proto] = ISocket::getClient(ip, port, proto);
+    }
     return clients[proto];
 }
 
@@ -246,9 +253,15 @@ void InfoMenu::recieveHandler(ISocket *client)
             (instruct = packet->unpack<Instruction>()) != NULL)
         {
             if (instruct->getInstruct() == Instruction::OK)
+            {
+                std::cout << "OK" << std::endl;
                 tmp->isDone = true;
+            }
             else if (instruct->getInstruct() == Instruction::KO)
+            {
+
                 tmp->_error = true;
+            }
             else
                 std::cout << "ERROR" << std::endl;
             delete instruct;

@@ -43,7 +43,7 @@ void CreateRoomMenu::RenderFrame()
 {
     float   time = 0;
 
-    while (this->window->isOpen())
+    while (this->window->isOpen() && !(InfoMenu::getInstance()->close))
     {
         time = this->clock->getElapsedTime().asMilliseconds();
         if (time >= 0.5 && this->transp > 0)
@@ -109,7 +109,11 @@ int CreateRoomMenu::getKeys(sf::Event *event)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !this->input.empty())
     {
         this->checkRoom();
-        usleep(120000);
+        #ifdef _WIN_32
+            Sleep(120000 / 100);
+        #else
+            usleep(120000);
+        #endif
     }
     if (event->type == sf::Event::TextEntered && this->input.size() < 9)
     {

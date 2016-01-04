@@ -5,6 +5,9 @@
 #ifndef SFML_WAITINGROOM_H
 #define SFML_WAITINGROOM_H
 
+#include "../Source/GameEngine/OnLevel.h"
+#include "../Source/System/window.h"
+#include "../Source/GameEngine/LinuxThread.hpp"
 #include "MainMenu.h"
 
 class WaitingRoom
@@ -23,6 +26,9 @@ public:
     static void handlerLeave(ISocket *);
     static void handlerUsers(ISocket *);
     static void handlerStart(ISocket *);
+    static void gameLoop(unsigned int, sf::RenderWindow *);
+    static void recvHandler(ISocket *);
+    static void gameUpdateHandler(OnLevel &);
 
 private:
     float                       transp;

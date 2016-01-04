@@ -42,6 +42,7 @@ public:
     static InfoMenu *getInstance();
 
     bool checkIp();
+    bool                        close;
 
 private:
     bool                        isDone;

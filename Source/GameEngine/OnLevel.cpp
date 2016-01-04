@@ -57,6 +57,7 @@ void					OnLevel::loadLevel(Level *newLevel)
 	this->world->addSample(new Monster("BasicShip")); // A MODIFIER
 	this->world->addSample(new Monster("Meteora")); // A MODIFIER
 	this->world->addSample(new Monster("Nautilus")); // A MODIFIER
+	this->world->addSample(new Monster("Robot"));
 	this->level->loadIdentifiers();
 
 	this->player = dynamic_cast<Player *>(this->world->getPlayerObject(0));
@@ -103,6 +104,34 @@ void					OnLevel::updateLogic(sf::Time *time)
 		Monster *monster = new Monster("Meteora", t2Vector<unsigned int>(this->gameData->getWidth() - 25, rand() % this->gameData->getHeight()));
 		GameData::getInstance()->world->createNewObject(monster);
 		this->timer.reset("meteoraSpawn");
+	}
+
+	if (this->timer.eventDone("robotSpawn"))
+	{
+		Monster *monster = new Monster("Robot", t2Vector<unsigned int>(this->gameData->getWidth() - 50, rand() % this->gameData->getHeight()));
+		GameData::getInstance()->world->createNewObject(monster);
+		this->timer.reset("robotSpawn");
+	}
+
+	if (this->world->timer.eventDone("player0"))
+	{
+		GameData::getInstance()->world->createNewPlayer(t2Vector<unsigned int>(50, 50), 0);
+		this->world->timer.removeEvent("player0");
+	}
+	if (this->world->timer.eventDone("player1"))
+	{
+		GameData::getInstance()->world->createNewPlayer(t2Vector<unsigned int>(50, 90), 1);
+		this->world->timer.removeEvent("player1");
+	}
+	if (this->world->timer.eventDone("player2"))
+	{
+		GameData::getInstance()->world->createNewPlayer(t2Vector<unsigned int>(50, 130), 2);
+		this->world->timer.removeEvent("player2");
+	}
+	if (this->world->timer.eventDone("player3"))
+	{
+		GameData::getInstance()->world->createNewPlayer(t2Vector<unsigned int>(50, 180), 3);
+		this->world->timer.removeEvent("player3");
 	}
 
 	this->world->tick(time->asSeconds());

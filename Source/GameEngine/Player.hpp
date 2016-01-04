@@ -17,7 +17,13 @@ class Player :			public Object
 public:
     Player(t2Vector<int> position, unsigned int);
     Player(int x, int y, unsigned int);
-    virtual ~Player() { delete this->entity; };
+    virtual ~Player()
+	{
+		if (this->entity != NULL) {
+			this->animation->removeEntity(this->entity->getId());
+			delete this->entity;
+		}
+	};
 
     unsigned int		getPlayerNo() const;
 

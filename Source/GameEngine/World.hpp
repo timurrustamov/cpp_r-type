@@ -79,8 +79,9 @@ public:
             mutex->unlock();
             return (this->_playersId[playerNo]);
         }
-        newobj = new Player(position, playerNo);
+        newobj = new Player(position + t2Vector<int>(0, playerNo * 30), playerNo);
 		newobj->start();
+        this->_qt.insert(newobj->geometry);
         id = newobj->getId();
         this->_objects[id] = newobj;
         this->_playersId[playerNo] = id;
@@ -105,7 +106,7 @@ public:
         mutex->lock();
         Object *obj = NULL;
 
-        if (!(playerNo > MAX_PLAYERS || this->_playersId[playerNo] == BAD_ID))
+        if (playerNo < MAX_PLAYERS && this->_playersId[playerNo] != BAD_ID)
             obj = this->_objects[this->_playersId[playerNo]];
         mutex->unlock();
         return (obj);
@@ -122,6 +123,8 @@ public:
         mutex->unlock();
         return (obj);
     }
+
+    Timer                               timer;
 };
 
 #endif /* !CPP_R_TYPE_WORLD_HPP */
