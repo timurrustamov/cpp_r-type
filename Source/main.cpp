@@ -45,7 +45,7 @@ int							main()
 {
 	Window					window("R-Type");
 	OnLevel					gameplay;
-	OnEditor				editor;
+//	OnEditor				editor;
 	Level					level("../Data/level1.xml");
 	/*ISocket					*tcpServer = ISocket::getServer(4242, "TCP");
 

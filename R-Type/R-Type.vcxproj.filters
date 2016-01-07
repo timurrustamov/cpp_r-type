@@ -40,6 +40,12 @@
     <Filter Include="Fichiers sources\Editor">
       <UniqueIdentifier>{cc8f74c5-24ab-47ef-b3f8-f457d0b123df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Menu">
+      <UniqueIdentifier>{0d57200b-a069-40e8-82e0-7d982214a8b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Menu">
+      <UniqueIdentifier>{48087bbf-476f-49bb-b168-c7a4e3969775}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\GameEngine\Level.cpp">
@@ -167,6 +173,27 @@
     </ClCompile>
     <ClCompile Include="..\Source\editor.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SFML\CreateRoomMenu.cpp">
+      <Filter>Fichiers sources\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SFML\Gameplay.cpp">
+      <Filter>Fichiers sources\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SFML\InfoMenu.cpp">
+      <Filter>Fichiers sources\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SFML\JoinRoomMenu.cpp">
+      <Filter>Fichiers sources\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SFML\main.cpp">
+      <Filter>Fichiers sources\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SFML\MainMenu.cpp">
+      <Filter>Fichiers sources\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SFML\WaitingRoom.cpp">
+      <Filter>Fichiers sources\Menu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -313,6 +340,24 @@
     </ClInclude>
     <ClInclude Include="..\Source\Editor\EditorEntity.h">
       <Filter>Fichiers d%27en-tête\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SFML\CreateRoomMenu.h">
+      <Filter>Fichiers d%27en-tête\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SFML\Gameplay.h">
+      <Filter>Fichiers d%27en-tête\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SFML\InfoMenu.h">
+      <Filter>Fichiers d%27en-tête\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SFML\JoinRoomMenu.h">
+      <Filter>Fichiers d%27en-tête\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SFML\MainMenu.h">
+      <Filter>Fichiers d%27en-tête\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SFML\WaitingRoom.h">
+      <Filter>Fichiers d%27en-tête\Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

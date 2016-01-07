@@ -2,8 +2,10 @@
 // Created by rivatn on 12/10/15.
 //
 
-#include <unistd.h>
 #include "JoinRoomMenu.h"
+#ifndef WIN32
+# include <unistd.h>
+#endif
 
 JoinRoomMenu::JoinRoomMenu(sf::RenderWindow *win)
 {
@@ -50,7 +52,7 @@ void JoinRoomMenu::RenderFrame()
 {
     float   time = 0;
 
-    #ifdef _WIN_32
+    #ifdef WIN32
         Sleep(100000 / 100);
     #else
         usleep(100000);

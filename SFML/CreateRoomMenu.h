@@ -5,6 +5,12 @@
 #ifndef SFML_CREATEROOMMENU_H
 #define SFML_CREATEROOMMENU_H
 
+#if defined(_WIN32) && !defined(WIN32)
+# define _WINSOCKAPI_
+# define NOGDI
+# include <windows.h>
+# define WIN32
+#endif
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "../Source/GameEngine/ISocket.h"

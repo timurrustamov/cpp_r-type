@@ -4,7 +4,9 @@
 
 #include "InfoMenu.h"
 #include <iostream>
-#include <unistd.h>
+#ifndef WIN32
+# include <unistd.h>
+#endif
 
 InfoMenu::InfoMenu()
 {

@@ -5,9 +5,21 @@
 #ifndef SFML_WAITINGROOM_H
 #define SFML_WAITINGROOM_H
 
+#if defined(_WIN32) && !defined(WIN32)
+# define _WINSOCKAPI_
+# define NOGDI
+# include <windows.h>
+# define WIN32
+#endif
+
+#ifdef WIN32
+# include "../Source/System/WinThread.hpp"
+#else
+# include "../Source/GameEngine/LinuxThread.hpp"
+#endif
+
 #include "../Source/GameEngine/OnLevel.h"
 #include "../Source/System/window.h"
-#include "../Source/GameEngine/LinuxThread.hpp"
 #include "MainMenu.h"
 
 class WaitingRoom

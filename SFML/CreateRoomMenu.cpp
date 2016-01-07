@@ -2,8 +2,10 @@
 // Created by rivatn on 12/9/15.
 //
 
-#include <unistd.h>
 #include "CreateRoomMenu.h"
+#ifndef WIN32
+# include <unistd.h>
+#endif
 
 CreateRoomMenu::CreateRoomMenu(sf::RenderWindow *win)
 {
@@ -109,7 +111,7 @@ int CreateRoomMenu::getKeys(sf::Event *event)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !this->input.empty())
     {
         this->checkRoom();
-        #ifdef _WIN_32
+        #ifdef WIN32
             Sleep(120000 / 100);
         #else
             usleep(120000);

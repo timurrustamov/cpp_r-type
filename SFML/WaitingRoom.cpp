@@ -170,7 +170,7 @@ void WaitingRoom::handlerStart(ISocket *client)
                 InfoMenu::getInstance()->close = true;
 //                MainMenu::getInstance()->song->stop();
                 client->attachOnReceive(WaitingRoom::recvHandler);
-                #ifdef _WIN_32
+                #ifdef WIN32
                     WinThread<void, sf::RenderWindow *> *thread = new WinThread<void, sf::RenderWindow *>(WaitingRoom::gameLoop);
                 #else
                     LinuxThread<void, sf::RenderWindow *> *thread = new LinuxThread<void, sf::RenderWindow *>(WaitingRoom::gameLoop);
